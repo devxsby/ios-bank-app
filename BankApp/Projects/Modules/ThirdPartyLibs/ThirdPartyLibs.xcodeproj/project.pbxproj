@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D735FD7713117AE6F3CE847A /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A02E05F37CE31FF89F9DBE92 /* SnapKit.framework */; platformFilter = ios; };
 		DB245196A4FAF891F8EC7D26 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089F2BC836FD428F5EE37819 /* Example.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +27,6 @@
 		089F2BC836FD428F5EE37819 /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 		133E3BE5202DF5329EEF90B3 /* Project-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
 		137DD12012E54A8377D9251A /* ThirdPartyLibs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ThirdPartyLibs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A02E05F37CE31FF89F9DBE92 /* SnapKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SnapKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1C67D43D2E1AF443B53F74E /* iOS-Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-Framework.xcconfig"; sourceTree = "<group>"; };
 		DF8D175E3E6DC60ED0A88700 /* ThirdPartyLibs-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "ThirdPartyLibs-Info.plist"; sourceTree = "<group>"; };
 		F7E43AFF49C2CDE1D8038E83 /* Project-Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Project-Development.xcconfig"; sourceTree = "<group>"; };
@@ -39,7 +37,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D735FD7713117AE6F3CE847A /* SnapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +79,6 @@
 		310E69B382427FE2F99A2FAB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A02E05F37CE31FF89F9DBE92 /* SnapKit.framework */,
 				137DD12012E54A8377D9251A /* ThirdPartyLibs.framework */,
 			);
 			name = Products;
