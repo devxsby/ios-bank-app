@@ -11,7 +11,7 @@ import DependencyPlugin
 
 let project = Project.makeModule(
     name: "RootFeature",
-    targets: [.unitTest, .staticFramework, .interface],
+    targets: [.unitTest, .staticFramework],
     internalDependencies: [
         .Features.Main.Feature,
         .Features.Waiting.Feature,

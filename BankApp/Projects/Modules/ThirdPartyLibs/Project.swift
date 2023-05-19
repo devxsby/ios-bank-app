@@ -5,5 +5,5 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: "ThirdPartyLibs",
     targets: [.dynamicFramework],
-    dependencies: []
+    dependencies: [.package(product: "SnapKit")]
 )

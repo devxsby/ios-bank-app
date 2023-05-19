@@ -1,11 +1,13 @@
 //
 //  SceneDelegate.swift
-//  ProjectDescriptionHelpers
+//  BankApp
 //
 //  Created by devxsby on 2023/05/19.
 //
 
 import UIKit
+
+import MainFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -16,7 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
-        guard let scene = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.windowScene = windowScene
+        window?.rootViewController = HomeViewController()
+        window?.makeKeyAndVisible()
+//        guard let scene = (scene as? UIWindowScene) else { return }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
