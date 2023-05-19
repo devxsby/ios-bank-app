@@ -1,0 +1,38 @@
+//#include "iOS-Base.xcconfig"
+
+CODE_SIGNING_REQUIRED = NO
+CODE_SIGN_IDENTITY =
+
+// Whether to strip out code that isn't called from anywhere
+DEAD_CODE_STRIPPING = NO
+
+// Whether this framework should define an LLVM module
+DEFINES_MODULE = YES
+
+// Whether function calls should be position-dependent (should always be
+// disabled for library code)
+GCC_DYNAMIC_NO_PIC = NO
+
+// Default frameworks to the name of the project, instead of any
+// platform-specific target
+PRODUCT_NAME = $(PROJECT_NAME)
+
+// Enables the framework to be included from any location as long as the
+// loader’s runpath search paths includes it. For example from an application
+// bundle (inside the "Frameworks" folder) or shared folder
+INSTALL_PATH = @rpath
+LD_DYLIB_INSTALL_NAME = @rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/$(PRODUCT_NAME)
+SKIP_INSTALL = YES
+
+// Make SwiftUI previews work in frameworks that depend on other non-system
+// frameworks. The Xcode agent that renders SwiftUI previews seems to copy all
+// required frameworks from the built product into a single temp directory.
+// This allows the rendering agent to find the frameworks there.
+// Source: https://github.com/NSHipster/articles/issues/673
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @loader_path/..
+
+COPY_PHASE_STRIP = NO
+
+ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
+
+ENABLE_TESTABILITY = YES
