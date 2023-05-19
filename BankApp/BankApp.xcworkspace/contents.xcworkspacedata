@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:Projects"
+      name = "Projects">
+      <FileRef
+         location = "group:BankApp/BankApp.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Core/Core.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Data/Data.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Domain/Domain.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:Features"
+         name = "Features">
+         <FileRef
+            location = "group:BankingFeature/BankingFeature.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:BaseFeatureDependency/BaseFeatureDependency.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:MainFeature/MainFeature.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:RootFeature/RootFeature.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:SettingFeature/SettingFeature.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:WaitingFeature/WaitingFeature.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Modules"
+         name = "Modules">
+         <FileRef
+            location = "group:DSKit/DSKit.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:DataBase/DataBase.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:Network/Network.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:ThirdPartyLibs/ThirdPartyLibs.xcodeproj">
+         </FileRef>
+      </Group>
+   </Group>
+   <Group
+      location = "group:Tuist"
+      name = "Tuist">
+      <Group
+         location = "group:Dependencies"
+         name = "Dependencies">
+         <Group
+            location = "group:SwiftPackageManager"
+            name = "SwiftPackageManager">
+            <Group
+               location = "group:.build"
+               name = ".build">
+               <Group
+                  location = "group:checkouts"
+                  name = "checkouts">
+                  <FileRef
+                     location = "group:SnapKit/SnapKit.xcodeproj">
+                  </FileRef>
+               </Group>
+            </Group>
+         </Group>
+      </Group>
+   </Group>
+</Workspace>
