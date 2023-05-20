@@ -12,7 +12,7 @@ public extension Project {
         "CFBundleShortVersionString": "1.0.0",
         "CFBundleDevelopmentRegion": "ko",
         "CFBundleVersion": "1",
-        "CFBundleIdentifier": "com.devxsby.release",
+        "CFBundleIdentifier": "com.devxsby.BankApp",
         "CFBundleDisplayName": "BankApp",
         "UILaunchStoryboardName": "LaunchScreen",
         "UIApplicationSceneManifest": [

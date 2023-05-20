@@ -2,7 +2,6 @@ import Foundation
 import ProjectDescription
 import DependencyPlugin
 import EnvPlugin
-import ConfigPlugin
 
 public extension Project {
     static func makeModule(
@@ -16,12 +15,16 @@ public extension Project {
         hasResources: Bool = false
     ) -> Project {
         
-        let configurationName: ConfigurationName = "Development"
         let hasDynamicFramework = targets.contains(.dynamicFramework)
         let deploymentTarget = Environment.deploymentTarget
         let platform = Environment.platform
         
-        let baseSettings: SettingsDictionary = .baseSettings.setCodeSignManual()
+        let settings: Settings = .settings(
+            base: [:],
+            configurations: [
+                .debug(name: .debug),
+                .release(name: .release)
+            ], defaultSettings: .recommended)
         
         var projectTargets: [Target] = []
         var schemes: [Scheme] = []
@@ -30,7 +33,6 @@ public extension Project {
         
         if targets.contains(.app) {
             let infoPlist = Project.appInfoPlist
-            let settings = baseSettings.setProvisioning()
             
             let target = Target(
                 name: name,
@@ -41,20 +43,20 @@ public extension Project {
                 infoPlist: .extendingDefault(with: infoPlist),
                 sources: ["Sources/**/*.swift"],
                 resources: [.glob(pattern: "Resources/**", excluding: [])],
+                scripts: [.SwiftLintShell],
                 dependencies: [
                     internalDependencies,
                     externalDependencies
-                ].flatMap { $0 },
-                settings: .settings(base: settings, configurations: XCConfig.project)
+                ]
+                    .flatMap { $0 }
             )
             
             projectTargets.append(target)
         }
         
         // MARK: - Feature Interface
-        
+
         if targets.contains(.interface) {
-            let settings = baseSettings
             
             let target = Target(
                 name: "\(name)Interface",
@@ -65,19 +67,18 @@ public extension Project {
                 infoPlist: .default,
                 sources: ["Interface/Sources/*.swift"],
                 dependencies: interfaceDependencies,
-                settings: .settings(base: settings, configurations: XCConfig.framework)
+                settings: settings
             )
             
             projectTargets.append(target)
         }
-        
+
         // MARK: - Framework
-        
+
         if targets.contains(where: { $0.hasFramework }) {
             let deps: [TargetDependency] = targets.contains(.interface)
             ? [.target(name: "\(name)Interface")]
             : []
-            let settings = baseSettings
             
             let target = Target(
                 name: name,
@@ -89,16 +90,15 @@ public extension Project {
                 sources: ["Sources/**/*.swift"],
                 resources: hasResources ? [.glob(pattern: "Resources/**", excluding: [])] : [],
                 dependencies: deps + internalDependencies + externalDependencies,
-                settings: .settings(base: settings, configurations: XCConfig.framework)
+                settings: settings
             )
             
             projectTargets.append(target)
         }
-        
+
         // MARK: - Unit Tests
         
         if targets.contains(.unitTest) {
-            let _: [TargetDependency] = [.target(name: name)]
             
             let target = Target(
                 name: "\(name)Tests",
@@ -109,34 +109,25 @@ public extension Project {
                 infoPlist: .default,
                 sources: ["Tests/Sources/**/*.swift"],
                 resources: [.glob(pattern: "Tests/Resources/**", excluding: [])],
-                dependencies: [
-                ].compactMap { $0 },
-                settings: .settings(base: SettingsDictionary().setCodeSignManual(), configurations: XCConfig.tests)
+                dependencies: dependencies
             )
             
             projectTargets.append(target)
         }
         
-        // MARK: - Schemes
-        
-        let additionalSchemes = [Scheme.makeScheme(configs: configurationName, name: name)]
-        schemes += additionalSchemes
-        
-        var scheme = schemes
-        
         return Project(
             name: name,
             organizationName: Environment.workspaceName,
             packages: packages,
-            settings: .settings(configurations: XCConfig.project),
+            settings: settings,
             targets: projectTargets,
-            schemes: scheme
+            schemes: schemes
         )
     }
 }
 
 extension Scheme {
-    /// Scheme 생성하는 method
+    
     static func makeScheme(configs: ConfigurationName, name: String) -> Scheme {
         return Scheme(
             name: name,
