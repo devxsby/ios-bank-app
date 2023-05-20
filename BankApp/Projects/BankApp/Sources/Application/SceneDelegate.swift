@@ -8,6 +8,7 @@
 import UIKit
 
 import MainFeature
+import MainFeatureInterface
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -22,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = HomeViewController()
+        window?.rootViewController = TabBarController()
         window?.makeKeyAndVisible()
 //        guard let scene = (scene as? UIWindowScene) else { return }
     }

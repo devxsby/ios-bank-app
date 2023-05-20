@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  StockViewController.swift
 //  MainFeatureInterface
 //
 //  Created by devxsby on 2023/05/21.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-public class HomeViewController: UIViewController {
+public class StockViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+        view.backgroundColor = .systemMint
     }
 }
