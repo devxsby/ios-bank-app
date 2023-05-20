@@ -43,7 +43,7 @@ public extension Project {
                 infoPlist: .extendingDefault(with: infoPlist),
                 sources: ["Sources/**/*.swift"],
                 resources: [.glob(pattern: "Resources/**", excluding: [])],
-                scripts: [.SwiftLintShell],
+//                scripts: [.SwiftLintShell],
                 dependencies: [
                     internalDependencies,
                     externalDependencies
@@ -90,7 +90,7 @@ public extension Project {
                 infoPlist: .default,
                 sources: ["Sources/**/*.swift"],
                 resources: hasResources ? [.glob(pattern: "Resources/**", excluding: [])] : [],
-                scripts: [.SwiftLintShell],
+//                scripts: [.SwiftLintShell],
                 dependencies: deps + internalDependencies + externalDependencies,
                 settings: settings
             )
