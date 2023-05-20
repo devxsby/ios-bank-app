@@ -1,9 +1,9 @@
-import Foundation
 import ProjectDescription
 import DependencyPlugin
 import EnvPlugin
 
 public extension Project {
+    
     static func makeModule(
         name: String,
         targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest]),
@@ -66,6 +66,7 @@ public extension Project {
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Interface/Sources/*.swift"],
+                scripts: [],
                 dependencies: interfaceDependencies,
                 settings: settings
             )
@@ -89,6 +90,7 @@ public extension Project {
                 infoPlist: .default,
                 sources: ["Sources/**/*.swift"],
                 resources: hasResources ? [.glob(pattern: "Resources/**", excluding: [])] : [],
+                scripts: [.SwiftLintShell],
                 dependencies: deps + internalDependencies + externalDependencies,
                 settings: settings
             )

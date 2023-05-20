@@ -12,9 +12,7 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: "BankingFeature",
     targets: [.unitTest, .staticFramework, .interface],
-    internalDependencies: [
-        
-    ],
+    internalDependencies: [],
     interfaceDependencies: [
         .Features.BaseFeatureDependency
     ]

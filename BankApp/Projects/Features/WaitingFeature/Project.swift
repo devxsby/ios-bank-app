@@ -12,9 +12,7 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: "WaitingFeature",
     targets: [.unitTest, .staticFramework, .interface],
-    internalDependencies: [
-        
-    ],
+    internalDependencies: [],
     interfaceDependencies: [
         .Features.BaseFeatureDependency
     ]

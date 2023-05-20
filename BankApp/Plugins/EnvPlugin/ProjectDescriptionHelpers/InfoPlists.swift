@@ -27,16 +27,11 @@ public extension Project {
             ]
         ],
         "UIAppFonts": [
-            // FIXME: - 폰트 추가 후 수정
-            //                "Item 0": "Pretendard-Black.otf",
-            //                "Item 1": "Pretendard-Bold.otf",
-            //                "Item 2": "Pretendard-ExtraBold.otf",
-            //                "Item 3": "Pretendard-ExtraLight.otf",
-            //                "Item 4": "Pretendard-Light.otf",
-            //                "Item 5": "Pretendard-Medium.otf",
-            //                "Item 6": "Pretendard-Regular.otf",
-            //                "Item 7": "Pretendard-SemiBold.otf",
-            //                "Item 8": "Pretendard-Thin.otf"
+            "Item 0": "SpoqaHanSansNeo-Bold",
+            "Item 1": "SpoqaHanSansNeo-Light",
+            "Item 2": "SpoqaHanSansNeo-Medium",
+            "Item 3": "SpoqaHanSansNeo-Regular",
+            "Item 4": "SpoqaHanSansNeo-Thin"
         ],
         "App Transport Security Settings": ["Allow Arbitrary Loads": true],
         "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
