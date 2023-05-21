@@ -1,6 +1,6 @@
 //
 //  Project.swift
-//  WaitingFeature
+//  ServiceFeature
 //
 //  Created by devxsby on 2023/05/19.
 //
@@ -10,7 +10,7 @@ import ProjectDescriptionHelpers
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: "WaitingFeature",
+    name: "ServiceFeature",
     targets: [.unitTest, .staticFramework, .interface],
     internalDependencies: [],
     interfaceDependencies: [

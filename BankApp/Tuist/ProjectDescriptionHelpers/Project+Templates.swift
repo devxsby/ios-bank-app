@@ -8,9 +8,9 @@ public extension Project {
         name: String,
         targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest]),
         packages: [Package] = [],
-        internalDependencies: [TargetDependency] = [],  // 모듈간 의존성
-        externalDependencies: [TargetDependency] = [],  // 외부 라이브러리 의존성
-        interfaceDependencies: [TargetDependency] = [], // Feature Interface 의존성
+        internalDependencies: [TargetDependency] = [],
+        externalDependencies: [TargetDependency] = [],
+        interfaceDependencies: [TargetDependency] = [],
         dependencies: [TargetDependency] = [],
         hasResources: Bool = false
     ) -> Project {
@@ -19,13 +19,15 @@ public extension Project {
         let deploymentTarget = Environment.deploymentTarget
         let platform = Environment.platform
         
-        let settings: Settings = .settings(
-            base: [:],
-            configurations: [
-                .debug(name: .debug),
-                .release(name: .release)
-            ], defaultSettings: .recommended)
-        
+        let baseSettings: SettingsDictionary = SettingsDictionary.baseSettings
+
+//        let settings: Settings = .settings(
+//            base: [:],
+//            configurations: [
+//                .debug(name: .debug),
+//                .release(name: .release)
+//            ], defaultSettings: .recommended)
+
         var projectTargets: [Target] = []
         var schemes: [Scheme] = []
         
@@ -48,7 +50,8 @@ public extension Project {
                     internalDependencies,
                     externalDependencies
                 ]
-                    .flatMap { $0 }
+                    .flatMap { $0 },
+                settings: .settings(base: baseSettings)
             )
             
             projectTargets.append(target)
@@ -68,7 +71,7 @@ public extension Project {
                 sources: ["Interface/Sources/*.swift"],
                 scripts: [],
                 dependencies: interfaceDependencies,
-                settings: settings
+                settings: .settings(base: baseSettings)
             )
             
             projectTargets.append(target)
@@ -92,7 +95,7 @@ public extension Project {
                 resources: hasResources ? [.glob(pattern: "Resources/**", excluding: [])] : [],
 //                scripts: [.SwiftLintShell],
                 dependencies: deps + internalDependencies + externalDependencies,
-                settings: settings
+                settings: .settings(base: baseSettings)
             )
             
             projectTargets.append(target)
@@ -111,7 +114,8 @@ public extension Project {
                 infoPlist: .default,
                 sources: ["Tests/Sources/**/*.swift"],
                 resources: [.glob(pattern: "Tests/Resources/**", excluding: [])],
-                dependencies: dependencies
+                dependencies: dependencies,
+                settings: .settings(base: baseSettings)
             )
             
             projectTargets.append(target)
@@ -121,7 +125,7 @@ public extension Project {
             name: name,
             organizationName: Environment.workspaceName,
             packages: packages,
-            settings: settings,
+            settings: .settings(base: baseSettings),
             targets: projectTargets,
             schemes: schemes
         )

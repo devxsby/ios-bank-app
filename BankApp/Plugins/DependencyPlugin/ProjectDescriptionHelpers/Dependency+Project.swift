@@ -11,9 +11,11 @@ public typealias Dep = TargetDependency
 
 public extension Dep {
     struct Features {
+        public struct Splash {}
         public struct Main {}
-        public struct Waiting {}
+        public struct Service {}
         public struct Banking {}
+        public struct Stock {}
         public struct Setting {}
     }
     
@@ -52,6 +54,13 @@ public extension Dep.Features {
     static let RootFeature = TargetDependency.project(target: "RootFeature", path: .relativeToFeature("RootFeature"))
 }
 
+public extension Dep.Features.Splash {
+    static let group = "Splash"
+    
+    static let Feature = Dep.Features.project(name: "Feature", group: group)
+    static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
+}
+
 public extension Dep.Features.Main {
     static let group = "Main"
     
@@ -59,8 +68,8 @@ public extension Dep.Features.Main {
     static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
 }
 
-public extension Dep.Features.Waiting {
-    static let group = "Waiting"
+public extension Dep.Features.Service {
+    static let group = "Service"
     
     static let Feature = Dep.Features.project(name: "Feature", group: group)
     static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
@@ -68,6 +77,13 @@ public extension Dep.Features.Waiting {
 
 public extension Dep.Features.Banking {
     static let group = "Banking"
+    
+    static let Feature = Dep.Features.project(name: "Feature", group: group)
+    static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
+}
+
+public extension Dep.Features.Stock {
+    static let group = "Stock"
     
     static let Feature = Dep.Features.project(name: "Feature", group: group)
     static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))

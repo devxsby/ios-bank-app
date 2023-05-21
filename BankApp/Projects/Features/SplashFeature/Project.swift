@@ -1,8 +1,8 @@
 //
 //  Project.swift
-//  MainFeature
+//  SplashFeature
 //
-//  Created by devxsby on 2023/05/19.
+//  Created by devxsby on 2023/05/21.
 //
 
 import ProjectDescription
@@ -10,13 +10,10 @@ import ProjectDescriptionHelpers
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: "MainFeature",
+    name: "SplashFeature",
     targets: [.unitTest, .staticFramework, .interface],
     internalDependencies: [
-        .Features.Service.Interface,
-        .Features.Stock.Interface,
-        .Features.Banking.Interface,
-        .Features.Setting.Interface
+        .Features.Main.Interface
     ],
     interfaceDependencies: [
         .Features.BaseFeatureDependency

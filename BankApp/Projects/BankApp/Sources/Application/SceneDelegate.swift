@@ -7,8 +7,7 @@
 
 import UIKit
 
-import MainFeature
-import MainFeatureInterface
+import RootFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -23,9 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = TabBarController()
+        window?.rootViewController = DIContainer.shared.makeSplashContoller()
         window?.makeKeyAndVisible()
-//        guard let scene = (scene as? UIWindowScene) else { return }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
