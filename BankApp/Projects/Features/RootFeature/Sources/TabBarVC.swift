@@ -42,11 +42,11 @@ public class TabBarController: UITabBarController {
             title: "홈"
         )
 
-//        let serviceNVC = makeNavigationController(
-//            image: DSKitAsset.Images.icnService.image,
-//            rootViewController: ServiceViewContoller(),
-//            title: "서비스"
-//        )
+        let serviceNVC = makeNavigationController(
+            image: DSKitAsset.Images.icnService.image,
+            rootViewController: ServiceViewController(),
+            title: "서비스"
+        )
         
         let bankingNVC = makeNavigationController(
             image: DSKitAsset.Images.icnPay.image,
@@ -66,7 +66,7 @@ public class TabBarController: UITabBarController {
             title: "전체"
         )
         
-        viewControllers = [homeNVC, bankingNVC, stockNVC, settingNVC]
+        viewControllers = [homeNVC, serviceNVC, bankingNVC, stockNVC, settingNVC]
     }
     
     private func setTabBar() {
