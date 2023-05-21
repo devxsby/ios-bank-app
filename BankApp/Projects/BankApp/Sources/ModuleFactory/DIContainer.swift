@@ -20,7 +20,7 @@ import SplashFeatureInterface
 import BaseFeatureDependency
 
 public protocol DIContainerInterface {
-    func makeTabBarController() -> TabBarController
+    func makeTabBarController() -> TabBarViewController
     func makeSplashContoller() -> SplashViewController
 }
 
@@ -33,8 +33,8 @@ public class DIContainer {
 
 extension DIContainer: DIContainerInterface {
     
-    public func makeTabBarController() -> TabBarController {
-        let tabBarController = TabBarController()
+    public func makeTabBarController() -> TabBarViewController {
+        let tabBarController = TabBarViewController()
         return tabBarController
     }
     

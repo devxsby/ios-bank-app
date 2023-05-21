@@ -22,7 +22,7 @@ import StockFeatureInterface
 import SettingFeature
 import SettingFeatureInterface
 
-public class TabBarController: UITabBarController {
+public class TabBarViewController: UITabBarController {
         
     // MARK: - View Life Cycle
     
@@ -95,5 +95,5 @@ public class TabBarController: UITabBarController {
     }
 }
 
-extension TabBarController: UIGestureRecognizerDelegate { }
+extension TabBarViewController: UIGestureRecognizerDelegate { }
 

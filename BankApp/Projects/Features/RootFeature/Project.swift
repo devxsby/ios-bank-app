@@ -13,7 +13,6 @@ let project = Project.makeModule(
     name: "RootFeature",
     targets: [.unitTest, .staticFramework],
     internalDependencies: [
-        .Features.Splash.Feature,
         .Features.Main.Feature,
         .Features.Service.Feature,
         .Features.Banking.Feature,
