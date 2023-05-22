@@ -15,8 +15,6 @@ import Data
 import RootFeature
 import MainFeature
 import MainFeatureInterface
-import SplashFeature
-import SplashFeatureInterface
 import BaseFeatureDependency
 
 public protocol DIContainerInterface {

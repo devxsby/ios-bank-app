@@ -10,8 +10,6 @@ import UIKit
 import Core
 import DSKit
 
-import SplashFeature
-import SplashFeatureInterface
 import MainFeature
 import MainFeatureInterface
 import ServiceFeature

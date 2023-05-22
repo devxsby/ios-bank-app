@@ -28,5 +28,9 @@ public struct I18N {
         public static let teller = "창구"
         public static let peopleCount = "명"
         public static let showMyWaitlist = "나의 대기 현황 보기"
+        
+        public static let sampleBankName = "공덕금융센터점"
+        public static let sampleBankPlace = "서울 마포구 백범로 192,(S-OIL본사 사옥2층)"
+        public static let sampleBankBusinessHours = "월~금 09:00 ~ 16:00 / 토, 일 정기휴무  "
     }
 }
