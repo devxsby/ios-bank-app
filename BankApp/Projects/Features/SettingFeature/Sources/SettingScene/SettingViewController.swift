@@ -8,9 +8,7 @@
 
 import UIKit
 
-import BaseFeatureDependency
-
-public class SettingViewController: UIViewController {
+public final class SettingViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

@@ -23,7 +23,7 @@ import StockFeatureInterface
 import SettingFeature
 import SettingFeatureInterface
 
-public class TabBarViewController: UITabBarController {
+public final class TabBarViewController: UITabBarController {
         
     // MARK: - View Life Cycle
     

@@ -8,15 +8,16 @@
 
 import UIKit
 
+import Core
 import DSKit
 
 import SnapKit
 
-enum ServiceType: String {
+private enum ServiceType: String {
     case mobileNumbering
 }
 
-public class ServiceViewController: UIViewController {
+public final class ServiceViewController: UIViewController {
     
     // MARK: - UI Components
     
@@ -54,14 +55,14 @@ extension ServiceViewController {
         view.backgroundColor = .white
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.backgroundColor = .white
-        title = "서비스"
+        title = I18N.ServiceFeature.service
         
         contentView.backgroundColor = .white
     }
     
     private func setLayout() {
         
-        [containerScrollView].forEach { view.addSubview($0) }
+        view.addSubview(containerScrollView)
         containerScrollView.addSubview(contentView)
 
         containerScrollView.snp.makeConstraints {

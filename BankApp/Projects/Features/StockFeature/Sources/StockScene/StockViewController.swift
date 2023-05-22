@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class StockViewController: UIViewController {
+public final class StockViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class BankingViewController: UIViewController {
+public final class BankingViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

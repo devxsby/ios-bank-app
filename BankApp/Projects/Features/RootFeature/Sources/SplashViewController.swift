@@ -14,7 +14,7 @@ import Domain
 
 import SnapKit
 
-public class SplashViewController: UIViewController {
+public final class SplashViewController: UIViewController {
     
     // MARK: - UI Components
     
