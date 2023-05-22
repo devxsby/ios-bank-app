@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Core
 import DSKit
 
 import SplashFeature
@@ -30,6 +31,7 @@ public class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         setViewControllers()
         setTabBar()
+        setupStyle()
     }
     
     // MARK: - Methods
@@ -39,31 +41,31 @@ public class TabBarViewController: UITabBarController {
         let homeNVC = makeNavigationController(
             image: DSKitAsset.Images.icnHome.image,
             rootViewController: HomeViewController(),
-            title: "홈"
+            title: I18N.TabBar.home
         )
 
         let serviceNVC = makeNavigationController(
             image: DSKitAsset.Images.icnService.image,
             rootViewController: ServiceViewController(),
-            title: "서비스"
+            title: I18N.TabBar.service
         )
         
         let bankingNVC = makeNavigationController(
             image: DSKitAsset.Images.icnPay.image,
             rootViewController: BankingViewController(),
-            title: "송금"
+            title: I18N.TabBar.moneyTransfer
         )
         
         let stockNVC = makeNavigationController(
             image: DSKitAsset.Images.icnStock.image,
             rootViewController: StockViewController(),
-            title: "주식"
+            title: I18N.TabBar.stock
         )
         
         let settingNVC = makeNavigationController(
             image: DSKitAsset.Images.icnMenu.image,
             rootViewController: SettingViewController(),
-            title: "전체"
+            title: I18N.TabBar.overall
         )
         
         viewControllers = [homeNVC, serviceNVC, bankingNVC, stockNVC, settingNVC]
@@ -84,8 +86,8 @@ public class TabBarViewController: UITabBarController {
         nav.tabBarItem.title = title
         
         nav.navigationBar.backgroundColor = .white
-        nav.isNavigationBarHidden = true
-        nav.navigationBar.isHidden = true
+//        nav.isNavigationBarHidden = true
+//        nav.navigationBar.isHidden = true
         nav.tabBarItem.setTitleTextAttributes([.font: DSKitFontFamily.SpoqaHanSansNeo.medium.font(size: 10)], for: .normal)
         nav.navigationItem.backBarButtonItem = UIBarButtonItem(title: nil, style: .plain, target: self, action: nil)
         
@@ -93,7 +95,14 @@ public class TabBarViewController: UITabBarController {
         nav.interactivePopGestureRecognizer?.delegate = self
         return nav
     }
+    
+    private func setupStyle() {
+        UITabBar.clearShadow()
+        tabBar.layer.applyShadow(color: .black, alpha: 0.3, x: 0, y: 0, blur: 1)
+    }
 }
+
+// MARK: - UIGestureRecognizerDelegate
 
 extension TabBarViewController: UIGestureRecognizerDelegate { }
 

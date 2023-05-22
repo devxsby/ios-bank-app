@@ -55,9 +55,7 @@ public class SplashViewController: UIViewController {
             print("애니메이션 종료")
             let tabBarController = TabBarViewController()
             tabBarController.selectedIndex = 1
-            self.navigationController?.pushViewController(tabBarController, animated: true)
-            let navigation = UINavigationController(rootViewController: tabBarController)
-            SplashViewController.setRootViewController(window: self.view.window!, viewController: navigation, withAnimation: true)
+            SplashViewController.setRootViewController(window: self.view.window!, viewController: tabBarController, withAnimation: true)
         })
     }
     
