@@ -13,7 +13,15 @@ import DSKit
 
 import SnapKit
 
+public protocol TellerWaitingBoxViewDelegate: AnyObject {
+    func pushToDetailViewCotroller(_ type: BankingServiceType)
+}
+
 final public class TellerWaitingBoxView: UIView {
+    
+    // MARK: - Properties
+
+    weak var delegate: TellerWaitingBoxViewDelegate?
     
     // MARK: - UI Components
     
@@ -110,9 +118,9 @@ extension TellerWaitingBoxView {
     @objc
     private func handleTap() {
         if (titleLabel.text?.contains(I18N.ServiceFeature.deposits)) == true {
-            print("tap gesture deposits view")
+            delegate?.pushToDetailViewCotroller(.deposits)
         } else {
-            print("tap gesture loans view")
+            delegate?.pushToDetailViewCotroller(.loans)
         }
     }
 }

@@ -15,6 +15,7 @@ public final class NumberingDetailViewController: UIViewController {
     
     // MARK: - UI Components
     
+    var initialTab: Int = 0
     private var viewTypes: [String] = [I18N.ServiceFeature.loans, I18N.ServiceFeature.deposits]
     
     // MARK: - Properties
@@ -138,19 +139,12 @@ extension NumberingDetailViewController {
     }
     
     private func setFirstIndexSelected() {
-        let selectedIndexPath = IndexPath(item: 0, section: 0)
+        let selectedIndexPath = IndexPath(item: initialTab, section: 0)
         headerCollectionView.selectItem(at: selectedIndexPath,
                                         animated: true,
                                         scrollPosition: .bottom)
+        pageViewController.setViewControllers([detailViewControllers[initialTab]], direction: .forward, animated: true, completion: nil)
         
-        if let loansVC = detailViewControllers.first {
-            pageViewController.setViewControllers(
-                [loansVC],
-                direction: .forward,
-                animated: true,
-                completion: nil
-            )
-        }
     }
 }
 

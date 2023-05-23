@@ -19,27 +19,32 @@ public final class ServiceViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let containerScrollView = UIScrollView()
-    
-    private let contentView = UIView()
-    
-    private let searchView = BankingSearchView()
-    
-    private let bankInformationView = BankInformationContainerView()
-    
-    private lazy var refreshButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(DSKitAsset.Images.refresh.image
-            .withRenderingMode(.alwaysOriginal)
-            .withTintColor(DSKitAsset.Colors.gray400.color), for: .normal)
-        button.addTarget(self, action: #selector(refreshButtonDidTap), for: .touchUpInside)
-        return button
+    private lazy var refresher: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .lightGray
+        refreshControl.addTarget(self, action: #selector(refreshed), for: .valueChanged)
+        return refreshControl
     }()
     
+    private lazy var containerScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.refreshControl = refresher
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
+    private let mobileBankingSectionView = UIView()
+    
+    private let mobileNumberingLabel: UILabel = {
+        let label = UILabel()
+        label.text = ServiceType.mobileBanking.title
+        label.font = DSKitFontFamily.SpoqaHanSansNeo.bold.font(size: 22)
+        return label
+    }()
+    private let searchView = BankingSearchView()
+    private let bankInformationView = BankInformationContainerView()
     private let loansWaitingBoxView = TellerWaitingBoxView(type: .loans)
-    
     private let depositsWaitingBoxView = TellerWaitingBoxView(type: .deposits)
-    
     private let showMyWaitlistView = MyWaitlistView()
     
     private let horizontalLineView = UIView()
@@ -71,33 +76,35 @@ extension ServiceViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         title = I18N.ServiceFeature.service
         
-        contentView.backgroundColor = .white
+        mobileBankingSectionView.backgroundColor = .white
         horizontalLineView.backgroundColor = DSKitAsset.Colors.gray100.color
-        
-        containerScrollView.showsVerticalScrollIndicator = false
     }
     
     private func setLayout() {
         
         view.addSubview(containerScrollView)
-        containerScrollView.addSubview(contentView)
-        [searchView, bankInformationView,
-         refreshButton, loansWaitingBoxView, depositsWaitingBoxView,
-         showMyWaitlistView, horizontalLineView].forEach { contentView.addSubview($0) }
+        containerScrollView.addSubview(mobileBankingSectionView)
+        [mobileNumberingLabel, searchView, bankInformationView,
+         loansWaitingBoxView, depositsWaitingBoxView,
+         showMyWaitlistView, horizontalLineView].forEach { mobileBankingSectionView.addSubview($0) }
         
         containerScrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        contentView.snp.makeConstraints {
+        mobileBankingSectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
 //            $0.height.equalTo(1000)
         }
         
+        mobileNumberingLabel.snp.makeConstraints {
+            $0.top.leading.equalToSuperview().offset(20)
+        }
+        
         searchView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+            $0.top.equalTo(mobileNumberingLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.height.equalTo(45)
         }
@@ -107,14 +114,8 @@ extension ServiceViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
         
-        refreshButton.snp.makeConstraints {
-            $0.top.equalTo(bankInformationView.snp.bottom).offset(15)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.width.height.equalTo(20)
-        }
-        
         loansWaitingBoxView.snp.makeConstraints {
-            $0.top.equalTo(refreshButton.snp.bottom).offset(15)
+            $0.top.equalTo(bankInformationView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.height.equalTo(80)
         }
@@ -146,6 +147,8 @@ extension ServiceViewController {
     
     private func setDelegate() {
         showMyWaitlistView.delegate = self
+        loansWaitingBoxView.delegate = self
+        depositsWaitingBoxView.delegate = self
     }
     
     private func setData() {
@@ -156,8 +159,11 @@ extension ServiceViewController {
     // MARK: - @objc Function
     
     @objc
-    private func refreshButtonDidTap() {
-        print("refresh button did tap")
+    private func refreshed() {
+        print("refreshed")
+        DispatchQueue.main.async {
+            self.containerScrollView.refreshControl?.endRefreshing()
+        }
     }
 }
 
@@ -169,5 +175,22 @@ extension ServiceViewController: MyWaitlistViewDelegate {
         let detailVC = NumberingDetailViewController()
         detailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
+
+// MARK: - TellerWaitingBoxViewDelegate
+
+extension ServiceViewController: TellerWaitingBoxViewDelegate {
+    
+    public func pushToDetailViewCotroller(_ type: BankingServiceType) {
+        let numberingDetailVC = NumberingDetailViewController()
+        numberingDetailVC.hidesBottomBarWhenPushed = true
+        
+        if type == .loans {
+            numberingDetailVC.initialTab = 0
+        } else {
+            numberingDetailVC.initialTab = 1
+        }
+        navigationController?.pushViewController(numberingDetailVC, animated: true)
     }
 }

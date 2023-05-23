@@ -30,7 +30,9 @@ final public class BankingSearchView: UIView {
         textField.font = DSKitFontFamily.SpoqaHanSansNeo.medium.font(size: 14)
         textField.textColor = DSKitAsset.Colors.gray300.color
         textField.placeholder = I18N.ServiceFeature.searchBank
-        textField.isUserInteractionEnabled = false
+        textField.textColor = .black
+        textField.returnKeyType = .done
+//        textField.isUserInteractionEnabled = false
         return textField
     }()
     
@@ -40,6 +42,7 @@ final public class BankingSearchView: UIView {
         super.init(frame: .zero)
         setUI()
         setLayout()
+        setDelegate()
     }
     
     required init?(coder: NSCoder) {
@@ -76,5 +79,24 @@ extension BankingSearchView {
             $0.trailing.equalToSuperview().inset(10)
             $0.centerY.equalToSuperview()
         }
+    }
+}
+
+// MARK: - Methods
+
+extension BankingSearchView {
+    
+    private func setDelegate() {
+        textField.delegate = self
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension BankingSearchView: UITextFieldDelegate {
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
