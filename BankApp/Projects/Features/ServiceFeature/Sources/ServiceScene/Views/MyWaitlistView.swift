@@ -13,7 +13,15 @@ import DSKit
 
 import SnapKit
 
+public protocol MyWaitlistViewDelegate: AnyObject {
+    func didPressWaitlistView()
+}
+
 final public class MyWaitlistView: UIView {
+    
+    // MARK: - Properties
+    
+    public weak var delegate: MyWaitlistViewDelegate?
     
     // MARK: - UI Components
     
@@ -101,7 +109,7 @@ extension MyWaitlistView {
     
     @objc
     private func handleTap() {
-        print("tap gesture my waitlistview")
+        delegate?.didPressWaitlistView()
     }
 }
 

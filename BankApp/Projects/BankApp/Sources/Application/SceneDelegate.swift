@@ -22,7 +22,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = DIContainer.shared.makeSplashContoller()
+        let tabbar = TabBarViewController()
+        tabbar.selectedIndex = 1
+        window?.rootViewController = tabbar  // splash + dicontainer로 변경하기
         window?.makeKeyAndVisible()
     }
 

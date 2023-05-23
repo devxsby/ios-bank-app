@@ -1,5 +1,5 @@
 //
-//  SplashVC.swift
+//  SplashViewController.swift
 //  RootFeature
 //
 //  Created by devxsby on 2023/05/21.

@@ -31,7 +31,7 @@ public final class ServiceViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setImage(DSKitAsset.Images.refresh.image
             .withRenderingMode(.alwaysOriginal)
-            .withTintColor(DSKitAsset.Colors.gray500.color), for: .normal)
+            .withTintColor(DSKitAsset.Colors.gray400.color), for: .normal)
         button.addTarget(self, action: #selector(refreshButtonDidTap), for: .touchUpInside)
         return button
     }()
@@ -50,6 +50,7 @@ public final class ServiceViewController: UIViewController {
         super.viewDidLoad()
         setUI()
         setLayout()
+        setDelegate()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -65,11 +66,15 @@ extension ServiceViewController {
     private func setUI() {
         view.backgroundColor = .white
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.backgroundColor = .white
+        navigationController?.navigationBar.backgroundColor = .clear
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         title = I18N.ServiceFeature.service
         
         contentView.backgroundColor = .white
         horizontalLineView.backgroundColor = DSKitAsset.Colors.gray100.color
+        
+        containerScrollView.showsVerticalScrollIndicator = false
     }
     
     private func setLayout() {
@@ -139,6 +144,10 @@ extension ServiceViewController {
 
 extension ServiceViewController {
     
+    private func setDelegate() {
+        showMyWaitlistView.delegate = self
+    }
+    
     private func setData() {
         loansWaitingBoxView.setData(0, .loans)
         depositsWaitingBoxView.setData(0, .deposits)
@@ -149,5 +158,16 @@ extension ServiceViewController {
     @objc
     private func refreshButtonDidTap() {
         print("refresh button did tap")
+    }
+}
+
+// MARK: - MyWaitlistViewDelegate
+
+extension ServiceViewController: MyWaitlistViewDelegate {
+    
+    public func didPressWaitlistView() {
+        let detailVC = NumberingDetailViewController()
+        detailVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

@@ -1,8 +1,9 @@
 //
-//  Sample.swift
+//  TabBarViewController.swift
 //  RootFeature
 //
 //  Created by devxsby on 2023/05/19.
+//  Copyright © 2023 BankApp. All rights reserved.
 //
 
 import UIKit
@@ -71,6 +72,8 @@ public final class TabBarViewController: UITabBarController {
     
     private func setTabBar() {
         tabBar.backgroundColor = .white
+        tabBar.layer.cornerRadius = 20
+        tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         tabBar.tintColor = DSKitAsset.Colors.gray600.color
         tabBar.unselectedItemTintColor = DSKitAsset.Colors.gray300.color
     }
