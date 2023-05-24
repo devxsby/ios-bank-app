@@ -31,6 +31,7 @@ final public class BankingSearchView: UIView {
         textField.textColor = DSKitAsset.Colors.gray300.color
         textField.placeholder = I18N.ServiceFeature.searchBank
         textField.textColor = .black
+        textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .done
 //        textField.isUserInteractionEnabled = false
         return textField

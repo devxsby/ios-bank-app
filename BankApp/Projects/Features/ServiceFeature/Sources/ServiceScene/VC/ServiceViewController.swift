@@ -137,7 +137,7 @@ extension ServiceViewController {
         horizontalLineView.snp.makeConstraints {
             $0.top.equalTo(showMyWaitlistView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(20)
             $0.height.equalTo(4)
         }
     }
@@ -163,9 +163,7 @@ extension ServiceViewController {
     @objc
     private func refreshed() {
         print("refreshed")
-        DispatchQueue.main.async {
-            self.containerScrollView.refreshControl?.endRefreshing()
-        }
+        self.containerScrollView.refreshControl?.endRefreshing()
     }
 }
 

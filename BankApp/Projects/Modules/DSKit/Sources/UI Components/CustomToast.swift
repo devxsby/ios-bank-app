@@ -82,8 +82,8 @@ extension Toast {
     private static func setToastContainerLayout(_ toastContainer: UIView, view: UIView) {
         toastContainer.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().offset(20)
-            $0.width.equalTo(220)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+//            $0.width.equalTo(220)
             $0.height.equalTo(44)
         }
     }

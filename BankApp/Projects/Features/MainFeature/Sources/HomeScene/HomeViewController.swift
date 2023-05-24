@@ -8,10 +8,33 @@
 
 import UIKit
 
+import Core
+import DSKit
+
+import SnapKit
+
 public final class HomeViewController: UIViewController {
+    
+    // MARK: - View Life Cycle
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        setUI()
+        setLayout()
+    }
+}
+
+// MARK: - UI & Layout
+
+extension HomeViewController {
+    
+    private func setUI() {
+        navigationController?.navigationBar.backgroundColor = DSKitAsset.Colors.gray100.color
+        navigationController?.navigationBar.tintColor = DSKitAsset.Colors.gray300.color
+        view.backgroundColor = DSKitAsset.Colors.gray100.color
+    }
+    
+    private func setLayout() {
         
     }
 }

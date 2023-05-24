@@ -28,12 +28,17 @@ public final class TabBarViewController: UITabBarController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        setDelegate()
         setViewControllers()
         setTabBar()
         setupStyle()
     }
     
     // MARK: - Methods
+    
+    private func setDelegate() {
+        self.delegate = self
+    }
     
     private func setViewControllers() {
         
@@ -103,7 +108,38 @@ public final class TabBarViewController: UITabBarController {
     }
 }
 
+// MARK: - UITabBarControllerDelegate
+
+extension TabBarViewController: UITabBarControllerDelegate {
+    
+    public func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        makeVibrate(degree: .light)
+    }
+    
+    public func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        makeVibrate()
+        if viewController == tabBarController.selectedViewController {
+            if let scrollView = findScrollView(in: viewController.view) {
+
+                scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.adjustedContentInset.top), animated: true)
+            }
+        }
+        return true
+    }
+    
+    private func findScrollView(in view: UIView) -> UIScrollView? {
+        for subview in view.subviews {
+            if let scrollView = subview as? UIScrollView {
+                return scrollView
+            }
+            if let scrollView = findScrollView(in: subview) {
+                return scrollView
+            }
+        }
+        return nil
+    }
+}
+
 // MARK: - UIGestureRecognizerDelegate
 
 extension TabBarViewController: UIGestureRecognizerDelegate { }
-

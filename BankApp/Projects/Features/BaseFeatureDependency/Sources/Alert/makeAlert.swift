@@ -22,6 +22,9 @@ extension UIViewController {
         alertVC.customAction = customAction
         alertVC.modalPresentationStyle = .overFullScreen
         alertVC.modalTransitionStyle = .crossDissolve
+        
+        makeVibrate()
+        
         return alertVC
     }
 }
