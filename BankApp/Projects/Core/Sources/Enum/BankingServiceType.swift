@@ -21,6 +21,6 @@ public enum BankingServiceType: String {
     }
     
     public var teller: String {
-        return title + I18N.ServiceFeature.teller
+        return title + " " + I18N.ServiceFeature.teller
     }
 }
