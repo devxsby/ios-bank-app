@@ -7,24 +7,33 @@
 //
 
 import UIKit
+import MapKit
 
+import BaseFeatureDependency
 import Core
 import DSKit
-
-// TODO: -  MapView로 변경하기
 
 final public class BankInformationContainerView: UIView {
     
     // MARK: - UI Components
     
-    private let mapImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = DSKitAsset.Images.imgSamplePlace.image
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        imageView.contentMode = .scaleToFill
-        return imageView
+    private let mapView = BankMapView()
+    
+    private lazy var locationButton: UIButton = {
+        let button = UIButton()
+        button.setImage(DSKitAsset.Images.icnFriend.image, for: .normal)
+        button.addTarget(self, action: #selector(centerMapOnUserLocation), for: .touchUpInside)
+        return button
     }()
+    
+//    private let mapImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.image = DSKitAsset.Images.imgSamplePlace.image
+//        imageView.clipsToBounds = true
+//        imageView.layer.cornerRadius = 20
+//        imageView.contentMode = .scaleToFill
+//        return imageView
+//    }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -81,22 +90,40 @@ extension BankInformationContainerView {
     
     private func setUI() {
         backgroundColor = .white
+        mapView.layer.cornerRadius = 20
     }
     
     private func setLayout() {
         
-        [mapImageView, stackView].forEach { self.addSubview($0) }
+        [mapView, stackView, locationButton].forEach { self.addSubview($0) }
         
-        mapImageView.snp.makeConstraints {
+        mapView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(120)
         }
         
         stackView.snp.makeConstraints {
-            $0.top.equalTo(mapImageView.snp.bottom).offset(15)
+            $0.top.equalTo(mapView.snp.bottom).offset(15)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
+        
+        locationButton.snp.makeConstraints {
+            $0.top.trailing.equalTo(mapView).inset(10)
+            $0.width.height.equalTo(24)
+        }
+    }
+}
+
+// MARK: - Methods
+
+extension BankInformationContainerView {
+    
+    @objc
+    public func centerMapOnUserLocation() {
+        guard let userLocation = mapView.userLocation.location else { return }
+        let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: true)
     }
 }

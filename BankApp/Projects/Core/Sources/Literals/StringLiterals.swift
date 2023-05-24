@@ -36,9 +36,9 @@ public struct I18N {
         public static let peopleCount = "명"
         public static let showMyWaitlist = "나의 대기 현황 보기"
         
-        public static let sampleBankName = "공덕금융센터점"
-        public static let sampleBankPlace = "서울 마포구 백범로 192,(S-OIL본사 사옥2층)"
-        public static let sampleBankBusinessHours = "월~금 09:00 ~ 16:00 / 토, 일 정기휴무"
+        public static let sampleBankName = "KB국민은행 용산종합금융센터"
+        public static let sampleBankPlace = "서울 용산구 청파로 101 나진상가 10동 (한강로3가 1-3)"
+        public static let sampleBankBusinessHours = "월 ~ 금 09:00 ~ 18:00 / 토, 일, 공휴일 휴무"
         
         public static let mobileNumbering = "모바일 번호표"
         public static let waitingCustomers = "대기 고객"

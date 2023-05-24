@@ -36,7 +36,9 @@ public extension Project {
         "App Transport Security Settings": ["Allow Arbitrary Loads": true],
         "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
         "ITSAppUsesNonExemptEncryption": false,
-        "UIUserInterfaceStyle": "Light"
+        "UIUserInterfaceStyle": "Light",
+        "NSLocationUsageDescription": "은행 검색을 위해 위치 정보를 사용합니다.",
+        "NSLocationWhenInUseUsageDescription": "은행 검색을 위해 위치 정보를 사용합니다."
     ]
     
 }
