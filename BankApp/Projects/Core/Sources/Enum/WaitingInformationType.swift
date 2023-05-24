@@ -8,6 +8,7 @@
 
 import Foundation
 
+@frozen
 public enum WaitingInformationType: String {
     case waitingCustomers
     case estimatedWaitTime

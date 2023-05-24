@@ -15,6 +15,22 @@ import SnapKit
 
 public class NumberingBaseViewController: UIViewController {
     
+    // MARK: - Properties
+    
+    @UserDefaultWrapper<Bool>(key: "isWaiting", defaultValue: false)
+    public var isWaiting: Bool {
+        didSet {
+            waitButton.isSelected = isWaiting
+            waitButton.backgroundColor = isWaiting ? DSKitAsset.Colors.gray300.color : DSKitAsset.Colors.blue.color
+        }
+    }
+    
+    private var isButtonEnabled: Bool = true {
+        didSet {
+            waitButton.isEnabled = isButtonEnabled
+        }
+    }
+    
     // MARK: - UI Components
     
     private let containerScrollView = UIScrollView()
@@ -24,16 +40,20 @@ public class NumberingBaseViewController: UIViewController {
     
     private let notificationView = WaitingNotificationView()
     
-    private lazy var waitButton: UIButton = {
-        let button = UIButton(type: .system)
+    public lazy var waitButton: UIButton = {
+        let button = UIButton()
         button.tintColor = .white
+        button.titleLabel?.font = DSKitFontFamily.SpoqaHanSansNeo.medium.font(size: 16)
         button.backgroundColor = DSKitAsset.Colors.blue.color
         button.setTitle(I18N.ServiceFeature.waiting, for: .normal)
-        button.setTitle(I18N.ServiceFeature.cancelWaiting, for: .disabled)
+        button.setTitle(I18N.ServiceFeature.cancelWaiting, for: .selected)
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(waitButtonDidTap), for: .touchUpOutside) // FIX: 클릭 안됨 -> delegate로 전달
+        button.addTarget(self, action: #selector(waitButtonDidTap), for: .touchUpOutside)
         return button
     }()
+    
+    // MARK: - Initialization
+    
     
     // MARK: - View Life Cycle
     
@@ -41,6 +61,12 @@ public class NumberingBaseViewController: UIViewController {
         super.viewDidLoad()
         setUI()
         setLayout()
+        initialButtonState()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print(isWaiting)
     }
 }
 
@@ -57,7 +83,7 @@ extension NumberingBaseViewController {
     private func setLayout() {
         [containerScrollView, waitButton].forEach { view.addSubview($0) }
         containerScrollView.addSubview(contentView)
-    
+        
         [waitStatusView, notificationView].forEach { contentView.addSubview($0) }
         
         containerScrollView.snp.makeConstraints {
@@ -95,9 +121,40 @@ extension NumberingBaseViewController {
 
 extension NumberingBaseViewController {
     
+    private func initialButtonState() {
+        isWaiting = isWaiting // 기존 상태
+    }
+    
     @objc
-    private func waitButtonDidTap() {
-//        waitButton.isSelected.toggle()
-//        print("대기하기 버튼 클릭")
+    public func waitButtonDidTap() {
+        if isButtonEnabled {
+            isButtonEnabled = false
+            isWaiting ? presentAlertVC() : performWaiting()
+        }
+    }
+    
+    private func presentAlertVC() {
+        let alertVC = makeAlertViewController(type: .cancelWaiting,
+                                              title: I18N.ServiceFeature.Alert.cancelPopup,
+                                              customButtonTitle: I18N.ServiceFeature.cancelWaiting,
+                                              customAction: {
+            self.cancelWaiting()
+        })
+        present(alertVC, animated: true)
+        
+        isButtonEnabled = true // 버튼을 즉시 다시 활성화
+    }
+    
+    private func performWaiting() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { // 클릭 간격 제한
+            self.isButtonEnabled = true
+        }
+        isWaiting = true
+        showToast(message: I18N.ServiceFeature.successWaiting)
+    }
+    
+    private func cancelWaiting() {
+        isWaiting = false
+        isButtonEnabled = true // 버튼을 즉시 다시 활성화
     }
 }

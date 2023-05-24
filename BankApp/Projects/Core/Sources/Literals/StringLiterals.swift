@@ -10,6 +10,11 @@ import Foundation
 
 public struct I18N {
     
+    public struct Alert {
+        public static let network = "네트워크 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요."
+        public static let reload = "다시 시도"
+    }
+    
     public struct TabBar {
         public static let home = "홈"
         public static let service = "서비스"
@@ -47,9 +52,15 @@ public struct I18N {
         
         public static let waiting = "대기하기"
         public static let cancelWaiting = "대기 취소하기"
-        public static let successWaiting = "번호표 발행 완료"
-        public static let cancelPopup = "정말 대기를\n취소하시겠습니까?"
-        public static let cancel = "취소하기"
-        public static let no = "아니요"
+        public static let successWaiting = "번호표 발급에 성공했어요"
+        
+        public struct Alert {
+            public static let cancelPopup = "정말 대기를\n취소하시겠습니까?"
+            public static let cancel = "취소하기"
+            public static let no = "아니요"
+            public static let confirm = "확인"
+            public static let unableToWait = "대기 불가능"
+            public static let unableToWaitDescription = "이미 예약중인 창구가 존재합니다."
+        }
     }
 }

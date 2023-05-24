@@ -15,6 +15,8 @@ import SnapKit
 
 import ServiceFeatureInterface
 
+import BaseFeatureDependency
+
 public final class ServiceViewController: UIViewController {
     
     // MARK: - UI Components

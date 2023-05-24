@@ -23,6 +23,23 @@ public final class NumberingDetailViewController: UIViewController {
     private let loanDetailVC = LoansViewController()
     private let depositDetailVC = DepositsViewController()
     
+    private lazy var backBarButton: UIBarButtonItem = {
+        let barButton = UIBarButtonItem(image: DSKitAsset.Images.icnBackArrow.image,
+                                        style: .plain,
+                                        target: self,
+                                        action: #selector(dismissVC))
+        return barButton
+    }()
+    
+    private lazy var refreshBarButton: UIBarButtonItem = {
+        let barButton = UIBarButtonItem(image: DSKitAsset.Images.refresh.image,
+                                        style: .plain,
+                                        target: self,
+                                        action: #selector(refreshed))
+        barButton.customView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(refreshed)))
+        return barButton
+    }()
+    
     public lazy var detailViewControllers: [UIViewController] = {
         return [loanDetailVC, depositDetailVC]
     }()
@@ -63,6 +80,9 @@ public final class NumberingDetailViewController: UIViewController {
         return view
     }()
     
+    // MARK: - Initialization
+    
+    
     // MARK: - View Life Cycle
     
     public override func viewDidLoad() {
@@ -83,6 +103,8 @@ extension NumberingDetailViewController {
         view.backgroundColor = .white
         title = I18N.ServiceFeature.mobileNumbering
         navigationItem.largeTitleDisplayMode = .never
+        navigationItem.leftBarButtonItem = backBarButton
+        navigationItem.rightBarButtonItem = refreshBarButton
         headerCollectionView.backgroundColor = .clear
     }
     
@@ -146,6 +168,19 @@ extension NumberingDetailViewController {
         pageViewController.setViewControllers([detailViewControllers[initialTab]], direction: .forward, animated: true, completion: nil)
         
     }
+    
+    // MARK: - @objc Function
+    
+    @objc
+    private func dismissVC() {
+        navigationController?.popViewController(animated: true)
+    }
+
+    @objc
+    private func refreshed() {
+        print("새로고침 버튼 클릭 !!!")
+    }
+
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -201,5 +236,13 @@ extension NumberingDetailViewController: UIPageViewControllerDelegate, UIPageVie
         let nextIndex = index + 1
         if nextIndex == detailViewControllers.count { return nil }
         return detailViewControllers[nextIndex]
+    }
+}
+
+extension UIImageView {
+    
+    public func rotate() {
+        // Rotation
+        
     }
 }

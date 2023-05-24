@@ -8,6 +8,7 @@
 
 import Foundation
 
+@frozen
 public enum BankingServiceType: String {
     case deposits
     case loans
