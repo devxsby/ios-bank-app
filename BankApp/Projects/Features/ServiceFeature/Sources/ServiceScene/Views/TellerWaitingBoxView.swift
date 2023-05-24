@@ -117,10 +117,17 @@ extension TellerWaitingBoxView {
     
     @objc
     private func handleTap() {
-        if (titleLabel.text?.contains(I18N.ServiceFeature.deposits)) == true {
-            delegate?.pushToDetailViewCotroller(.deposits)
-        } else {
-            delegate?.pushToDetailViewCotroller(.loans)
+        
+        containerView.backgroundColor = DSKitAsset.Colors.gray300.color.withAlphaComponent(0.15)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.containerView.backgroundColor = DSKitAsset.Colors.gray100.color
+            
+            if (self.titleLabel.text?.contains(I18N.ServiceFeature.deposits)) == true {
+                self.delegate?.pushToDetailViewCotroller(.deposits)
+            } else {
+                self.delegate?.pushToDetailViewCotroller(.loans)
+            }
         }
     }
 }

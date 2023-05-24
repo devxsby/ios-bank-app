@@ -109,7 +109,13 @@ extension MyWaitlistView {
     
     @objc
     private func handleTap() {
-        delegate?.didPressWaitlistView()
+        
+        backgroundColor = DSKitAsset.Colors.gray100.color.withAlphaComponent(0.3)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.backgroundColor = .white
+            self.delegate?.didPressWaitlistView()
+        }
     }
 }
 
