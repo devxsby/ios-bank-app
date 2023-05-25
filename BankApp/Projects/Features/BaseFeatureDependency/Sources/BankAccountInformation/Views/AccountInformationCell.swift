@@ -28,7 +28,7 @@ open class AccountInformationCell: UICollectionViewCell {
     private var titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.textColor = DSKitAsset.Colors.gray400.color
+        label.textColor = DSKitAsset.Colors.gray400.color.withAlphaComponent(0.8)
         label.font = DSKitFontFamily.SpoqaHanSansNeo.medium.font(size: 14)
         return label
     }()
@@ -37,7 +37,7 @@ open class AccountInformationCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .left
         label.textColor = DSKitAsset.Colors.gray500.color
-        label.font = DSKitFontFamily.SpoqaHanSansNeo.bold.font(size: 18)
+        label.font = DSKitFontFamily.SpoqaHanSansNeo.bold.font(size: 16)
         return label
     }()
     

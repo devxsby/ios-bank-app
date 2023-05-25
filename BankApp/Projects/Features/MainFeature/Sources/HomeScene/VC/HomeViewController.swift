@@ -46,8 +46,8 @@ public final class HomeViewController: UIViewController {
                 return self?.createInvestmentsSection()
             case .consumption:
                 return self?.createConsumptionSection()
-//            case .life:
-//                return self?.createLifeSection()
+            case .life:
+                return self?.createLifeSection()
             }
         }
     }()
@@ -103,15 +103,15 @@ extension HomeViewController {
     
     private func registerCells() {
         
-        //cell
         collectionView.register(BankIntroduceCell.self, forCellWithReuseIdentifier: BankIntroduceCell.className)
         collectionView.register(EarnPointCell.self, forCellWithReuseIdentifier: EarnPointCell.className)
         collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: "AssetsCell")
         collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: "InvestmentsCell")
         collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: "ConsumptionCell")
+        collectionView.register(LifeTipCell.self, forCellWithReuseIdentifier: LifeTipCell.className)
         
-        //header
         collectionView.register(AccountInformationHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AccountInformationHeaderView.className)
+        collectionView.register(HomeFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HomeFooterView.className)
     }
     
     private func setDelegate() {
@@ -130,68 +130,54 @@ extension HomeViewController {
 extension HomeViewController {
     
     private func createBankInformationSection() -> NSCollectionLayoutSection {
-        let sectionMargin: CGFloat = 10
-        let groupMargin: CGFloat = 6
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .fractionalHeight(1)))
         
-        //item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: .init(widthDimension: .absolute(collectionView.frame.size.width - 30),
+                              heightDimension: .estimated((75))),
+            subitem: item,
+            count: 1)
         
-        //group
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(view.frame.width - (sectionMargin * 2)),
-            heightDimension: .estimated(75)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-        group.contentInsets = .init(top: 0, leading: groupMargin, bottom: 0, trailing: groupMargin)
-        
-        //section
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .groupPaging
-        section.contentInsets = .init(top: sectionMargin + groupMargin, leading: sectionMargin, bottom: sectionMargin + groupMargin, trailing: sectionMargin)
+        section.orthogonalScrollingBehavior = .none
+        section.contentInsets = .init(top: 0, leading: 15, bottom: 20, trailing: 15)
         
         return section
     }
     
     
     private func createPointSection() -> NSCollectionLayoutSection {
-        let sectionMargin: CGFloat = 10
-        let groupMargin: CGFloat = 6
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .fractionalHeight(1)))
         
-        //item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        //group
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(view.frame.width - (sectionMargin * 2)),
-            heightDimension: .estimated(160)
-        )
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(collectionView.frame.size.width - 30),
+                                               heightDimension: .estimated(160))
+
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
         
-        //section
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .groupPaging
-        section.contentInsets = .init(top: sectionMargin + groupMargin, leading: sectionMargin, bottom: sectionMargin + groupMargin, trailing: sectionMargin)
+        section.orthogonalScrollingBehavior = .none
+        section.contentInsets = .init(top: 0, leading: 15, bottom: 20, trailing: 15)
         
         return section
     }
         
     
     private func createAssetsSection() -> NSCollectionLayoutSection {
-        //item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .fractionalHeight(1)))
         
-        //group
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(collectionView.frame.size.width - 30), heightDimension: .estimated(400))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: 5)
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: .init(widthDimension: .absolute(collectionView.frame.size.width - 30),
+                              heightDimension: .estimated((400))),
+            subitem: item,
+            count: 5)
         
-        //section
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
-
+        section.contentInsets = .init(top: 0, leading: 15, bottom: 20, trailing: 15)
+        
         let sectionHeader = self.createDefaultSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
 
@@ -199,19 +185,18 @@ extension HomeViewController {
     }
     
     private func createInvestmentsSection() -> NSCollectionLayoutSection {
-        //item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        //group
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(collectionView.frame.size.width - 30), heightDimension: .estimated(80))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: 1)
-        group.contentInsets = .init(top: 0, leading: 0, bottom: 10, trailing: 0)
-
-        //section
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .fractionalHeight(1)))
+        
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: .init(widthDimension: .absolute(collectionView.frame.size.width - 30),
+                              heightDimension: .estimated((80))),
+            subitem: item,
+            count: 1)
+        
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
+        section.contentInsets = .init(top: 0, leading: 15, bottom: 20, trailing: 15)
 
         let sectionHeader = self.createDefaultSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
@@ -220,36 +205,52 @@ extension HomeViewController {
     }
     
     private func createConsumptionSection() -> NSCollectionLayoutSection {
-        //item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .fractionalHeight(1)))
 
-        //group
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(collectionView.frame.size.width - 30), heightDimension: .estimated(160))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: 2)
-        group.contentInsets = .init(top: 0, leading: 0, bottom: 10, trailing: 0)
-
-        //section
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: .init(widthDimension: .absolute(collectionView.frame.size.width - 30),
+                              heightDimension: .absolute(160)),
+            subitem: item,
+            count: 2)
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
         section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
-
+        
         let sectionHeader = self.createDefaultSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
+        
+        return section
+    }
 
+    private func createLifeSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .fractionalHeight(1)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(140),
+                                                                         heightDimension: .absolute(160)),
+                                                       subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 15
+        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
+        
+        let sectionFooter = self.createHomeFooter()
+        section.boundarySupplementaryItems = [sectionFooter]
         return section
     }
     
-//    private func createLifeSection() -> NSCollectionLayoutSection {
-//
-//    }
-    
     private func createDefaultSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
-        //section header 사이즈
-        let layoutSectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
+        let layoutSectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                             heightDimension: .estimated(60))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSectionHeaderSize,
+                                                                        elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
-        //section header Layout
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSectionHeaderSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        return sectionHeader
+     }
+    
+    private func createHomeFooter() -> NSCollectionLayoutBoundarySupplementaryItem {
+        let layoutSectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSectionHeaderSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
         
         return sectionHeader
      }
@@ -261,6 +262,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("셀 클릭")
+        makeVibrate(degree: .light)
     }
     
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -325,6 +327,16 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             cell.backgroundColor = .white
             cell.setData(item)
             return cell
+        case .life:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LifeTipCell.className, for: indexPath) as? LifeTipCell else {
+                return UICollectionViewCell()
+            }
+            guard let item = sections[indexPath.section].items[indexPath.row] as? LifeTipModel else {
+                return UICollectionViewCell()
+            }
+            cell.backgroundColor = .white
+            cell.setData(item)
+            return cell
         }
     }
     
@@ -337,6 +349,13 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let item = sections[indexPath.section]
             headerView.setData(item.headerText)
             return headerView
+        }
+        
+        if kind == UICollectionView.elementKindSectionFooter {
+            guard let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HomeFooterView.className, for: indexPath) as? HomeFooterView else {
+                return UICollectionReusableView()
+            }
+            return footerView
         }
         return UICollectionReusableView()
     }
@@ -362,12 +381,12 @@ extension HomeViewController {
             HomeItem(
                 type: .assets,
                 items: [AccountInformationModel(image: DSKitAsset.Images.icnYagom.image,
-                                                title: "야곰 뱅크 통장",
-                                                subtitle: "123,456,789 원",
+                                                title: "야곰뱅크 주거래 통장",
+                                                subtitle: "6,083,000원",
                                                 buttonTitle: "송금"),
                         AccountInformationModel(image: DSKitAsset.Images.icnSaving.image,
-                                                        title: "야곰뱅크 통장",
-                                                        subtitle: "123,456원",
+                                                        title: "모으기 통장",
+                                                        subtitle: "851,500원",
                                                         buttonTitle: nil),
                         AccountInformationModel(image: DSKitAsset.Images.icnKb.image,
                                                         title: "KB 국민은행 통장",
@@ -375,31 +394,42 @@ extension HomeViewController {
                                                         buttonTitle: "송금"),
                         AccountInformationModel(image: DSKitAsset.Images.icnBanks.image,
                                                         title: "증권 · 3개",
-                                                        subtitle: "457,000원",
+                                                        subtitle: "2,557,000원",
                                                         buttonTitle: "송금"),
                         AccountInformationModel(image: DSKitAsset.Images.icnMoneybag.image,
-                                                        title: "대출 · 59개 금융사 대기중",
+                                                        title: "대출 · 39개 금융사 대기중",
                                                         subtitle: "내 최대 대출 한도 보기",
                                                         buttonTitle: nil)],
                 headerText: "자산"),
             HomeItem(
                 type: .investments,
-                items: [AccountInformationModel(image: DSKitAsset.Images.icnBanks.image,
+                items: [AccountInformationModel(image: DSKitAsset.Images.icnStocks.image,
                                                 title: "주식",
-                                                subtitle: "123,456원 + 123.6%",
+                                                subtitle: "1,805,456원 + 123.6%",
                                                 buttonTitle: nil)],
                 headerText: "투자"),
             HomeItem(
                 type: .consumption,
                 items: [AccountInformationModel(image: DSKitAsset.Images.icnCards.image,
                                                 title: "이번 달 쓴 금액",
-                                                subtitle: "123,456,789원",
+                                                subtitle: "1,248,200원",
                                                 buttonTitle: "내역"),
                         AccountInformationModel(image: DSKitAsset.Images.icnDday.image,
                                                         title: "6월 15일 낼 카드값",
-                                                        subtitle: "123,456원",
+                                                        subtitle: "913,560원",
                                                         buttonTitle: nil)],
-                headerText: "소비"
+                headerText: "소비"),
+            HomeItem(
+                type: .life,
+                items: [LifeTipModel(title: "돈 버는 법",
+                                     subtitle: "매일 포인트\n받기",
+                                     image: DSKitAsset.Images.icnPoint.image),
+                        LifeTipModel(title: "최근",
+                                     subtitle: "오늘의\n머니 팁",
+                                     image: DSKitAsset.Images.icnLamp.image),
+                        LifeTipModel(title: "자주",
+                                     subtitle: "신용점수\n보기",
+                                     image: nil)]
             )
         ]
     }

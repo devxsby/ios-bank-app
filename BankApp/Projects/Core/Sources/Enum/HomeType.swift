@@ -15,5 +15,5 @@ public enum HomeItemType: Int {
     case assets
     case investments
     case consumption
-//    case life
+    case life
 }
