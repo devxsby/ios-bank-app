@@ -15,8 +15,6 @@ import MainFeatureInterface
 
 import SnapKit
 
-// TODO: - life 그룹 추가, 중복되는 코드 리팩토링
-
 public final class HomeViewController: UIViewController {
     
     // MARK: - Properties
@@ -26,7 +24,7 @@ public final class HomeViewController: UIViewController {
     // MARK: - UI Components
     
     private lazy var collectionView: UICollectionView = {
-        var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = DSKitAsset.Colors.gray100.color
         return collectionView
     }()
@@ -68,12 +66,11 @@ public final class HomeViewController: UIViewController {
         setLayout()
         setDelegate()
         registerCells()
-        setData()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        setData()
     }
 }
 
@@ -103,12 +100,12 @@ extension HomeViewController {
     
     private func registerCells() {
         
-        collectionView.register(BankIntroduceCell.self, forCellWithReuseIdentifier: BankIntroduceCell.className)
-        collectionView.register(EarnPointCell.self, forCellWithReuseIdentifier: EarnPointCell.className)
-        collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: "AssetsCell")
-        collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: "InvestmentsCell")
-        collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: "ConsumptionCell")
-        collectionView.register(LifeTipCell.self, forCellWithReuseIdentifier: LifeTipCell.className)
+        collectionView.register(BankIntroduceCell.self, forCellWithReuseIdentifier: HomeItemType.bankIntroduce.reuseIdentifier)
+        collectionView.register(EarnPointCell.self, forCellWithReuseIdentifier: HomeItemType.point.reuseIdentifier)
+        collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: HomeItemType.assets.reuseIdentifier)
+        collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: HomeItemType.investments.reuseIdentifier)
+        collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: HomeItemType.consumption.reuseIdentifier)
+        collectionView.register(LifeTipCell.self, forCellWithReuseIdentifier: HomeItemType.life.reuseIdentifier)
         
         collectionView.register(AccountInformationHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AccountInformationHeaderView.className)
         collectionView.register(HomeFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HomeFooterView.className)
@@ -130,131 +127,104 @@ extension HomeViewController {
 extension HomeViewController {
     
     private func createBankInformationSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .fractionalHeight(1)))
-        
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: .init(widthDimension: .absolute(collectionView.frame.size.width - 30),
-                              heightDimension: .estimated((75))),
-            subitem: item,
-            count: 1)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 20, trailing: 15)
-        
-        return section
+        return createSectionWithVerticalGroup(itemCount: 1, itemHeight: 75)
     }
-    
     
     private func createPointSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .fractionalHeight(1)))
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(collectionView.frame.size.width - 30),
-                                               heightDimension: .estimated(160))
-
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 20, trailing: 15)
-        
-        return section
+        return createSectionWithVerticalGroup(itemCount: 1, itemHeight: 160)
     }
-        
     
     private func createAssetsSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .fractionalHeight(1)))
-        
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: .init(widthDimension: .absolute(collectionView.frame.size.width - 30),
-                              heightDimension: .estimated((400))),
-            subitem: item,
-            count: 5)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 20, trailing: 15)
-        
-        let sectionHeader = self.createDefaultSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
-
-        return section
+        let headerKind = UICollectionView.elementKindSectionHeader
+        return createSectionWithVerticalGroup(itemCount: 5, itemHeight: 400, headerKind: headerKind)
     }
     
     private func createInvestmentsSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .fractionalHeight(1)))
-        
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: .init(widthDimension: .absolute(collectionView.frame.size.width - 30),
-                              heightDimension: .estimated((80))),
-            subitem: item,
-            count: 1)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 20, trailing: 15)
-
-        let sectionHeader = self.createDefaultSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
-
-        return section
+        let headerKind = UICollectionView.elementKindSectionHeader
+        return createSectionWithVerticalGroup(itemCount: 1, itemHeight: 80, headerKind: headerKind)
     }
     
     private func createConsumptionSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .fractionalHeight(1)))
-
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: .init(widthDimension: .absolute(collectionView.frame.size.width - 30),
-                              heightDimension: .absolute(160)),
-            subitem: item,
-            count: 2)
+        let headerKind = UICollectionView.elementKindSectionHeader
+        return createSectionWithVerticalGroup(itemCount: 2, itemHeight: 160, headerKind: headerKind)
+    }
+    
+    private func createLifeSection() -> NSCollectionLayoutSection {
+        let footerKind = UICollectionView.elementKindSectionFooter
+        return createSectionWithHorizontalGroup(itemCount: 1, itemWidth: 140, itemHeight: 160, interItemSpacing: 15, footerKind: footerKind)
+    }
+    
+    private func createSectionWithVerticalGroup(itemCount: Int,
+                                                itemHeight: CGFloat,
+                                                headerKind: String? = nil,
+                                                footerKind: String? = nil) -> NSCollectionLayoutSection {
+        
+        let sectionInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 20, trailing: 15)
+        
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(itemHeight))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: itemCount)
+        
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
+        section.interGroupSpacing = 15
+        section.contentInsets = sectionInsets
         
-        let sectionHeader = self.createDefaultSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
+        if let kind = headerKind {
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: kind, alignment: .top)
+            section.boundarySupplementaryItems = [header]
+        }
+        
+        if let kind = footerKind {
+            let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
+            let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: kind, alignment: .bottom)
+            section.boundarySupplementaryItems = [footer]
+        }
         
         return section
     }
-
-    private func createLifeSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .fractionalHeight(1)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(140),
-                                                                         heightDimension: .absolute(160)),
-                                                       subitems: [item])
+    
+    private func createSectionWithHorizontalGroup(itemCount: Int,
+                                                  itemWidth: CGFloat,
+                                                  itemHeight: CGFloat,
+                                                  interItemSpacing: CGFloat,
+                                                  headerKind: String? = nil,
+                                                  footerKind: String? = nil) -> NSCollectionLayoutSection {
+        
+        let sectionInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 20, trailing: 15)
+        
+        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth), heightDimension: .absolute(itemHeight))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth * CGFloat(itemCount) + interItemSpacing * CGFloat(itemCount - 1)), heightDimension: .absolute(itemHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: itemCount)
+        group.interItemSpacing = .fixed(interItemSpacing)
+        
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 15
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
+        section.contentInsets = sectionInsets
         
-        let sectionFooter = self.createHomeFooter()
-        section.boundarySupplementaryItems = [sectionFooter]
+        if let kind = headerKind {
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: kind, alignment: .top)
+            section.boundarySupplementaryItems = [header]
+        }
+        
+        if let kind = footerKind {
+            let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
+            let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: kind, alignment: .bottom)
+            section.boundarySupplementaryItems = [footer]
+        }
+        
         return section
     }
-    
-    private func createDefaultSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
-        let layoutSectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                             heightDimension: .estimated(60))
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSectionHeaderSize,
-                                                                        elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-        
-        return sectionHeader
-     }
-    
-    private func createHomeFooter() -> NSCollectionLayoutBoundarySupplementaryItem {
-        let layoutSectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSectionHeaderSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-        
-        return sectionHeader
-     }
 }
+
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
@@ -276,68 +246,44 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let sectionType = sections[indexPath.section].type
+        let reuseIdentifier: String
+        
         switch sectionType {
         case .bankIntroduce:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BankIntroduceCell.className, for: indexPath) as? BankIntroduceCell else {
-                return UICollectionViewCell()
-            }
-            guard let item = sections[indexPath.section].items[indexPath.row] as? BankIntroduceModel else {
-                return UICollectionViewCell()
-            }
-            cell.backgroundColor = .white
-            cell.setData(item)
-            return cell
+            reuseIdentifier = HomeItemType.bankIntroduce.reuseIdentifier
         case .point:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EarnPointCell.className, for: indexPath) as? EarnPointCell else {
-                return UICollectionViewCell()
-            }
-            guard let item = sections[indexPath.section].items[indexPath.row] as? EarnPointModel else {
-                return UICollectionViewCell()
-            }
-            cell.backgroundColor = .white
-            cell.setData(item)
-            return cell
+            reuseIdentifier = HomeItemType.point.reuseIdentifier
         case .assets:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AssetsCell", for: indexPath) as? AccountInformationCell else {
-                return UICollectionViewCell()
-            }
-            guard let item = sections[indexPath.section].items[indexPath.row] as? AccountInformationModel else {
-                return UICollectionViewCell()
-            }
-            cell.backgroundColor = .white
-            cell.setData(item)
-            return cell
+            reuseIdentifier = HomeItemType.assets.reuseIdentifier
         case .investments:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "InvestmentsCell", for: indexPath) as? AccountInformationCell else {
-                return UICollectionViewCell()
-            }
-            guard let item = sections[indexPath.section].items[indexPath.row] as? AccountInformationModel else {
-                return UICollectionViewCell()
-            }
-            cell.backgroundColor = .white
-            cell.setData(item)
-            return cell
+            reuseIdentifier = HomeItemType.investments.reuseIdentifier
         case .consumption:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ConsumptionCell", for: indexPath) as? AccountInformationCell else {
-                return UICollectionViewCell()
-            }
-            guard let item = sections[indexPath.section].items[indexPath.row] as? AccountInformationModel else {
-                return UICollectionViewCell()
-            }
-            cell.backgroundColor = .white
-            cell.setData(item)
-            return cell
+            reuseIdentifier = HomeItemType.consumption.reuseIdentifier
         case .life:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LifeTipCell.className, for: indexPath) as? LifeTipCell else {
-                return UICollectionViewCell()
-            }
-            guard let item = sections[indexPath.section].items[indexPath.row] as? LifeTipModel else {
-                return UICollectionViewCell()
-            }
-            cell.backgroundColor = .white
-            cell.setData(item)
-            return cell
+            reuseIdentifier = HomeItemType.life.reuseIdentifier
         }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        
+        switch sectionType {
+        case .bankIntroduce:
+            if let item = sections[indexPath.section].items[indexPath.row] as? BankIntroduceModel {
+                (cell as? BankIntroduceCell)?.setData(item)
+            }
+        case .point:
+            if let item = sections[indexPath.section].items[indexPath.row] as? EarnPointModel {
+                (cell as? EarnPointCell)?.setData(item)
+            }
+        case .assets, .investments, .consumption:
+            if let item = sections[indexPath.section].items[indexPath.row] as? AccountInformationModel {
+                (cell as? AccountInformationCell)?.setData(item)
+            }
+        case .life:
+            if let item = sections[indexPath.section].items[indexPath.row] as? LifeTipModel {
+                (cell as? LifeTipCell)?.setData(item)
+            }
+        }
+        
+        return cell
     }
     
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

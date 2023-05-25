@@ -16,4 +16,15 @@ public enum HomeItemType: Int {
     case investments
     case consumption
     case life
+    
+    public var reuseIdentifier: String {
+        switch self {
+        case .bankIntroduce: return "BankIntroduceCell"
+        case .point: return "EarnPointCell"
+        case .assets: return "AssetsCell"
+        case .investments: return "InvestmentsCell"
+        case .consumption: return "ConsumptionCell"
+        case .life: return "LifeTipCell"
+        }
+    }
 }
