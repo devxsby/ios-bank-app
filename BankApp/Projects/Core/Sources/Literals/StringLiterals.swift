@@ -23,6 +23,21 @@ public struct I18N {
         public static let overall = "전체"
     }
     
+    public struct MainFeature {
+        public static let yagomBank = "야곰뱅크"
+        public static let getPoint = "함께 어플 켜고 포인트 받기"
+        public static let assets = "자산"
+        public static let investments = "투자"
+        public static let consumption = "소비"
+
+        public static let transfer = "송금"
+        public static let history = "내역"
+        public static let screenSettings = "화면 설정"
+        public static let addingAssets = "자산 추가"
+        public static let viewPrivacyPolicy = "개인정보처리방침 보기"
+
+    }
+    
     public struct ServiceFeature {
         public static let service = "서비스"
         public static let searchBank = "가까운 은행을 검색하세요"
