@@ -14,8 +14,12 @@ import Domain
 
 import SnapKit
 
-public final class SplashViewController: UIViewController {
+public final class SplashViewController: UIViewController, SplashViewControllable {
     
+    // MARK: - Properties
+    
+    public var factory: RootFeatureViewBuildable
+        
     // MARK: - UI Components
     
     private let imageView: UIImageView = {
@@ -23,6 +27,17 @@ public final class SplashViewController: UIViewController {
         imageView.image = DSKitAsset.Images.icnYagom.image
         return imageView
     }()
+    
+    // MARK: - Initialization
+    
+    public init(factory: RootFeatureViewBuildable) {
+        self.factory = factory
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - View Life Cycle
     
@@ -50,32 +65,12 @@ public final class SplashViewController: UIViewController {
     
     private func addAnimation() {
         UIView.animate(withDuration: 1.0, delay: 1.0, options: .autoreverse, animations: {
-            print("애니메이션 실행!")
-        }, completion: { finished in
-            print("애니메이션 종료")
-            let tabBarController = TabBarViewController()
+            // TODO: - 스플래시 애니메이션 넣기
+        }, completion: { _ in
+            guard let tabBarController = self.factory.makeTabBarController().viewController
+                    as? UITabBarController else { return }
             tabBarController.selectedIndex = 1
             SplashViewController.setRootViewController(window: self.view.window!, viewController: tabBarController, withAnimation: true)
         })
-    }
-    
-    static func setRootViewController(window: UIWindow, viewController: UIViewController, withAnimation: Bool) {
-        if !withAnimation {
-            window.rootViewController = viewController
-            window.makeKeyAndVisible()
-            return
-        }
-
-        if let snapshot = window.snapshotView(afterScreenUpdates: true) {
-            viewController.view.addSubview(snapshot)
-            window.rootViewController = viewController
-            window.makeKeyAndVisible()
-            
-            UIView.animate(withDuration: 0.4, animations: {
-                snapshot.layer.opacity = 0
-            }, completion: { _ in
-                snapshot.removeFromSuperview()
-            })
-        }
     }
 }

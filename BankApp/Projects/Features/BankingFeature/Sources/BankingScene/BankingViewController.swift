@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import BankingFeatureInterface
 
-public final class BankingViewController: UIViewController {
+public final class BankingViewController: UIViewController, BankingViewControllable {
+    
+    // MARK: - View Life Cycle
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

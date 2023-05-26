@@ -13,7 +13,7 @@ import DSKit
 
 import SnapKit
 
-public final class AlertViewController: UIViewController {
+public final class AlertViewController: UIViewController, AlertViewControllable {
     
     // MARK: - Properties
     
@@ -22,12 +22,12 @@ public final class AlertViewController: UIViewController {
     // MARK: - UI Components
     
     private lazy var backgroundDimmerView = CustomDimmerView(self) {
-            didSet {
-                let gesture = UITapGestureRecognizer(target: self, action: #selector(backgroundDimmerViewTapped))
-                gesture.cancelsTouchesInView = false
-                backgroundDimmerView.addGestureRecognizer(gesture)
-            }
+        didSet {
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(backgroundDimmerViewTapped))
+            gesture.cancelsTouchesInView = false
+            backgroundDimmerView.addGestureRecognizer(gesture)
         }
+    }
     private let alertView = UIView()
     private let titleLabel = UILabel()
     private let cancelButton = UIButton()

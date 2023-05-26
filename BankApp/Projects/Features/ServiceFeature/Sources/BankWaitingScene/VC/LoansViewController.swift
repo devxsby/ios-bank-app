@@ -8,7 +8,7 @@
 
 import UIKit
 
-public final class LoansViewController: NumberingBaseViewController {
+public final class LoansViewController: BankWaitingBaseViewController {
     
     // MARK: - View Life Cycle
     

@@ -10,18 +10,27 @@ import UIKit
 
 import Core
 import DSKit
+import ServiceFeatureInterface
+import BaseFeatureDependency
 
-public final class NumberingDetailViewController: UIViewController {
-    
-    // MARK: - UI Components
-    
-    var initialTab: Int = 0
-    private var viewTypes: [String] = [I18N.ServiceFeature.loans, I18N.ServiceFeature.deposits]
+public final class BankWaitingDetailViewController: UIViewController, ServiceViewControllable {
     
     // MARK: - Properties
     
-    private let loanDetailVC = LoansViewController()
-    private let depositDetailVC = DepositsViewController()
+    public var factory: AlertViewBuildable
+    
+    public var initialTab: Int = 0
+    private var viewTypes: [String] = [I18N.ServiceFeature.loans, I18N.ServiceFeature.deposits]
+    private var currentPage: Int = 0 {
+        didSet {
+            bind(newValue: currentPage)
+        }
+    }
+    
+    // MARK: - UI Components
+    
+    private lazy var loanDetailVC = LoansViewController(factory: factory)
+    private lazy var depositDetailVC = DepositsViewController(factory: factory)
     
     private lazy var backBarButton: UIBarButtonItem = {
         let barButton = UIBarButtonItem(image: DSKitAsset.Images.icnBackArrow.image,
@@ -43,12 +52,6 @@ public final class NumberingDetailViewController: UIViewController {
     public lazy var detailViewControllers: [UIViewController] = {
         return [loanDetailVC, depositDetailVC]
     }()
-    
-    private var currentPage: Int = 0 {
-        didSet {
-            bind(newValue: currentPage)
-        }
-    }
     
     // MARK: - UI Components
     
@@ -82,6 +85,14 @@ public final class NumberingDetailViewController: UIViewController {
     
     // MARK: - Initialization
     
+    public init(factory: AlertViewBuildable) {
+        self.factory = factory
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - View Life Cycle
     
@@ -97,7 +108,7 @@ public final class NumberingDetailViewController: UIViewController {
 
 // MARK: - UI & Layout
 
-extension NumberingDetailViewController {
+extension BankWaitingDetailViewController {
     
     private func setUI() {
         view.backgroundColor = .white
@@ -133,7 +144,7 @@ extension NumberingDetailViewController {
 
 // MARK: - Methods
 
-extension NumberingDetailViewController {
+extension BankWaitingDetailViewController {
     
     private func registerCells() {
         headerCollectionView.register(
@@ -148,6 +159,7 @@ extension NumberingDetailViewController {
         
         pageViewController.delegate = self
         pageViewController.dataSource = self
+    
     }
     
     private func didTapCell(at indexPath: IndexPath) {
@@ -185,7 +197,7 @@ extension NumberingDetailViewController {
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
-extension NumberingDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension BankWaitingDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewTypes.count
@@ -206,7 +218,7 @@ extension NumberingDetailViewController: UICollectionViewDelegate, UICollectionV
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension NumberingDetailViewController: UICollectionViewDelegateFlowLayout {
+extension BankWaitingDetailViewController: UICollectionViewDelegateFlowLayout {
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width / CGFloat(viewTypes.count)
@@ -216,7 +228,7 @@ extension NumberingDetailViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - UIPageViewControllerDelegate, UIPageViewControllerDataSource
 
-extension NumberingDetailViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+extension BankWaitingDetailViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
@@ -236,13 +248,5 @@ extension NumberingDetailViewController: UIPageViewControllerDelegate, UIPageVie
         let nextIndex = index + 1
         if nextIndex == detailViewControllers.count { return nil }
         return detailViewControllers[nextIndex]
-    }
-}
-
-extension UIImageView {
-    
-    public func rotate() {
-        // Rotation
-        
     }
 }

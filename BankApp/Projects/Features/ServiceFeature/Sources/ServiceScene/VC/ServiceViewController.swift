@@ -14,10 +14,13 @@ import DSKit
 import SnapKit
 
 import ServiceFeatureInterface
-
 import BaseFeatureDependency
 
-public final class ServiceViewController: UIViewController {
+public final class ServiceViewController: UIViewController, ServiceViewControllable {
+    
+    // MARK: - Properties
+    
+    public var factory: ServiceFeatureViewBuildable & AlertViewBuildable
     
     // MARK: - UI Components
     
@@ -50,6 +53,17 @@ public final class ServiceViewController: UIViewController {
     private let showMyWaitlistView = MyWaitlistView()
     
     private let horizontalLineView = UIView()
+    
+    // MARK: - Initialization
+    
+    public init(factory: ServiceFeatureViewBuildable & AlertViewBuildable) {
+        self.factory = factory
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - View Life Cycle
     
@@ -172,9 +186,12 @@ extension ServiceViewController {
 extension ServiceViewController: MyWaitlistViewDelegate {
     
     public func didPressWaitlistView() {
-        let detailVC = NumberingDetailViewController()
-        detailVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(detailVC, animated: true)
+        // TODO: 분기처리를 해야하는데 isWaiting상태를 어떻게 공유하면 좋을까?
+        showToast(message: I18N.ServiceFeature.Alert.noWaitingList)
+        makeVibrate()
+//        let detailVC = factory.makeBankWaitingViewController().viewController
+//        detailVC.hidesBottomBarWhenPushed = true
+//        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
@@ -183,14 +200,10 @@ extension ServiceViewController: MyWaitlistViewDelegate {
 extension ServiceViewController: TellerWaitingBoxViewDelegate {
     
     public func pushToDetailViewCotroller(_ type: BankingServiceType) {
-        let numberingDetailVC = NumberingDetailViewController()
-        numberingDetailVC.hidesBottomBarWhenPushed = true
-        
-        if type == .loans {
-            numberingDetailVC.initialTab = 0
-        } else {
-            numberingDetailVC.initialTab = 1
-        }
-        navigationController?.pushViewController(numberingDetailVC, animated: true)
+        guard let detailVC = factory.makeBankWaitingViewController().viewController
+                as? BankWaitingDetailViewController else { return }
+        detailVC.hidesBottomBarWhenPushed = true
+        detailVC.initialTab = type.tabIndex
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

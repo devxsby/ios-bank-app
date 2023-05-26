@@ -76,6 +76,7 @@ public struct I18N {
             public static let confirm = "확인"
             public static let unableToWait = "대기 불가능"
             public static let unableToWaitDescription = "이미 예약중인 창구가 존재합니다."
+            public static let noWaitingList = "대기 중인 내역이 없습니다."
         }
     }
 }

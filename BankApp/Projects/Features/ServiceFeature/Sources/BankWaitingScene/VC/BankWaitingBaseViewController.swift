@@ -9,13 +9,18 @@
 import UIKit
 
 import Core
+import Domain
 import DSKit
 
 import SnapKit
+import BaseFeatureDependency
+import ServiceFeatureInterface
 
-public class NumberingBaseViewController: UIViewController {
+public class BankWaitingBaseViewController: UIViewController, ServiceViewControllable {
     
     // MARK: - Properties
+    
+    public var factory: AlertViewBuildable
     
     @UserDefaultWrapper<Bool>(key: "isWaiting", defaultValue: false)
     public var isWaiting: Bool {
@@ -54,6 +59,14 @@ public class NumberingBaseViewController: UIViewController {
     
     // MARK: - Initialization
     
+    init(factory: AlertViewBuildable) {
+        self.factory = factory
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - View Life Cycle
     
@@ -72,7 +85,7 @@ public class NumberingBaseViewController: UIViewController {
 
 // MARK: - UI & Layout
 
-extension NumberingBaseViewController {
+extension BankWaitingBaseViewController {
     
     private func setUI() {
         view.backgroundColor = .white
@@ -119,7 +132,7 @@ extension NumberingBaseViewController {
 
 // MARK: - Methods
 
-extension NumberingBaseViewController {
+extension BankWaitingBaseViewController {
     
     private func initialButtonState() {
         isWaiting = isWaiting // 기존 상태
@@ -134,12 +147,15 @@ extension NumberingBaseViewController {
     }
     
     private func presentAlertVC() {
-        let alertVC = makeAlertViewController(type: .cancelWaiting,
-                                              title: I18N.ServiceFeature.Alert.cancelPopup,
-                                              customButtonTitle: I18N.ServiceFeature.cancelWaiting,
-                                              customAction: {
+        
+        let alertVC = factory.makeAlertViewController(type: .cancelWaiting,
+                                                      title: I18N.ServiceFeature.Alert.cancelPopup,
+                                                      customButtonTitle: I18N.ServiceFeature.cancelWaiting,
+                                                      customAction: {
             self.cancelWaiting()
-        })
+        }).viewController
+        
+        makeVibrate()
         present(alertVC, animated: true)
         
         isButtonEnabled = true // 버튼을 즉시 다시 활성화

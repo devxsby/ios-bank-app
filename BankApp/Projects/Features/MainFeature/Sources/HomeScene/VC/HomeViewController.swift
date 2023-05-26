@@ -15,7 +15,7 @@ import MainFeatureInterface
 
 import SnapKit
 
-public final class HomeViewController: UIViewController {
+public final class HomeViewController: UIViewController, HomeViewControllable {
     
     // MARK: - Properties
     

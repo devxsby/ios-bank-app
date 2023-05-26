@@ -17,46 +17,69 @@ import MainFeature
 import MainFeatureInterface
 import ServiceFeature
 import ServiceFeatureInterface
+import BankingFeature
+import BankingFeatureInterface
+import StockFeature
+import StockFeatureInterface
+import SettingFeature
+import SettingFeatureInterface
 import BaseFeatureDependency
 
-public protocol DIContainerInterface {
-    func makeTabBarController() -> TabBarViewController
-    func makeSplashContoller() -> SplashViewController
-    func makeAlertViewController(type: AlertType, title: String, customButtonTitle: String, customAction: (() -> Void)?) -> AlertViewController
-}
+typealias Features = RootFeatureViewBuildable & MainFeatureViewBuildable & BankingFeatureViewBuildable & StockFeatureViewBuildable & SettingFeatureViewBuildable & AlertViewBuildable
 
-// TODO: - 잘 안된다 . . . Coordinator 적용하기
-
-public class DIContainer {
+public class DIContainer: ServiceFeatureViewBuildable {
     
     static let shared = DIContainer()
     
     private init() { }
 }
 
-extension DIContainer: DIContainerInterface {
+extension DIContainer: Features {
     
-    public func makeTabBarController() -> RootFeature.TabBarViewController {
-        let tabBarController = TabBarViewController()
-        return tabBarController
-    }
-    
-    public func makeSplashContoller() -> RootFeature.SplashViewController {
-        let splashVC = SplashViewController()
-//        splashVC.container = self
+    public func makeSplashViewController() -> RootFeature.SplashViewControllable {
+        let splashVC = SplashViewController(factory: self)
         return splashVC
     }
     
-    public func makeServiceContoller() -> ServiceFeature.ServiceViewController {
-        let serviceVC = ServiceViewController()
-//        serviceVC.container = self
+    public func makeTabBarController() -> RootFeature.TabBarControllable {
+        let tabBarController = TabBarController(factory: self)
+        return tabBarController
+    }
+    
+    public func makeHomeViewController() -> MainFeatureInterface.HomeViewControllable {
+        let homeVC = HomeViewController()
+        return homeVC
+    }
+        
+    public func makeServiceViewController() -> ServiceFeatureInterface.ServiceViewControllable {
+        let serviceVC = ServiceViewController(factory: self)
         return serviceVC
+    }
+
+    public func makeBankWaitingViewController() -> ServiceFeatureInterface.ServiceViewControllable {
+        let bankingWaitingVC = BankWaitingDetailViewController(factory: self)
+        return bankingWaitingVC
+    }
+    
+    public func makeBankingViewController() -> BankingFeatureInterface.BankingViewControllable {
+        let bankingVC = BankingViewController()
+        return bankingVC
+    }
+    
+    public func makeStockViewController() -> StockFeatureInterface.StockViewControllable {
+        let stockVC = StockViewController()
+        return stockVC
+    }
+    
+    public func makeSettingViewController() -> SettingFeatureInterface.SettingViewControllable {
+        let settingVC = SettingViewController()
+        return settingVC
     }
     
     public func makeAlertViewController(type: AlertType,
                                         title: String,
                                         customButtonTitle: String,
-                                        customAction: (() -> Void)?) -> BaseFeatureDependency.AlertViewController {
+                                        customAction: (() -> Void)?) -> BaseFeatureDependency.AlertViewControllable {
         let alertVC = AlertViewController(alertType: type)
             .setTitle(title)
             .setCustomButtonTitle(customButtonTitle)

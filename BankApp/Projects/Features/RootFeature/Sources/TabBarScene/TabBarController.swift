@@ -11,19 +11,31 @@ import UIKit
 import Core
 import DSKit
 
-import MainFeature
 import MainFeatureInterface
-import ServiceFeature
 import ServiceFeatureInterface
-import BankingFeature
 import BankingFeatureInterface
-import StockFeature
 import StockFeatureInterface
-import SettingFeature
 import SettingFeatureInterface
 
-public final class TabBarViewController: UITabBarController {
+public final class TabBarController: UITabBarController, TabBarControllable {
+    
+    // MARK: - Properties
         
+    public var factory: MainFeatureViewBuildable & ServiceFeatureViewBuildable
+    & BankingFeatureViewBuildable  & StockFeatureViewBuildable & SettingFeatureViewBuildable
+    
+    // MARK: - Initialization
+    
+    public init(factory: MainFeatureViewBuildable & ServiceFeatureViewBuildable &
+                BankingFeatureViewBuildable  & StockFeatureViewBuildable & SettingFeatureViewBuildable) {
+        self.factory = factory
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - View Life Cycle
     
     public override func viewDidLoad() {
@@ -44,31 +56,31 @@ public final class TabBarViewController: UITabBarController {
         
         let homeNVC = makeNavigationController(
             image: DSKitAsset.Images.icnHome.image,
-            rootViewController: HomeViewController(),
+            rootViewController: factory.makeHomeViewController().viewController,
             title: I18N.TabBar.home
         )
 
         let serviceNVC = makeNavigationController(
             image: DSKitAsset.Images.icnService.image,
-            rootViewController: ServiceViewController(),
+            rootViewController: factory.makeServiceViewController().viewController,
             title: I18N.TabBar.service
         )
         
         let bankingNVC = makeNavigationController(
             image: DSKitAsset.Images.icnPay.image,
-            rootViewController: BankingViewController(),
+            rootViewController: factory.makeBankingViewController().viewController,
             title: I18N.TabBar.moneyTransfer
         )
         
         let stockNVC = makeNavigationController(
             image: DSKitAsset.Images.icnStock.image,
-            rootViewController: StockViewController(),
+            rootViewController: factory.makeStockViewController().viewController,
             title: I18N.TabBar.stock
         )
         
         let settingNVC = makeNavigationController(
             image: DSKitAsset.Images.icnMenu.image,
-            rootViewController: SettingViewController(),
+            rootViewController: factory.makeSettingViewController().viewController,
             title: I18N.TabBar.overall
         )
         
@@ -110,7 +122,7 @@ public final class TabBarViewController: UITabBarController {
 
 // MARK: - UITabBarControllerDelegate
 
-extension TabBarViewController: UITabBarControllerDelegate {
+extension TabBarController: UITabBarControllerDelegate {
     
     public func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         makeVibrate(degree: .light)
@@ -142,4 +154,4 @@ extension TabBarViewController: UITabBarControllerDelegate {
 
 // MARK: - UIGestureRecognizerDelegate
 
-extension TabBarViewController: UIGestureRecognizerDelegate { }
+extension TabBarController: UIGestureRecognizerDelegate { }

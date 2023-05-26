@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import SettingFeatureInterface
 
-public final class SettingViewController: UIViewController {
+public final class SettingViewController: UIViewController, SettingViewControllable {
+    
+    // MARK: - View Life Cycle
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

@@ -12,6 +12,8 @@ import RootFeature
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    
+    let container = DIContainer.shared
 
     func scene(
         _ scene: UIScene,
@@ -22,9 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
-        let tabbar = TabBarViewController()
-        tabbar.selectedIndex = 1
-        window?.rootViewController = tabbar  // splash + dicontainer로 변경하기
+        window?.rootViewController = container.makeSplashViewController().viewController
         window?.makeKeyAndVisible()
     }
 
