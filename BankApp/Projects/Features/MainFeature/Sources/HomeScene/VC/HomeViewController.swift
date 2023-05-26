@@ -156,16 +156,17 @@ extension HomeViewController {
     
     private func createSectionWithVerticalGroup(itemCount: Int,
                                                 itemHeight: CGFloat,
-                                                headerKind: String? = nil,
-                                                footerKind: String? = nil) -> NSCollectionLayoutSection {
+                                                headerKind: String? = nil) -> NSCollectionLayoutSection {
         
         let sectionInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 20, trailing: 15)
         
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .absolute(itemHeight))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(itemHeight))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .absolute(itemHeight))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: itemCount)
         
         let section = NSCollectionLayoutSection(group: group)
@@ -174,17 +175,11 @@ extension HomeViewController {
         section.contentInsets = sectionInsets
         
         if let kind = headerKind {
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                    heightDimension: .absolute(60))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: kind, alignment: .top)
             section.boundarySupplementaryItems = [header]
         }
-        
-        if let kind = footerKind {
-            let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
-            let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: kind, alignment: .bottom)
-            section.boundarySupplementaryItems = [footer]
-        }
-        
         return section
     }
     
@@ -192,15 +187,16 @@ extension HomeViewController {
                                                   itemWidth: CGFloat,
                                                   itemHeight: CGFloat,
                                                   interItemSpacing: CGFloat,
-                                                  headerKind: String? = nil,
                                                   footerKind: String? = nil) -> NSCollectionLayoutSection {
         
         let sectionInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 20, trailing: 15)
         
-        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth), heightDimension: .absolute(itemHeight))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth),
+                                              heightDimension: .absolute(itemHeight))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth * CGFloat(itemCount) + interItemSpacing * CGFloat(itemCount - 1)), heightDimension: .absolute(itemHeight))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth * CGFloat(itemCount) + interItemSpacing * CGFloat(itemCount - 1)),
+                                               heightDimension: .absolute(itemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: itemCount)
         group.interItemSpacing = .fixed(interItemSpacing)
         
@@ -209,14 +205,9 @@ extension HomeViewController {
         section.interGroupSpacing = 15
         section.contentInsets = sectionInsets
         
-        if let kind = headerKind {
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
-            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: kind, alignment: .top)
-            section.boundarySupplementaryItems = [header]
-        }
-        
         if let kind = footerKind {
-            let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
+            let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                    heightDimension: .absolute(160))
             let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: kind, alignment: .bottom)
             section.boundarySupplementaryItems = [footer]
         }
@@ -294,6 +285,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             headerView.backgroundColor = .white
             let item = sections[indexPath.section]
             headerView.setData(item.headerText)
+//            print(headerView.frame.origin.y)
             return headerView
         }
         
@@ -304,6 +296,23 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return footerView
         }
         return UICollectionReusableView()
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        // TODO:- 스크롤 시 소비 영역 애니메이션 추가하기
+        
+        let bottomOffset = collectionView.contentSize.height - collectionView.contentOffset.y - collectionView.bounds.height
+        if bottomOffset >= 280 && bottomOffset <= 500 { // se일때 safeareabottomheight(34)있어서 더해야된
+            print("Reached the offset: \(bottomOffset)")
+        }
+        
+        if scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) {
+            print("끝")
+        }
     }
 }
 
