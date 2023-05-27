@@ -22,6 +22,7 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
     public var viewModel: HomeViewModel
     private var cancelBag = CancelBag()
     private var sections = [HomeItem]()
+    private var isFirstEntry = true
     
     // MARK: - UI Components
     
@@ -59,6 +60,8 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
                                         action: #selector(settingButtonTapped))
         return barButton
     }()
+    
+    private let bottomComsumptionView = AccountInformationView(type: .comsumption)
     
     // MARK: - Initialization
     
@@ -101,9 +104,16 @@ extension HomeViewController {
     private func setLayout() {
         
         view.addSubview(collectionView)
+        view.addSubview(bottomComsumptionView)
         
         collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        bottomComsumptionView.snp.makeConstraints {
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(6)
+            $0.height.equalTo(60)
         }
     }
 }
@@ -126,7 +136,7 @@ extension HomeViewController {
         collectionView.register(AccountInformationCell.self, forCellWithReuseIdentifier: HomeItemType.consumption.reuseIdentifier)
         collectionView.register(LifeTipCell.self, forCellWithReuseIdentifier: HomeItemType.life.reuseIdentifier)
         
-        collectionView.register(AccountInformationHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AccountInformationHeaderView.className)
+        collectionView.register(AccountInformamtionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AccountInformamtionReusableView.className)
         collectionView.register(HomeFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HomeFooterView.className)
     }
     
@@ -298,10 +308,10 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AccountInformationHeaderView.className, for: indexPath) as? AccountInformationHeaderView else {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AccountInformamtionReusableView.className, for: indexPath) as? AccountInformamtionReusableView else {
                 return UICollectionReusableView()
             }
-            headerView.backgroundColor = .white
+//            headerView.backgroundColor = .white
             let item = sections[indexPath.section]
             headerView.setData(item.headerText)
 //            print(headerView.frame.origin.y)
@@ -318,19 +328,26 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
+
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     
+    // TODO: - 애니메이션 추가
+    
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        // TODO:- 스크롤 시 소비 영역 애니메이션 추가하기
-        
+        let itemLowerHeight = 280 - bottomComsumptionView.frame.height + SafeAreaHeight.safeAreaBottomInset()
+        let itemHigherHeight = 500 - bottomComsumptionView.frame.height + SafeAreaHeight.safeAreaBottomInset()
         let bottomOffset = collectionView.contentSize.height - collectionView.contentOffset.y - collectionView.bounds.height
-        if bottomOffset >= 280 && bottomOffset <= 500 { // se일때 safeareabottomheight(34)있어서 더해야된
-            print("Reached the offset: \(bottomOffset)")
+                
+        if isFirstEntry {
+            isFirstEntry = false
+            return
         }
         
-        if scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) {
-            print("끝")
+        if bottomOffset <= itemHigherHeight {
+            print("Reached the offset: \(bottomOffset)")
+        } else {
+            print("Reached Out. the offset: \(bottomOffset)")
         }
     }
 }
