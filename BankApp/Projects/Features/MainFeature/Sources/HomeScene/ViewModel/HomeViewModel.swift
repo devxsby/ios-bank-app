@@ -12,14 +12,16 @@ import Core
 import Domain
 
 public class HomeViewModel: ViewModelType {
-
+    
     private let useCase: HomeUseCase
-    private var cancelBag = Set<AnyCancellable>()
+    private var cancelBag = CancelBag()
   
     // MARK: - Inputs
     
     public struct Input {
-    
+        public init() {
+
+        }
     }
     
     // MARK: - Outputs
@@ -27,24 +29,26 @@ public class HomeViewModel: ViewModelType {
     public struct Output {
     
     }
+
     
-    // MARK: - init
-  
+    // MARK: - Initialization
+    
     public init(useCase: HomeUseCase) {
         self.useCase = useCase
     }
 }
 
 extension HomeViewModel {
-    public func transform(from input: Input, cancelBag: Set<AnyCancellable>) -> Output {
+    
+    public func transform(from input: Input, cancelBag: Core.CancelBag) -> Output {
         let output = Output()
         self.bindOutput(output: output, cancelBag: cancelBag)
         // input,output 상관관계 작성
     
         return output
     }
-  
-    private func bindOutput(output: Output, cancelBag: Set<AnyCancellable>) {
+    
+    private func bindOutput(output: Output, cancelBag: Core.CancelBag) {
     
     }
 }

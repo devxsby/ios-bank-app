@@ -7,3 +7,10 @@
 //
 
 import Foundation
+
+public struct HomeModel {
+
+    public init() {
+        
+    }
+}

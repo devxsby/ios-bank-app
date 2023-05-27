@@ -47,7 +47,10 @@ extension DIContainer: Features {
     }
     
     public func makeHomeViewController() -> MainFeatureInterface.HomeViewControllable {
-        let homeVC = HomeViewController()
+        let repository = HomeRepository()
+        let usecase = DefaultHomeUseCase(repository: repository)
+        let viewModel = HomeViewModel(useCase: usecase)
+        let homeVC = HomeViewController(viewModel: viewModel)
         return homeVC
     }
         

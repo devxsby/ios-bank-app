@@ -7,3 +7,8 @@
 //
 
 import Foundation
+import Combine
+
+public protocol HomeRepositoryInterface {
+  
+}

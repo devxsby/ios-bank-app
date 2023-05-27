@@ -7,3 +7,21 @@
 //
 
 import Foundation
+import Combine
+
+import Core
+import Domain
+import Network
+
+public class HomeRepository {
+    
+    private let cancelBag = Core.CancelBag()
+    
+    public init() {
+        
+    }
+}
+
+extension HomeRepository: HomeRepositoryInterface {
+    
+}

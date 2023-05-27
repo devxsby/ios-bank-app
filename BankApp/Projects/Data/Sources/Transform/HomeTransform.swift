@@ -7,3 +7,13 @@
 //
 
 import Foundation
+
+import Domain
+import Network
+
+extension HomeEntity {
+
+    public func toDomain() -> HomeModel {
+        return HomeModel.init()
+    }
+}

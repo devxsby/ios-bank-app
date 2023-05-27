@@ -19,6 +19,8 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
     
     // MARK: - Properties
     
+    public var viewModel: HomeViewModel
+    private var cancelBag = CancelBag()
     private var sections = [HomeItem]()
     
     // MARK: - UI Components
@@ -58,6 +60,17 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
         return barButton
     }()
     
+    // MARK: - Initialization
+    
+    public init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - View Life Cycle
 
     public override func viewDidLoad() {
@@ -66,6 +79,7 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
         setLayout()
         setDelegate()
         registerCells()
+        bindViewModels()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -97,6 +111,11 @@ extension HomeViewController {
 // MARK: - Methods
 
 extension HomeViewController {
+    
+    private func bindViewModels() {
+        let input = HomeViewModel.Input()
+        let output = self.viewModel.transform(from: input, cancelBag: self.cancelBag)
+    }
     
     private func registerCells() {
         
