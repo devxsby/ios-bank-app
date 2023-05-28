@@ -96,9 +96,13 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
 extension HomeViewController {
 
     private func setUI() {
+        view.backgroundColor = DSKitAsset.Colors.gray100.color
         navigationController?.navigationBar.backgroundColor = DSKitAsset.Colors.gray100.color
         navigationController?.navigationBar.tintColor = DSKitAsset.Colors.gray300.color
         navigationItem.rightBarButtonItem = alarmBarButton
+        bottomComsumptionView.layer.cornerRadius = 20
+        bottomComsumptionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        bottomComsumptionView.layer.applyShadow(color: .black, alpha: 0.1, x: 0, y: 0, blur: 3)
     }
     
     private func setLayout() {
@@ -107,13 +111,18 @@ extension HomeViewController {
         view.addSubview(bottomComsumptionView)
         
         collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         bottomComsumptionView.snp.makeConstraints {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(6)
-            $0.height.equalTo(60)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.height.equalTo(70)
+        }
+        
+        bottomComsumptionView.titleLabel.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(38)
+            $0.centerY.equalToSuperview().multipliedBy(0.9)
         }
     }
 }
