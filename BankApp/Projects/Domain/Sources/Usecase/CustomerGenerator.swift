@@ -16,8 +16,8 @@ public final class CustomerGenerator {
     public init() { }
     
     public func generateRandomCustomers() -> (depositCustomers: [Customer], loanCustomers: [Customer]) {
-        var depositCustomers: [Customer] = []
-        var loanCustomers: [Customer] = []
+        var depositCustomers = [Customer]()
+        var loanCustomers = [Customer]()
         
         var depositNumber = 1
         var loanNumber = 1

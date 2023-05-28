@@ -20,7 +20,7 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     
     // MARK: - Properties
     
-    public var factory: AlertViewBuildable
+    public let factory: AlertViewBuildable
     
     @UserDefaultWrapper<Bool>(key: "isWaiting", defaultValue: false)
     public var isWaiting: Bool {

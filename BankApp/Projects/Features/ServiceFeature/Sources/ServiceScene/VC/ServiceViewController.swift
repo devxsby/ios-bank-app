@@ -20,8 +20,8 @@ public final class ServiceViewController: UIViewController, ServiceViewControlla
     
     // MARK: - Properties
     
-    public var factory: ServiceFeatureViewBuildable & AlertViewBuildable
-    public var viewModel: ServiceViewModel
+    public let factory: ServiceFeatureViewBuildable & AlertViewBuildable
+    public let viewModel: ServiceViewModel
     private var cancelBag = CancelBag()
     
     // MARK: - UI Components

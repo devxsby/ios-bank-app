@@ -17,7 +17,7 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     
     // MARK: - Properties
     
-    public var factory: AlertViewBuildable
+    public let factory: AlertViewBuildable
     
     public var initialTab: Int = 0
     private var viewTypes: [String] = [I18N.ServiceFeature.loan, I18N.ServiceFeature.deposit]
