@@ -12,40 +12,51 @@ import Core
 import Network
 
 public protocol ServiceUseCase {
-    func processBank(completion: @escaping (Int, Double) -> Void)
+    func processDeposit(completion: @escaping (Int, Double) -> Void)
+    func processLoan(completion: @escaping (Int, Double) -> Void)
 }
 
 public class DefaultServiceUseCase {
-  
+    
     public let repository: ServiceRepositoryInterface
     public let customerGenerator: CustomerGenerator
     private var bank: Bank?
-  
+    
     public init(repository: ServiceRepositoryInterface, customerGenerator: CustomerGenerator) {
         self.repository = repository
         self.customerGenerator = customerGenerator
     }
-
-    public func processBank(completion: @escaping (Int, Double) -> Void) {
-        // Usage
+    
+    public func processDeposit(completion: @escaping (Int, Double) -> Void) {
         let depositBankers = [
-            Banker(type: .deposit, taskDuration: 1.0),
-            Banker(type: .deposit, taskDuration: 2.0)
+            Banker(type: .deposit, taskDuration: 3.0),
+            Banker(type: .deposit, taskDuration: 3.0)
         ]
-
-        let loanBankers = [
-            Banker(type: .loan, taskDuration: 1.0),
-            Banker(type: .loan, taskDuration: 2.0),
-            Banker(type: .loan, taskDuration: 1.5)
-        ]
-
-        let depositCustomers = (1...7).map { Customer(number: $0, taskType: .deposit) }
-        let loanCustomers = (1...3).map { Customer(number: $0, taskType: .loan) }
-
-        bank = Bank(depositBankers: depositBankers, loanBankers: loanBankers, depositCustomers: depositCustomers, loanCustomers: loanCustomers)
+        let depositCustomers = (1...12).map { Customer(number: $0, taskType: .deposit) }
+        
+        bank = Bank(depositBankers: depositBankers, loanBankers: [], depositCustomers: depositCustomers, loanCustomers: [])
         
         bank?.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
-            print("\(taskType) 대기 중 - 남은 고객수: \(remainingCustomers), 예상 대기 시간: \(estimatedWaitTime)초")
+            if taskType == .deposit { // 예금 작업에 대해서만 결과 출력
+                completion(remainingCustomers, estimatedWaitTime)
+            }
+        }
+        
+        bank?.startProcessing()
+    }
+    
+    public func processLoan(completion: @escaping (Int, Double) -> Void) {
+        let loanBankers = [
+            Banker(type: .loan, taskDuration: 5.0)
+        ]
+        let loanCustomers = (1...5).map { Customer(number: $0, taskType: .loan) }
+        
+        bank = Bank(depositBankers: [], loanBankers: loanBankers, depositCustomers: [], loanCustomers: loanCustomers)
+        
+        bank?.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
+            if taskType == .loan { // 대출 작업에 대해서만 결과 출력
+                completion(remainingCustomers, estimatedWaitTime)
+            }
         }
         
         bank?.startProcessing()

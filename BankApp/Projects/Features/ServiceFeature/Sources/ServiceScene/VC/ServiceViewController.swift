@@ -75,13 +75,12 @@ public final class ServiceViewController: UIViewController, ServiceViewControlla
         setUI()
         setLayout()
         setDelegate()
+        viewModel.startProcessing()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         bindViewModels()
-        viewModel.startProcessing()
-        setData()
     }
 }
 
@@ -188,21 +187,19 @@ extension ServiceViewController {
         depositsWaitingBoxView.delegate = self
     }
     
-    private func setData() {
-        loansWaitingBoxView.setData(0, .loan)
-        depositsWaitingBoxView.setData(0, .deposit)
-    }
     
     // 대출 라벨 업데이트
     private func updateLoanLabel(_ count: Int, _ time: Double) {
         // 대출 라벨 업데이트 로직
         print("남은 대출 고객 수: \(count), 예상 대기 시간: \(time)")
+        loansWaitingBoxView.setData(count, .loan)
     }
     
     // 예금 라벨 업데이트
     private func updateDepositLabel(_ count: Int, _ time: Double) {
         // 예금 라벨 업데이트 로직
         print("남은 예금 고객 수: \(count), 예상 대기 시간: \(time)")
+        depositsWaitingBoxView.setData(count, .deposit)
     }
     
     // MARK: - @objc Function

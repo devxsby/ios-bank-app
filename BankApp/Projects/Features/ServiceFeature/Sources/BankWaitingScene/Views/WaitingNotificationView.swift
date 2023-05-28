@@ -36,7 +36,7 @@ final public class WaitingNotificationView: UIView {
     private lazy var alertSwitch: UISwitch = {
         let alertSwitch = UISwitch()
         alertSwitch.onTintColor = DSKitAsset.Colors.blue.color
-        alertSwitch.setOn(true, animated: false)
+//        alertSwitch.setOn(true, animated: false)
         alertSwitch.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
         return alertSwitch
     }()

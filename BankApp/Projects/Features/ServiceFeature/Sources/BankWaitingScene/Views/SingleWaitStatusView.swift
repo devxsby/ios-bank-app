@@ -81,7 +81,7 @@ extension SingleWaitStatusView {
         let number = String(number)
         switch waitingInformationType {
         case .waitingCustomers:
-            titleLabel.text = " \(bankingServiceType.title) \(I18N.ServiceFeature.waitingCustomers)"
+            titleLabel.text = "\(bankingServiceType.title) \(I18N.ServiceFeature.waitingCustomers)"
             return subtitleLabel.text = "\(number) \(I18N.ServiceFeature.peopleCount)"
         case .estimatedWaitTime:
             titleLabel.text = I18N.ServiceFeature.estimatedWaitTimes

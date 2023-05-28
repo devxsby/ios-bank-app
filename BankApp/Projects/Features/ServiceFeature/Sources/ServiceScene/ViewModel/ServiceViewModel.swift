@@ -45,10 +45,19 @@ public class ServiceViewModel: ViewModelType {
     }
     
     public func startProcessing() {
-        
-        usecase.processBank { [weak self] (count, time) in
-            self?.depositCountDidChange?(count, time)
-            self?.loanCountDidChange?(count, time)
+        self.startProcessingDeposit()
+        self.startProcessingLoan()
+    }
+    
+    private func startProcessingDeposit() {
+        usecase.processDeposit { [weak self] remainingCustomers, estimatedWaitTime in
+            self?.depositCountDidChange?(remainingCustomers, estimatedWaitTime)
+        }
+    }
+    
+    private func startProcessingLoan() {
+        usecase.processLoan { [weak self] remainingCustomers, estimatedWaitTime in
+            self?.loanCountDidChange?(remainingCustomers, estimatedWaitTime)
         }
     }
 }

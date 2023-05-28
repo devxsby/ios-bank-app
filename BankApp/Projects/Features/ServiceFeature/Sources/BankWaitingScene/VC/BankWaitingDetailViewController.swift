@@ -231,10 +231,11 @@ extension BankWaitingDetailViewController: UICollectionViewDelegateFlowLayout {
 extension BankWaitingDetailViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
-        let previousIndex = index - 1
-        if previousIndex < 0 { return nil }
-        return detailViewControllers[previousIndex]
+//        guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
+//        let previousIndex = index - 1
+//        if previousIndex < 0 { return nil }
+//        return detailViewControllers[previousIndex]
+    return nil
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
@@ -244,9 +245,10 @@ extension BankWaitingDetailViewController: UIPageViewControllerDelegate, UIPageV
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
-        let nextIndex = index + 1
-        if nextIndex == detailViewControllers.count { return nil }
-        return detailViewControllers[nextIndex]
+//        guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
+//        let nextIndex = index + 1
+//        if nextIndex == detailViewControllers.count { return nil }
+//        return detailViewControllers[nextIndex]
+        return nil
     }
 }

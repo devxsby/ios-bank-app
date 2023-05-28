@@ -108,9 +108,20 @@ extension TellerWaitingBoxView {
     }
     
     public func setData(_ peopleCount: Int = 0, _ type: BankingServiceType) {
-        let peopleCount = String(peopleCount)
-        titleLabel.text = "\(type.teller) \(peopleCount) \(I18N.ServiceFeature.peopleCount)"
-        titleLabel.partColorChange(targetString: peopleCount, textColor: DSKitAsset.Colors.blue.color)
+        let peopleCountString = String(peopleCount)
+        DispatchQueue.main.async {
+            self.titleLabel.text = "\(type.teller) \(peopleCount) \(I18N.ServiceFeature.peopleCount)"
+            
+            var textColor: UIColor
+            if peopleCount == 0 {
+                textColor = DSKitAsset.Colors.gray600.color
+            } else if peopleCount >= 10 {
+                textColor = DSKitAsset.Colors.warning.color
+            } else {
+                textColor = DSKitAsset.Colors.blue.color
+            }
+            self.titleLabel.partColorChange(targetString: peopleCountString, textColor: textColor)
+        }
     }
     
     // MARK: - @objc Function
