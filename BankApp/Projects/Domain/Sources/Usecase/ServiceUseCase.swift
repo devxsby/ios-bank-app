@@ -27,6 +27,8 @@ public class DefaultServiceUseCase {
     }
 }
 
+// MARK: - Methods
+
 extension DefaultServiceUseCase: ServiceUseCase {
     
     public func processDeposit(completion: @escaping (Int, Double) -> Void) {
@@ -47,7 +49,7 @@ extension DefaultServiceUseCase: ServiceUseCase {
     
     public func processLoan(completion: @escaping (Int, Double) -> Void) {
         
-        let loanBankers = [Banker(type: .loan, taskDuration: 5.0)]
+        let loanBankers = [Banker(type: .loan, taskDuration: 6.0)]
         let loanCustomers = (1...5).map { Customer(number: $0, taskType: .loan) }
         
         let bank = Bank(depositBankers: [], loanBankers: loanBankers, depositCustomers: [], loanCustomers: loanCustomers)

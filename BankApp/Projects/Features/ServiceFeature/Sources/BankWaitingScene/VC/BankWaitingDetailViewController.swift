@@ -69,6 +69,7 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isScrollEnabled = false
         collectionView.allowsMultipleSelection = false
+//        collectionView.isUserInteractionEnabled = false
         return collectionView
     }()
     

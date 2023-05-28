@@ -13,7 +13,7 @@ import Combine
 import Core
 import Domain
 
-public class ServiceViewModel: ViewModelType {
+public class ServiceViewModel {
     
     // MARK: - Properties
     
@@ -22,21 +22,6 @@ public class ServiceViewModel: ViewModelType {
     
     public var depositCountDidChange: ((Int, Double) -> Void)?
     public var loanCountDidChange: ((Int, Double) -> Void)?
-  
-    // MARK: - Inputs
-    
-    public struct Input {
-        public init() {
-
-        }
-    }
-    
-    // MARK: - Outputs
-    
-    public struct Output {
-    
-    }
-
     
     // MARK: - Initialization
     
@@ -44,10 +29,15 @@ public class ServiceViewModel: ViewModelType {
         self.usecase = usecase
     }
     
+    // MARK: - Methods
+    
     public func startProcessing() {
         self.startProcessingDeposit()
         self.startProcessingLoan()
     }
+}
+
+extension ServiceViewModel {
     
     private func startProcessingDeposit() {
         usecase.processDeposit { [weak self] remainingCustomers, estimatedWaitTime in
@@ -59,20 +49,5 @@ public class ServiceViewModel: ViewModelType {
         usecase.processLoan { [weak self] remainingCustomers, estimatedWaitTime in
             self?.loanCountDidChange?(remainingCustomers, estimatedWaitTime)
         }
-    }
-}
-
-extension ServiceViewModel {
-    
-    public func transform(from input: Input, cancelBag: Core.CancelBag) -> Output {
-        let output = Output()
-        self.bindOutput(output: output, cancelBag: cancelBag)
-        // input,output 상관관계 작성
-    
-        return output
-    }
-    
-    private func bindOutput(output: Output, cancelBag: Core.CancelBag) {
-    
     }
 }

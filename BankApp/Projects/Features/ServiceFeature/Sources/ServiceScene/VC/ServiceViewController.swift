@@ -166,19 +166,14 @@ extension ServiceViewController {
 extension ServiceViewController {
     
     private func bindViewModels() {
-        let input = ServiceViewModel.Input()
-        let output = self.viewModel.transform(from: input, cancelBag: self.cancelBag)
         
-        // 대출 고객 수 업데이트 시 호출될 클로저
         viewModel.loanCountDidChange = { count, time in
             self.updateLoanLabel(count, time)
         }
         
-        // 예금 고객 수 업데이트 시 호출될 클로저
         viewModel.depositCountDidChange = { count, time in
             self.updateDepositLabel(count, time)
         }
-        
     }
     
     private func setDelegate() {
@@ -187,18 +182,13 @@ extension ServiceViewController {
         depositsWaitingBoxView.delegate = self
     }
     
-    
-    // 대출 라벨 업데이트
     private func updateLoanLabel(_ count: Int, _ time: Double) {
-        // 대출 라벨 업데이트 로직
-        print("남은 대출 고객 수: \(count), 예상 대기 시간: \(time)")
+//        print("남은 대출 고객 수: \(count), 예상 대기 시간: \(time)")
         loansWaitingBoxView.setData(count, .loan)
     }
     
-    // 예금 라벨 업데이트
     private func updateDepositLabel(_ count: Int, _ time: Double) {
-        // 예금 라벨 업데이트 로직
-        print("남은 예금 고객 수: \(count), 예상 대기 시간: \(time)")
+//        print("남은 예금 고객 수: \(count), 예상 대기 시간: \(time)")
         depositsWaitingBoxView.setData(count, .deposit)
     }
     
