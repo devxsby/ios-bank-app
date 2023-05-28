@@ -114,7 +114,7 @@ extension TellerWaitingBoxView {
             
             var textColor: UIColor
             if peopleCount == 0 {
-                textColor = DSKitAsset.Colors.gray600.color
+                textColor = DSKitAsset.Colors.gray500.color
             } else if peopleCount >= 10 {
                 textColor = DSKitAsset.Colors.warning.color
             } else {
