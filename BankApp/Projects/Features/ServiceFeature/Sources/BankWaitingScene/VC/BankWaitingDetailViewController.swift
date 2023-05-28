@@ -20,7 +20,7 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     public var factory: AlertViewBuildable
     
     public var initialTab: Int = 0
-    private var viewTypes: [String] = [I18N.ServiceFeature.loans, I18N.ServiceFeature.deposits]
+    private var viewTypes: [String] = [I18N.ServiceFeature.loan, I18N.ServiceFeature.deposit]
     private var currentPage: Int = 0 {
         didSet {
             bind(newValue: currentPage)

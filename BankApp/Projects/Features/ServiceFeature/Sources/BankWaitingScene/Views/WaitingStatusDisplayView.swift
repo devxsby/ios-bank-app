@@ -24,9 +24,9 @@ final public class WaitingStatusDisplayView: UIView {
         return imageView
     }()
     
-    private let waitingCustomersStatusView = SingleWaitStatusView(.loans, .waitingCustomers)
-    private let estimatedWaitTimeStatusView = SingleWaitStatusView(.loans, .estimatedWaitTime)
-    private let issuanceTimeStatusView = SingleWaitStatusView(.loans, .issuanceTime)
+    private let waitingCustomersStatusView = SingleWaitStatusView(.loan, .waitingCustomers)
+    private let estimatedWaitTimeStatusView = SingleWaitStatusView(.loan, .estimatedWaitTime)
+    private let issuanceTimeStatusView = SingleWaitStatusView(.loan, .issuanceTime)
     
     private let bankNameLabel: UILabel = {
         let label = UILabel()
@@ -98,9 +98,9 @@ extension WaitingStatusDisplayView {
     // TODO: - viewwillappear 노티받으면 setData 업데이트 하기
     // TODO: - 예금, 대출 다른 뷰컨으로 상속 시키는 법?
     private func setData() {
-        waitingCustomersStatusView.setData(.deposits, .waitingCustomers, 5)
-        estimatedWaitTimeStatusView.setData(.deposits, .estimatedWaitTime, 10)
-        issuanceTimeStatusView.setData(.deposits, .issuanceTime, 0)
+        waitingCustomersStatusView.setData(.deposit, .waitingCustomers, 5)
+        estimatedWaitTimeStatusView.setData(.deposit, .estimatedWaitTime, 10)
+        issuanceTimeStatusView.setData(.deposit, .issuanceTime, 0)
 
     }
 }

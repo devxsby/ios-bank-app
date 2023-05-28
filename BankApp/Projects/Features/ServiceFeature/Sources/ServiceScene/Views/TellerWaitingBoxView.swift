@@ -123,10 +123,10 @@ extension TellerWaitingBoxView {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.containerView.backgroundColor = DSKitAsset.Colors.gray100.color
             
-            if (self.titleLabel.text?.contains(I18N.ServiceFeature.deposits)) == true {
-                self.delegate?.pushToDetailViewCotroller(.deposits)
+            if (self.titleLabel.text?.contains(I18N.ServiceFeature.deposit)) == true {
+                self.delegate?.pushToDetailViewCotroller(.deposit)
             } else {
-                self.delegate?.pushToDetailViewCotroller(.loans)
+                self.delegate?.pushToDetailViewCotroller(.loan)
             }
         }
     }

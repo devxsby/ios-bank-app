@@ -34,7 +34,7 @@ final class SingleWaitStatusView: UIView {
     
     // MARK: - Initialization
 
-    init(_ bankingServiceType: BankingServiceType = .loans, _ waitingInformationType: WaitingInformationType) {
+    init(_ bankingServiceType: BankingServiceType = .loan, _ waitingInformationType: WaitingInformationType) {
         super.init(frame: .zero)
         setUI(bankingServiceType)
         setData(bankingServiceType, waitingInformationType)
@@ -75,7 +75,7 @@ extension SingleWaitStatusView {
 extension SingleWaitStatusView {
     
     // TODO: - Input 파라미터 model로 바꾸기
-    public func setData(_ bankingServiceType: BankingServiceType = .loans,
+    public func setData(_ bankingServiceType: BankingServiceType = .loan,
                         _ waitingInformationType: WaitingInformationType = .waitingCustomers,
                         _ number: Int = 0) {
         let number = String(number)

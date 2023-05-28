@@ -55,7 +55,11 @@ extension DIContainer: Features {
     }
         
     public func makeServiceViewController() -> ServiceFeatureInterface.ServiceViewControllable {
-        let serviceVC = ServiceViewController(factory: self)
+        let repository = ServiceRepository()
+        let customerGenerator = CustomerGenerator()
+        let usecase = DefaultServiceUseCase(repository: repository, customerGenerator: customerGenerator)
+        let viewModel = ServiceViewModel(usecase: usecase)
+        let serviceVC = ServiceViewController(factory: self, viewModel: viewModel)
         return serviceVC
     }
 

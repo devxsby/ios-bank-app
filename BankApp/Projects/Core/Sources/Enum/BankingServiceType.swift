@@ -10,13 +10,13 @@ import Foundation
 
 @frozen
 public enum BankingServiceType: String {
-    case loans
-    case deposits
+    case loan
+    case deposit
     
     public var title: String {
         switch self {
-        case .loans: return I18N.ServiceFeature.loans
-        case .deposits: return I18N.ServiceFeature.deposits
+        case .loan: return I18N.ServiceFeature.loan
+        case .deposit: return I18N.ServiceFeature.deposit
         }
     }
     
@@ -26,8 +26,8 @@ public enum BankingServiceType: String {
     
     public var tabIndex: Int {
         switch self {
-        case .loans: return 0
-        case .deposits: return 1
+        case .loan: return 0
+        case .deposit: return 1
         }
     }
 }

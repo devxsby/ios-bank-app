@@ -21,6 +21,8 @@ public final class ServiceViewController: UIViewController, ServiceViewControlla
     // MARK: - Properties
     
     public var factory: ServiceFeatureViewBuildable & AlertViewBuildable
+    public var viewModel: ServiceViewModel
+    private var cancelBag = CancelBag()
     
     // MARK: - UI Components
     
@@ -48,16 +50,17 @@ public final class ServiceViewController: UIViewController, ServiceViewControlla
     }()
     private let searchView = BankingSearchView()
     private let bankInformationView = BankInformationContainerView()
-    private let loansWaitingBoxView = TellerWaitingBoxView(type: .loans)
-    private let depositsWaitingBoxView = TellerWaitingBoxView(type: .deposits)
+    private let loansWaitingBoxView = TellerWaitingBoxView(type: .loan)
+    private let depositsWaitingBoxView = TellerWaitingBoxView(type: .deposit)
     private let showMyWaitlistView = MyWaitlistView()
     
     private let horizontalLineView = UIView()
     
     // MARK: - Initialization
     
-    public init(factory: ServiceFeatureViewBuildable & AlertViewBuildable) {
+    public init(factory: ServiceFeatureViewBuildable & AlertViewBuildable, viewModel: ServiceViewModel) {
         self.factory = factory
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -76,6 +79,8 @@ public final class ServiceViewController: UIViewController, ServiceViewControlla
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        bindViewModels()
+        viewModel.startProcessing()
         setData()
     }
 }
@@ -161,6 +166,22 @@ extension ServiceViewController {
 
 extension ServiceViewController {
     
+    private func bindViewModels() {
+        let input = ServiceViewModel.Input()
+        let output = self.viewModel.transform(from: input, cancelBag: self.cancelBag)
+        
+        // 대출 고객 수 업데이트 시 호출될 클로저
+        viewModel.loanCountDidChange = { count, time in
+            self.updateLoanLabel(count, time)
+        }
+        
+        // 예금 고객 수 업데이트 시 호출될 클로저
+        viewModel.depositCountDidChange = { count, time in
+            self.updateDepositLabel(count, time)
+        }
+        
+    }
+    
     private func setDelegate() {
         showMyWaitlistView.delegate = self
         loansWaitingBoxView.delegate = self
@@ -168,8 +189,20 @@ extension ServiceViewController {
     }
     
     private func setData() {
-        loansWaitingBoxView.setData(0, .loans)
-        depositsWaitingBoxView.setData(0, .deposits)
+        loansWaitingBoxView.setData(0, .loan)
+        depositsWaitingBoxView.setData(0, .deposit)
+    }
+    
+    // 대출 라벨 업데이트
+    private func updateLoanLabel(_ count: Int, _ time: Double) {
+        // 대출 라벨 업데이트 로직
+        print("남은 대출 고객 수: \(count), 예상 대기 시간: \(time)")
+    }
+    
+    // 예금 라벨 업데이트
+    private func updateDepositLabel(_ count: Int, _ time: Double) {
+        // 예금 라벨 업데이트 로직
+        print("남은 예금 고객 수: \(count), 예상 대기 시간: \(time)")
     }
     
     // MARK: - @objc Function
