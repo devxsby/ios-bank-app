@@ -104,11 +104,8 @@ public final class TabBarController: UITabBarController, TabBarControllable {
         nav.tabBarItem.title = title
         
         nav.navigationBar.backgroundColor = .white
-//        nav.isNavigationBarHidden = true
-//        nav.navigationBar.isHidden = true
         nav.tabBarItem.setTitleTextAttributes([.font: DSKitFontFamily.SpoqaHanSansNeo.medium.font(size: 10)], for: .normal)
         nav.navigationItem.backBarButtonItem = UIBarButtonItem(title: nil, style: .plain, target: self, action: nil)
-        
         nav.interactivePopGestureRecognizer?.isEnabled = true
         nav.interactivePopGestureRecognizer?.delegate = self
         return nav
@@ -132,7 +129,6 @@ extension TabBarController: UITabBarControllerDelegate {
         makeVibrate()
         if viewController == tabBarController.selectedViewController {
             if let scrollView = findScrollView(in: viewController.view) {
-
                 scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.adjustedContentInset.top), animated: true)
             }
         }

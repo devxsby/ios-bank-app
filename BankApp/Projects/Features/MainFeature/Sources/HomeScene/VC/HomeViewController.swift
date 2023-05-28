@@ -260,7 +260,6 @@ extension HomeViewController {
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("셀 클릭")
         makeVibrate(degree: .light)
     }
     
@@ -354,9 +353,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         }
         
         if bottomOffset <= itemHigherHeight {
-            print("Reached the offset: \(bottomOffset)")
+//            print("Reached the offset: \(bottomOffset)")
         } else {
-            print("Reached Out. the offset: \(bottomOffset)")
+//            print("Reached Out. the offset: \(bottomOffset)")
         }
     }
 }
