@@ -183,12 +183,10 @@ extension ServiceViewController {
     }
     
     private func updateLoanLabel(_ count: Int, _ time: Double) {
-//        print("남은 대출 고객 수: \(count), 예상 대기 시간: \(time)")
         loansWaitingBoxView.setData(count, .loan)
     }
     
     private func updateDepositLabel(_ count: Int, _ time: Double) {
-//        print("남은 예금 고객 수: \(count), 예상 대기 시간: \(time)")
         depositsWaitingBoxView.setData(count, .deposit)
     }
     
@@ -196,8 +194,11 @@ extension ServiceViewController {
     
     @objc
     private func refreshed() {
-        print("refreshed")
-        self.containerScrollView.refreshControl?.endRefreshing()
+        self.containerScrollView.refreshControl?.beginRefreshing()
+        
+        DispatchQueue.main.async {
+            self.containerScrollView.refreshControl?.endRefreshing()
+        }
     }
 }
 

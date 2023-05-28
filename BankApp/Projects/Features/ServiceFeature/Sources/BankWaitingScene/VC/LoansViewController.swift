@@ -8,6 +8,9 @@
 
 import UIKit
 
+import Core
+import Domain
+
 public final class LoansViewController: BankWaitingBaseViewController {
     
     // MARK: - View Life Cycle
@@ -28,8 +31,16 @@ public final class LoansViewController: BankWaitingBaseViewController {
 
 extension LoansViewController {
     
-    private func updateView() {
+    func updateView() {
         // TODO: 예금과 대출의 버튼 상태가 하나로 같이 가야하나? 독립적으로 가야하나?
+        waitStatusView.loadingView(isActivate: true)
+        
+        let customers = String(WaitingInfoManager.shared.loanCount)
+        let time = String(Int(WaitingInfoManager.shared.loanTime))
+        
+        waitStatusView.waitingCustomersStatusView.setData(.deposit, .waitingCustomers, customers)
+        waitStatusView.estimatedWaitTimeStatusView.setData(.deposit, .estimatedWaitTime, time)
+        waitStatusView.issuanceTimeStatusView.setData(.loan, .issuanceTime, nil)
     }
     
     private func addButtonAction() {

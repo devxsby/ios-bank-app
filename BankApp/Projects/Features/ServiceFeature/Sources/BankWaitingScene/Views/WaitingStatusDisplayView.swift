@@ -17,6 +17,12 @@ final public class WaitingStatusDisplayView: UIView {
     
     // MARK: - UI Components
     
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.isHidden = true
+        return indicator
+    }()
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = DSKitAsset.Images.imgPeoples.image
@@ -24,9 +30,9 @@ final public class WaitingStatusDisplayView: UIView {
         return imageView
     }()
     
-    private let waitingCustomersStatusView = SingleWaitStatusView(.loan, .waitingCustomers)
-    private let estimatedWaitTimeStatusView = SingleWaitStatusView(.loan, .estimatedWaitTime)
-    private let issuanceTimeStatusView = SingleWaitStatusView(.loan, .issuanceTime)
+    let waitingCustomersStatusView = SingleWaitStatusView(.loan, .waitingCustomers)
+    let estimatedWaitTimeStatusView = SingleWaitStatusView(.loan, .estimatedWaitTime)
+    let issuanceTimeStatusView = SingleWaitStatusView(.loan, .issuanceTime)
     
     private let bankNameLabel: UILabel = {
         let label = UILabel()
@@ -70,7 +76,12 @@ extension WaitingStatusDisplayView {
     }
     
     private func setLayout() {
+        self.addSubview(activityIndicator)
         [imageView, stackView,  bankNameLabel].forEach { self.addSubview($0) }
+        
+        activityIndicator.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         
         imageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
@@ -98,10 +109,27 @@ extension WaitingStatusDisplayView {
     // TODO: - viewwillappear 노티받으면 setData 업데이트 하기
     // TODO: - 예금, 대출 다른 뷰컨으로 상속 시키는 법?
     private func setData() {
-        waitingCustomersStatusView.setData(.deposit, .waitingCustomers, 5)
-        estimatedWaitTimeStatusView.setData(.deposit, .estimatedWaitTime, 10)
-        issuanceTimeStatusView.setData(.deposit, .issuanceTime, 0)
+        waitingCustomersStatusView.setData(.deposit, .waitingCustomers, "5")
+        estimatedWaitTimeStatusView.setData(.deposit, .estimatedWaitTime, "10")
+        issuanceTimeStatusView.setData(.deposit, .issuanceTime, "몇시 몇분")
 
+    }
+    
+    func loadingView(isActivate: Bool) {
+        if isActivate {
+            imageView.isHidden = isActivate
+            stackView.isHidden = isActivate
+            bankNameLabel.isHidden = isActivate
+            
+            activityIndicator.startAnimating()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.activityIndicator.stopAnimating()
+                self.imageView.isHidden = !isActivate
+                self.stackView.isHidden = !isActivate
+                self.bankNameLabel.isHidden = !isActivate
+            }
+        }
     }
 }
 

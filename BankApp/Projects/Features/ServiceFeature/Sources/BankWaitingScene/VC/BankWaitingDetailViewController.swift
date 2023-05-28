@@ -29,8 +29,8 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     
     // MARK: - UI Components
     
-    private lazy var loanDetailVC = LoansViewController(factory: factory)
-    private lazy var depositDetailVC = DepositsViewController(factory: factory)
+    lazy var loanDetailVC = LoansViewController(factory: factory)
+    lazy var depositDetailVC = DepositsViewController(factory: factory)
     
     private lazy var backBarButton: UIBarButtonItem = {
         let barButton = UIBarButtonItem(image: DSKitAsset.Images.icnBackArrow.image,
@@ -191,9 +191,12 @@ extension BankWaitingDetailViewController {
 
     @objc
     private func refreshed() {
-        print("새로고침 버튼 클릭 !!!")
+        loanDetailVC.waitStatusView.loadingView(isActivate: true)
+        depositDetailVC.waitStatusView.loadingView(isActivate: true)
+        
+        loanDetailVC.updateView()
+        depositDetailVC.updateView()
     }
-
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -232,11 +235,11 @@ extension BankWaitingDetailViewController: UICollectionViewDelegateFlowLayout {
 extension BankWaitingDetailViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-//        guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
-//        let previousIndex = index - 1
-//        if previousIndex < 0 { return nil }
-//        return detailViewControllers[previousIndex]
-    return nil
+        guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
+        let previousIndex = index - 1
+        if previousIndex < 0 { return nil }
+        return detailViewControllers[previousIndex]
+//        return nil
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
@@ -246,10 +249,10 @@ extension BankWaitingDetailViewController: UIPageViewControllerDelegate, UIPageV
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-//        guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
-//        let nextIndex = index + 1
-//        if nextIndex == detailViewControllers.count { return nil }
-//        return detailViewControllers[nextIndex]
-        return nil
+        guard let index = detailViewControllers.firstIndex(of: viewController) else { return nil }
+        let nextIndex = index + 1
+        if nextIndex == detailViewControllers.count { return nil }
+        return detailViewControllers[nextIndex]
+//        return nil
     }
 }

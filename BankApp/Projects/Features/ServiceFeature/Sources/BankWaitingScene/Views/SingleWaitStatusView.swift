@@ -26,6 +26,7 @@ final class SingleWaitStatusView: UIView {
     
     private let subtitleLabel: UILabel = {
         let label = UILabel()
+        label.text = "-"
         label.textAlignment = .right
         label.font = DSKitFontFamily.SpoqaHanSansNeo.medium.font(size: 16)
         label.textColor = .black
@@ -34,7 +35,7 @@ final class SingleWaitStatusView: UIView {
     
     // MARK: - Initialization
 
-    init(_ bankingServiceType: BankingServiceType = .loan, _ waitingInformationType: WaitingInformationType) {
+    public init(_ bankingServiceType: BankingServiceType = .loan, _ waitingInformationType: WaitingInformationType) {
         super.init(frame: .zero)
         setUI(bankingServiceType)
         setData(bankingServiceType, waitingInformationType)
@@ -77,18 +78,17 @@ extension SingleWaitStatusView {
     // TODO: - Input 파라미터 model로 바꾸기
     public func setData(_ bankingServiceType: BankingServiceType = .loan,
                         _ waitingInformationType: WaitingInformationType = .waitingCustomers,
-                        _ number: Int = 0) {
-        let number = String(number)
+                        _ value: String? = nil) {
         switch waitingInformationType {
         case .waitingCustomers:
             titleLabel.text = "\(bankingServiceType.title) \(I18N.ServiceFeature.waitingCustomers)"
-            return subtitleLabel.text = "\(number) \(I18N.ServiceFeature.peopleCount)"
+            subtitleLabel.text = "\(value ?? "") \(I18N.ServiceFeature.peopleCount)"
         case .estimatedWaitTime:
             titleLabel.text = I18N.ServiceFeature.estimatedWaitTimes
-            return subtitleLabel.text = "\(number) \(I18N.ServiceFeature.minute)"
+            subtitleLabel.text = "\(value ?? "") \(I18N.ServiceFeature.minute)"
         case .issuanceTime:
             titleLabel.text = I18N.ServiceFeature.issuanceTime
-            return subtitleLabel.text = "00시 00분"
+            subtitleLabel.text = value != nil ? value! : "-"
         }
     }
 }

@@ -40,10 +40,8 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     
     private let containerScrollView = UIScrollView()
     private let contentView = UIView()
-    
-    private let waitStatusView = WaitingStatusDisplayView()
-    
-    private let notificationView = WaitingNotificationView()
+    let waitStatusView = WaitingStatusDisplayView()
+    let notificationView = WaitingNotificationView()
     
     public lazy var waitButton: UIButton = {
         let button = UIButton()
