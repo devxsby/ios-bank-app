@@ -38,8 +38,9 @@ extension LoansViewController {
         let customers = String(WaitingInfoManager.shared.loanCount)
         let time = String(Int(WaitingInfoManager.shared.loanTime))
         
-        waitStatusView.waitingCustomersStatusView.setData(.deposit, .waitingCustomers, customers)
-        waitStatusView.estimatedWaitTimeStatusView.setData(.deposit, .estimatedWaitTime, time)
+        waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 2))
+        waitStatusView.waitingCustomersStatusView.setData(.loan, .waitingCustomers, customers)
+        waitStatusView.estimatedWaitTimeStatusView.setData(.loan, .estimatedWaitTime, time)
         waitStatusView.issuanceTimeStatusView.setData(.loan, .issuanceTime, nil)
     }
     

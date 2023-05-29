@@ -23,13 +23,7 @@ final public class WaitingStatusDisplayView: UIView {
         return indicator
     }()
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = DSKitAsset.Images.imgPeoples.image
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-    
+    let waitingAnimationView = WaitingAnimationView(.basic)
     let waitingCustomersStatusView = SingleWaitStatusView(.loan, .waitingCustomers)
     let estimatedWaitTimeStatusView = SingleWaitStatusView(.loan, .estimatedWaitTime)
     let issuanceTimeStatusView = SingleWaitStatusView(.loan, .issuanceTime)
@@ -37,7 +31,7 @@ final public class WaitingStatusDisplayView: UIView {
     private let bankNameLabel: UILabel = {
         let label = UILabel()
         label.text = I18N.ServiceFeature.sampleBankName
-        label.font = DSKitFontFamily.SpoqaHanSansNeo.bold.font(size: 16)
+        label.font = DSKitFontFamily.SpoqaHanSansNeo.bold.font(size: 15)
         label.textColor = DSKitAsset.Colors.gray600.color
         return label
     }()
@@ -49,7 +43,7 @@ final public class WaitingStatusDisplayView: UIView {
             issuanceTimeStatusView
         ])
         stackView.axis = .vertical
-        stackView.spacing = 10
+        stackView.spacing = 5
         stackView.alignment = .fill
         return stackView
     }()
@@ -77,27 +71,27 @@ extension WaitingStatusDisplayView {
     
     private func setLayout() {
         self.addSubview(activityIndicator)
-        [imageView, stackView,  bankNameLabel].forEach { self.addSubview($0) }
+        [waitingAnimationView, stackView,  bankNameLabel].forEach { self.addSubview($0) }
         
         activityIndicator.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
-        imageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+        waitingAnimationView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(200)
-            $0.height.equalTo(180)
-        }
-        
-        stackView.snp.makeConstraints {
-            $0.top.equalTo(imageView.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview()
+            $0.width.equalTo(280)
+            $0.height.equalTo(220)
         }
         
         bankNameLabel.snp.makeConstraints {
-            $0.top.equalTo(stackView.snp.bottom).offset(20)
+            $0.bottom.equalToSuperview().inset(20)
             $0.trailing.equalTo(stackView.snp.trailing).inset(20)
+        }
+        
+        stackView.snp.makeConstraints {
+            $0.bottom.equalTo(bankNameLabel.snp.top).inset(-20)
+            $0.leading.trailing.equalToSuperview()
         }
     }
 }
@@ -117,7 +111,7 @@ extension WaitingStatusDisplayView {
     
     func loadingView(isActivate: Bool) {
         if isActivate {
-            imageView.isHidden = isActivate
+            waitingAnimationView.isHidden = isActivate
             stackView.isHidden = isActivate
             bankNameLabel.isHidden = isActivate
             
@@ -125,7 +119,7 @@ extension WaitingStatusDisplayView {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.activityIndicator.stopAnimating()
-                self.imageView.isHidden = !isActivate
+                self.waitingAnimationView.isHidden = !isActivate
                 self.stackView.isHidden = !isActivate
                 self.bankNameLabel.isHidden = !isActivate
             }

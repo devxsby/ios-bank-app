@@ -122,7 +122,7 @@ extension BankWaitingBaseViewController {
         notificationView.snp.makeConstraints {
             $0.top.equalTo(waitStatusView.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().offset(20)
+            $0.bottom.equalToSuperview().offset(10)
             $0.height.equalTo(250)
         }
     }
