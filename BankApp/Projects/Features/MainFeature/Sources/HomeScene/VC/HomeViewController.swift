@@ -8,10 +8,12 @@
 
 import UIKit
 
-import BaseFeatureDependency
 import Core
+import Domain
 import DSKit
+
 import MainFeatureInterface
+import BaseFeatureDependency
 
 import SnapKit
 
@@ -19,7 +21,7 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
     
     // MARK: - Properties
     
-    public var viewModel: HomeViewModel
+    public let viewModel: HomeViewModel
     private var cancelBag = CancelBag()
     private var sections = [HomeItem]()
     private var isFirstEntry = true
@@ -303,7 +305,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 (cell as? EarnPointCell)?.setData(item)
             }
         case .assets, .investments, .consumption:
-            if let item = sections[indexPath.section].items[indexPath.row] as? AccountInformationModel {
+            if let item = sections[indexPath.section].items[indexPath.row] as? AccountInformation {
                 (cell as? AccountInformationCell)?.setData(item)
             }
         case .life:
@@ -380,41 +382,41 @@ extension HomeViewController {
                 items: [EarnPointModel(title: "함께 어플 켜고 포인트 받기")]),
             HomeItem(
                 type: .assets,
-                items: [AccountInformationModel(image: DSKitAsset.Images.icnYagom.image,
+                items: [AccountInformation(image: DSKitAsset.Images.icnYagom.image,
                                                 title: "야곰뱅크 주거래 통장",
                                                 subtitle: "6,083,000원",
                                                 buttonTitle: "송금"),
-                        AccountInformationModel(image: DSKitAsset.Images.icnSaving.image,
+                        AccountInformation(image: DSKitAsset.Images.icnSaving.image,
                                                         title: "모으기 통장",
                                                         subtitle: "851,500원",
                                                         buttonTitle: nil),
-                        AccountInformationModel(image: DSKitAsset.Images.icnKb.image,
+                        AccountInformation(image: DSKitAsset.Images.icnKb.image,
                                                         title: "KB 국민은행 통장",
                                                         subtitle: "2,000원",
                                                         buttonTitle: "송금"),
-                        AccountInformationModel(image: DSKitAsset.Images.icnBanks.image,
+                        AccountInformation(image: DSKitAsset.Images.icnBanks.image,
                                                         title: "증권 · 3개",
                                                         subtitle: "2,557,000원",
                                                         buttonTitle: "송금"),
-                        AccountInformationModel(image: DSKitAsset.Images.icnMoneybag.image,
+                        AccountInformation(image: DSKitAsset.Images.icnMoneybag.image,
                                                         title: "대출 · 39개 금융사 대기중",
                                                         subtitle: "내 최대 대출 한도 보기",
                                                         buttonTitle: nil)],
                 headerText: "자산"),
             HomeItem(
                 type: .investments,
-                items: [AccountInformationModel(image: DSKitAsset.Images.icnStocks.image,
+                items: [AccountInformation(image: DSKitAsset.Images.icnStocks.image,
                                                 title: "주식",
                                                 subtitle: "1,805,456원 + 123.6%",
                                                 buttonTitle: nil)],
                 headerText: "투자"),
             HomeItem(
                 type: .consumption,
-                items: [AccountInformationModel(image: DSKitAsset.Images.icnCards.image,
+                items: [AccountInformation(image: DSKitAsset.Images.icnCards.image,
                                                 title: "이번 달 쓴 금액",
                                                 subtitle: "1,248,200원",
                                                 buttonTitle: "내역"),
-                        AccountInformationModel(image: DSKitAsset.Images.icnDday.image,
+                        AccountInformation(image: DSKitAsset.Images.icnDday.image,
                                                         title: "6월 15일 낼 카드값",
                                                         subtitle: "913,560원",
                                                         buttonTitle: nil)],

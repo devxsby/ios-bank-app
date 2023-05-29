@@ -9,11 +9,12 @@
 import UIKit
 
 import Core
+import Domain
 import DSKit
 
 import SnapKit
 
-open class AccountInformationCell: UICollectionViewCell {
+public class AccountInformationCell: UICollectionViewCell {
     
     // MARK: - UI Components
     
@@ -119,17 +120,35 @@ extension AccountInformationCell {
 
 extension AccountInformationCell {
     
-    public func setData(_ model: AccountInformationModel) {
-
+    public func setData(_ model: AccountInformation) {
         imageView.image = model.image
         titleLabel.text = model.title
         subtitleLabel.text = model.subtitle
         button.setTitle(model.buttonTitle, for: .normal)
         
-        if let buttonTitle = model.buttonTitle, !buttonTitle.isEmpty {
+        checkButtonHidden(with: model.buttonTitle)
+        checkStockLabel(with: subtitleLabel)
+    }
+    
+    private func checkButtonHidden(with buttonTitle: String?) {
+        if let title = buttonTitle, !title.isEmpty {
             button.isHidden = false
         } else {
             button.isHidden = true
+        }
+    }
+    
+    private func checkStockLabel(with subtitle: UILabel) {
+        if subtitleLabel.text?.contains(" ") == true {
+            let subtitle = subtitleLabel.text?.components(separatedBy: " ")
+            if subtitle?[1] == "+" {
+                subtitleLabel.textColor = DSKitAsset.Colors.warning.color
+                subtitleLabel.partColorChange(targetString: subtitle?[0] ?? "", textColor: .black)
+            }
+            if subtitle?[1] == "-" {
+                subtitleLabel.textColor = DSKitAsset.Colors.blue.color
+                subtitleLabel.partColorChange(targetString: subtitle?[0] ?? "", textColor: .black)
+            }
         }
     }
 }

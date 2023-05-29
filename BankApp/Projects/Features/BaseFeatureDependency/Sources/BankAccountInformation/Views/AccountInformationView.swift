@@ -13,11 +13,6 @@ import DSKit
 
 import SnapKit
 
-public enum AccountInformationAnimationType {
-    case comsumption
-    case others
-}
-
 public final class AccountInformationView: UIView {
     
     // MARK: - UI Components
@@ -106,14 +101,6 @@ extension AccountInformationView {
 // MARK: - Methods
 
 extension AccountInformationView {
-    
-    public func addShadow() {
-        
-    }
-    
-    public func animateView() {
-        
-    }
     
     public func setData(_ title: String?) {
         titleLabel.text = title

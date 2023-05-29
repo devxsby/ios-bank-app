@@ -1,6 +1,6 @@
 //
 //  AccountInformationModel.swift
-//  BaseFeatureDependency
+//  Domain
 //
 //  Created by devxsby on 2023/05/25.
 //  Copyright © 2023 BankApp. All rights reserved.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct AccountInformationModel {
+public struct AccountInformation {
     public let image: UIImage
     public let title: String
     public let subtitle: String
