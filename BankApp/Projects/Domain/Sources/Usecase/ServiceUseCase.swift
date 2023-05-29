@@ -9,7 +9,6 @@
 import Foundation
 
 import Core
-import Network
 
 public protocol ServiceUseCase {
     func processDeposit(completion: @escaping (Int, Double) -> Void)

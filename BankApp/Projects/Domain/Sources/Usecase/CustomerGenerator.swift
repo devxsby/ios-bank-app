@@ -9,7 +9,6 @@
 import Foundation
 
 import Core
-import Network
 
 public final class CustomerGenerator {
     
