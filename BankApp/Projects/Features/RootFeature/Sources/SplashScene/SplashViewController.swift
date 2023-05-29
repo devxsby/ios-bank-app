@@ -59,12 +59,12 @@ public final class SplashViewController: UIViewController, SplashViewControllabl
         
         imageView.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.height.equalTo(50)
+            $0.width.height.equalTo(80)
         }
     }
     
     private func addAnimation() {
-        UIView.animate(withDuration: 1.0, delay: 1.0, options: .autoreverse, animations: {
+        UIView.animate(withDuration: 1.0, delay: 1.0, animations: {
             // TODO: - 스플래시 애니메이션 넣기
         }, completion: { _ in
             guard let tabBarController = self.factory.makeTabBarController().viewController

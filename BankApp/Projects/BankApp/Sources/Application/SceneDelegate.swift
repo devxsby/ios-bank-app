@@ -63,19 +63,26 @@ extension SceneDelegate {
                 backgroundView.backgroundColor = .white
                 
                 let iconImageView = UIImageView()
-                iconImageView.frame = CGRect(x: (backgroundView.frame.width - 50) / 2,
+                iconImageView.frame = CGRect(x: (backgroundView.frame.width - 80) / 2,
                                              y: (backgroundView.frame.height - 50) / 2,
-                                             width: 50,
-                                             height: 50)
+                                             width: 80,
+                                             height: 80)
                 iconImageView.image = DSKitAsset.Images.icnYagom.image
                 backgroundView.addSubview(iconImageView)
                 backgroundView.addSubview(iconImageView)
                 
                 window?.rootViewController?.view.window?.addSubview(backgroundView)
+                
+                backgroundView.alpha = 0.0
+                UIView.animate(withDuration: 0.5) {
+                    backgroundView.alpha = 1.0
+                }
             }
         } else {
-            if let backgroundView = backgroundView {
-                backgroundView.removeFromSuperview()
+            UIView.animate(withDuration: 0.5, animations: {
+                backgroundView?.alpha = 0.0
+            }) { _ in
+                backgroundView?.removeFromSuperview()
             }
         }
     }
