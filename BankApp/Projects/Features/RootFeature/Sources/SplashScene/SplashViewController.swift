@@ -59,7 +59,7 @@ public final class SplashViewController: UIViewController, SplashViewControllabl
         
         imageView.snp.makeConstraints {
             $0.center.equalTo(view.safeAreaLayoutGuide)
-            $0.width.height.equalTo(40)
+            $0.width.height.equalTo(50)
         }
     }
     
