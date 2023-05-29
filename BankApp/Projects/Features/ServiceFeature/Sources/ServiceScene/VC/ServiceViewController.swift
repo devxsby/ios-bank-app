@@ -35,7 +35,7 @@ public final class ServiceViewController: UIViewController, ServiceViewControlla
     
     private lazy var containerScrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.refreshControl = refresher
+//        scrollView.refreshControl = refresher
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
