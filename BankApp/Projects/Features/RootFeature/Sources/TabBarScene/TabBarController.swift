@@ -126,10 +126,17 @@ extension TabBarController: UITabBarControllerDelegate {
     }
     
     public func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        makeVibrate()
+        
+        if let index = viewControllers?.firstIndex(where: { $0 == viewController }) {
+            if index == 2 || index == 3 {
+                return false
+            }
+        }
+        
         if viewController == tabBarController.selectedViewController {
             if let scrollView = findScrollView(in: viewController.view) {
-                scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.adjustedContentInset.top), animated: true)
+                scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.adjustedContentInset.top),
+                                            animated: true)
             }
         }
         return true
