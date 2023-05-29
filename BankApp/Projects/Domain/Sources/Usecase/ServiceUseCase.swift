@@ -48,7 +48,7 @@ extension DefaultServiceUseCase: ServiceUseCase {
 
     public func processLoan(completion: @escaping (Int, Double) -> Void) {
         let loanBankers = [Banker(type: .loan, taskDuration: 5.0)]
-        let loanCustomers = (1...9).map { Customer(number: $0, taskType: .loan) }
+        let loanCustomers = (1...11).map { Customer(number: $0, taskType: .loan) }
 
         let bank = Bank(depositBankers: [], loanBankers: loanBankers, depositCustomers: [], loanCustomers: loanCustomers)
 
