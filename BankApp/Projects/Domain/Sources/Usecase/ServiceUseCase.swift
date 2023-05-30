@@ -23,7 +23,7 @@ public class DefaultServiceUseCase {
     public let customerGenerator: CustomerGenerator
     
     private let depositBankers = [Banker(type: .deposit, taskDuration: 5.0)]
-    private let loanBankers = [Banker(type: .loan, taskDuration: 7.0)]
+    private let loanBankers = [Banker(type: .loan, taskDuration: 8.0)]
     private var depositBank = Bank(depositBankers: [], loanBankers: [], depositCustomers: [], loanCustomers: [])
     private var loanBank = Bank(depositBankers: [], loanBankers: [], depositCustomers: [], loanCustomers: [])
     

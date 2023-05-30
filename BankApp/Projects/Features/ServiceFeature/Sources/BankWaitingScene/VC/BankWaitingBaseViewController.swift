@@ -27,13 +27,19 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     public var isWaiting: Bool {
         didSet {
             waitButton.isSelected = isWaiting
-            waitButton.backgroundColor = isWaiting ? DSKitAsset.Colors.gray300.color : DSKitAsset.Colors.blue.color
+            waitButton.backgroundColor = isWaiting ? DSKitAsset.Colors.gray300.color.withAlphaComponent(0.5) : DSKitAsset.Colors.blue.color
         }
     }
     
     private var isButtonEnabled: Bool = true {
         didSet {
             waitButton.isEnabled = isButtonEnabled
+        }
+    }
+    
+    private var animationState: WaitingAnimationStyle = .basic {
+        didSet {
+            updateAnimationStyle()
         }
     }
     
@@ -130,6 +136,24 @@ extension BankWaitingBaseViewController {
             $0.height.equalTo(230)
         }
     }
+    
+    private func updateAnimationStyle() {
+        if isWaiting {
+            waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: animationState))
+        } else {
+            waitStatusView.waitingAnimationView.setStyle(.basic)
+        }
+    }
+    private func calculateAnimationState(for count: Int?) -> WaitingAnimationStyle {
+        guard let count = count else { return .basic }
+        if count <= 1 {
+            return .animated(fillIndex: 2)
+        } else if count <= 5 {
+            return .animated(fillIndex: 1)
+        } else {
+            return .animated(fillIndex: 0)
+        }
+    }
 }
 
 // MARK: - Methods
@@ -138,27 +162,73 @@ extension BankWaitingBaseViewController {
     
     private func bindViewModels() {
         
-        viewModel.depositCountDidChange = { count, time in
+        viewModel.depositCountDidChange = { [weak self] count, time in
+            guard let self = self else { return }
+            
             DispatchQueue.main.async {
                 if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.deposit) == true {
                     self.waitStatusView.waitingCustomersCountView.setData(.deposit, .waitingCustomers, String(count ?? 0))
                     self.waitStatusView.estimatedWaitTimeView.setData(.deposit, .estimatedWaitTime, String(Int(time ?? 0.0)))
+                    
+                    guard let count = count else { return }
+                    
+                    if count <= 1 && self.isWaiting {
+                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 2))
+                    } else if count >= 1 && self.isWaiting && count <= 5 {
+                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 1))
+                    } else if count > 5 && self.isWaiting {
+                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 0))
+                    }
+                    
+                    if count == 0 {
+                        self.isWaiting = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            self.waitStatusView.waitingAnimationView.setStyle(.basic)
+                        }
+                    }
+                    
+                    if !self.isWaiting {
+                        self.waitStatusView.waitingAnimationView.setStyle(.basic)
+                    }
                 }
             }
         }
 
-        viewModel.loanCountDidChange = { count, time in
+        viewModel.loanCountDidChange = { [weak self] count, time in
+            guard let self = self else { return }
+            
             DispatchQueue.main.async {
                 if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
                     self.waitStatusView.waitingCustomersCountView.setData(.loan, .waitingCustomers, String(count ?? 0))
                     self.waitStatusView.estimatedWaitTimeView.setData(.loan, .estimatedWaitTime, String(Int(time ?? 0.0)))
+                    
+                    guard let count = count else { return }
+                    
+                    if count <= 1 && self.isWaiting {
+                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 2))
+                    } else if count >= 1 && self.isWaiting && count <= 5 {
+                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 1))
+                    } else if count > 5 && self.isWaiting {
+                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 0))
+                    }
+                    
+                    if count == 0 {
+                        self.isWaiting = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            self.waitStatusView.waitingAnimationView.setStyle(.basic)
+                        }
+                    }
+                    
+                    if !self.isWaiting {
+                        self.waitStatusView.waitingAnimationView.setStyle(.basic)
+                    }
                 }
             }
         }
     }
     
     private func initialButtonState() {
-        isWaiting = false // 기존 상태 왜이러나?
+        isWaiting = isWaiting
     }
     
     @objc
@@ -197,8 +267,10 @@ extension BankWaitingBaseViewController {
         
         if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
             viewModel.registerWait(type: .loan)
+            self.waitStatusView.issuanceTimeView.setData(.loan, .issuanceTime, Date.now.currentTimeString())
         } else {
             viewModel.registerWait(type: .deposit)
+            self.waitStatusView.issuanceTimeView.setData(.loan, .issuanceTime, Date.now.currentTimeString())
         }
         
         bindViewModels()
@@ -210,8 +282,10 @@ extension BankWaitingBaseViewController {
         
         if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
             viewModel.cancelWaiting(type: .loan)
+            self.waitStatusView.issuanceTimeView.setData(.loan, .issuanceTime, nil)
         } else {
             viewModel.cancelWaiting(type: .deposit)
+            self.waitStatusView.issuanceTimeView.setData(.loan, .issuanceTime, nil)
         }
     }
 }

@@ -9,5 +9,9 @@
 import Foundation
 
 public extension Date {
-    
+    func currentTimeString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH시 mm분"
+        return dateFormatter.string(from: self)
+    }
 }
