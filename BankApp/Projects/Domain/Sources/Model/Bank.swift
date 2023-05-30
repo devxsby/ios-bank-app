@@ -10,7 +10,7 @@ import Foundation
 
 import Core
 
-// TODO: - 🚨 생각해보니까 내 뒤에 또 다른 고객이 대기 할 수가 있음
+// TODO: - 유닛 테스트, 뒤에 다른 고객이 대기하는 케이스 추가
 
 public class Bank {
     
@@ -87,8 +87,6 @@ extension Bank {
     }
     
     private func processLoanCustomers() {
-        let totalLoanCustomers = loanCustomers.count
-        
         loanQueue.async {
             while !self.loanCustomers.isEmpty {
                 if let banker = self.loanBankers.first {
@@ -152,6 +150,19 @@ extension Bank {
             }
             
             self.depositSemaphore.signal()
+        }
+    }
+    
+    public func removeLastCustomer(_ type: BankingServiceType) {
+        switch type {
+        case .deposit:
+            if !depositCustomers.isEmpty {
+                depositCustomers.removeLast()
+            }
+        case .loan:
+            if !loanCustomers.isEmpty {
+                loanCustomers.removeLast()
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ public protocol ServiceUseCase {
     func processDeposit(completion: @escaping (Int?, Double?) -> Void)
     func processLoan(completion: @escaping (Int?, Double?) -> Void)
     func addCustomer(type: BankingServiceType, completion: @escaping (Int, Double) -> Void)
-//    func removeCustomer(type: BankingServiceType, completion: @escaping (Int, Double) -> Void)
+    func removeCustomer(type: BankingServiceType)
 }
 
 public class DefaultServiceUseCase {
@@ -78,12 +78,12 @@ extension DefaultServiceUseCase: ServiceUseCase {
         }
     }
     
-//    public func removeCustomer(type: BankingServiceType, completion: @escaping (Int, Double) -> Void) {
-//        switch type {
-//        case .deposit:
-//            return depositBank.dequeueDepositCustomer()
-//        case .loan:
-//            return loanBank.dequeueLoanCustomer()
-//        }
-//    }
+    public func removeCustomer(type: BankingServiceType) {
+        switch type {
+        case .deposit:
+            depositBank.removeLastCustomer(.deposit)
+        case .loan:
+            loanBank.removeLastCustomer(.loan)
+        }
+    }
 }

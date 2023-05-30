@@ -35,7 +35,7 @@ public class ServiceViewModel {
         self.startProcessingLoan()
     }
     
-    public func addCustomer(type: BankingServiceType) {
+    public func registerWait(type: BankingServiceType) {
         usecase.addCustomer(type: type) { [weak self] remainingCustomers, estimatedWaitTime in
             switch type {
             case .deposit:
@@ -45,17 +45,10 @@ public class ServiceViewModel {
             }
         }
     }
-
-//    public func removeCustomer(type: BankingServiceType) {
-//        usecase.removeCustomer(type: type) { [weak self] remainingCustomers, estimatedWaitTime in
-//            switch type {
-//            case .deposit:
-//                self?.depositCountDidChange?(remainingCustomers, estimatedWaitTime)
-//            case .loan:
-//                self?.loanCountDidChange?(remainingCustomers, estimatedWaitTime)
-//            }
-//        }
-//    }
+    
+    public func cancelWaiting(type: BankingServiceType) {
+        usecase.removeCustomer(type: type)
+    }
 }
 
 extension ServiceViewModel {

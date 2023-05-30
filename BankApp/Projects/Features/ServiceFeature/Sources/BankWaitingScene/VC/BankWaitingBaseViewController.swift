@@ -163,7 +163,6 @@ extension BankWaitingBaseViewController {
     
     @objc
     public func waitButtonDidTap() {
-        print(waitStatusView.waitingCustomersCountView.titleLabel.text)
         if isButtonEnabled {
             isButtonEnabled = false
             isWaiting ? presentCancelAlertPopUp() : performWaiting()
@@ -197,9 +196,9 @@ extension BankWaitingBaseViewController {
         showToast(message: I18N.ServiceFeature.successWaiting)
         
         if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
-            viewModel.addCustomer(type: .loan)
+            viewModel.registerWait(type: .loan)
         } else {
-            viewModel.addCustomer(type: .deposit)
+            viewModel.registerWait(type: .deposit)
         }
         
         bindViewModels()
@@ -209,12 +208,10 @@ extension BankWaitingBaseViewController {
         isWaiting = false
         isButtonEnabled = true // 버튼을 즉시 다시 활성화
         
-//        if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains("대출") == true {
-//            viewModel.removeCustomer(type: .loan)
-//            print("🚨 대출 고객 삭제 버튼")
-//        } else {
-//            viewModel.addCustomer(type: .deposit)
-//            print("🚨 예금 고객 삭제 버튼")
-//        }
+        if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
+            viewModel.cancelWaiting(type: .loan)
+        } else {
+            viewModel.cancelWaiting(type: .deposit)
+        }
     }
 }
