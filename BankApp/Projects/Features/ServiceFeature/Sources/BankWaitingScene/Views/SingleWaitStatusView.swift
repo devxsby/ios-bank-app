@@ -82,10 +82,10 @@ extension SingleWaitStatusView {
         switch waitingInformationType {
         case .waitingCustomers:
             titleLabel.text = "\(bankingServiceType.title) \(I18N.ServiceFeature.waitingCustomers)"
-            subtitleLabel.text = "\(value ?? "") \(I18N.ServiceFeature.peopleCount)"
+            subtitleLabel.text = "\(value ?? "-") \(I18N.ServiceFeature.peopleCount)"
         case .estimatedWaitTime:
             titleLabel.text = I18N.ServiceFeature.estimatedWaitTimes
-            subtitleLabel.text = "\(value ?? "") \(I18N.ServiceFeature.minute)"
+            subtitleLabel.text = "\(value ?? "-") \(I18N.ServiceFeature.minute)"
         case .issuanceTime:
             titleLabel.text = I18N.ServiceFeature.issuanceTime
             subtitleLabel.text = value != nil ? value! : "-"

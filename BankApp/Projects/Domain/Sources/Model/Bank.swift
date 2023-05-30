@@ -18,10 +18,7 @@ public class Bank {
     public let loanQueue = DispatchQueue(label: "LoanQueue", qos: .userInitiated)
     
     private let depositSemaphore = DispatchSemaphore(value: 2)
-    
-    private var remainingDepositCustomers: Int = 0
-    private var estimatedDepositWaitTime: Double = 0.0
-    
+        
     public let depositBankers: [Banker]
     public let loanBankers: [Banker]
     public var depositCustomers: [Customer]
@@ -48,15 +45,21 @@ extension Bank {
         depositQueue.async {
             self.depositSemaphore.wait()
             
+            if self.depositCustomers.isEmpty == true {
+                return
+            }
+            
             if let firstBanker = self.depositBankers.first {
-                self.remainingDepositCustomers += 1
-                self.estimatedDepositWaitTime = Double(self.remainingDepositCustomers) * firstBanker.taskDuration
-                self.printRemainingCustomers?(.deposit, self.remainingDepositCustomers, self.estimatedDepositWaitTime)
+                self.depositCustomers.append(Customer(number: self.depositCustomers.count + 1, taskType: .deposit))
+                let remainingCustomers = self.depositCustomers.count
+                let estimatedDepositWaitTime = Double(remainingCustomers) * firstBanker.taskDuration
+                self.printRemainingCustomers?(.deposit, remainingCustomers, estimatedDepositWaitTime)
             }
             
             self.depositSemaphore.signal()
         }
     }
+    
     
     public func addCustomerToLoanQueue() {
         // 아직 x
@@ -66,9 +69,8 @@ extension Bank {
     private func processDepositCustomers() {
         let group = DispatchGroup()
         
-        // TODO: index 0이면 끝나서 업데이트가 안됨. while 문으로 바꾸기
         depositQueue.async {
-            for index in stride(from: self.depositCustomers.count, through: 0, by: -1) {
+            while !self.depositCustomers.isEmpty {
                 if let banker = self.depositBankers.first {
                     group.enter()
                     
@@ -76,10 +78,12 @@ extension Bank {
                     
                     Thread.sleep(forTimeInterval: banker.taskDuration)
                     
-                    self.remainingDepositCustomers = index
-                    self.estimatedDepositWaitTime = Double(self.remainingDepositCustomers) * banker.taskDuration
+                    self.depositCustomers.removeFirst()
                     
-                    self.printRemainingCustomers?(.deposit, self.remainingDepositCustomers, self.estimatedDepositWaitTime)
+                    let remainingCustomers = self.depositCustomers.count
+                    let estimatedDepositWaitTime = Double(remainingCustomers) * banker.taskDuration
+                    
+                    self.printRemainingCustomers?(.deposit, remainingCustomers, estimatedDepositWaitTime)
                     
                     self.depositSemaphore.signal()
                     group.leave()
