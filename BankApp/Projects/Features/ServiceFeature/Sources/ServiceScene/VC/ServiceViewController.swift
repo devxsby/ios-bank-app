@@ -181,11 +181,11 @@ extension ServiceViewController {
         depositsWaitingBoxView.delegate = self
     }
     
-    private func updateLoanLabel(_ count: Int, _ time: Double) {
+    private func updateLoanLabel(_ count: Int?, _ time: Double?) {
         loansWaitingBoxView.setData(count, .loan)
     }
     
-    private func updateDepositLabel(_ count: Int, _ time: Double) {
+    private func updateDepositLabel(_ count: Int?, _ time: Double?) {
         depositsWaitingBoxView.setData(count, .deposit)
     }
     

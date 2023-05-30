@@ -75,17 +75,16 @@ extension SingleWaitStatusView {
 
 extension SingleWaitStatusView {
     
-    // TODO: - Input 파라미터 model로 바꾸기
     public func setData(_ bankingServiceType: BankingServiceType = .loan,
                         _ waitingInformationType: WaitingInformationType = .waitingCustomers,
                         _ value: String? = nil) {
         switch waitingInformationType {
         case .waitingCustomers:
             titleLabel.text = "\(bankingServiceType.title) \(I18N.ServiceFeature.waitingCustomers)"
-            subtitleLabel.text = "\(value ?? "-") \(I18N.ServiceFeature.peopleCount)"
+            subtitleLabel.text = value == "0" ? "-" : "\(value ?? "-") \(I18N.ServiceFeature.peopleCount)"
         case .estimatedWaitTime:
             titleLabel.text = I18N.ServiceFeature.estimatedWaitTimes
-            subtitleLabel.text = "\(value ?? "-") \(I18N.ServiceFeature.minute)"
+            subtitleLabel.text = value == "0" ? "-" : "\(value ?? "-") \(I18N.ServiceFeature.peopleCount)"
         case .issuanceTime:
             titleLabel.text = I18N.ServiceFeature.issuanceTime
             subtitleLabel.text = value != nil ? value! : "-"

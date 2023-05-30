@@ -19,11 +19,8 @@ public class ServiceViewModel {
     
     private let usecase: ServiceUseCase
     
-    private var lastDepositRemainingCustomers: Int = 0
-    private var lastLoanRemainingCustomers: Int = 0
-    
-    public var depositCountDidChange: ((Int, Double) -> Void)?
-    public var loanCountDidChange: ((Int, Double) -> Void)?
+    public var depositCountDidChange: ((Int?, Double?) -> Void)?
+    public var loanCountDidChange: ((Int?, Double?) -> Void)?
     
     // MARK: - Initialization
     

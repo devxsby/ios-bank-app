@@ -107,7 +107,8 @@ extension TellerWaitingBoxView {
         self.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    public func setData(_ peopleCount: Int = 0, _ type: BankingServiceType) {
+    public func setData(_ peopleCount: Int? = 0, _ type: BankingServiceType) {
+        guard let peopleCount = peopleCount else { return }
         let peopleCountString = String(peopleCount)
         DispatchQueue.main.async {
             self.titleLabel.text = "\(type.teller) \(peopleCount) \(I18N.ServiceFeature.peopleCount)"

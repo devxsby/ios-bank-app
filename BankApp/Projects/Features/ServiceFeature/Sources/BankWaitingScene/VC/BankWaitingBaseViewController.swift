@@ -140,20 +140,18 @@ extension BankWaitingBaseViewController {
         
         viewModel.depositCountDidChange = { count, time in
             DispatchQueue.main.async {
-                if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains("예금") == true {
-                    self.waitStatusView.waitingCustomersCountView.setData(.deposit, .waitingCustomers, String(count))
-                    self.waitStatusView.estimatedWaitTimeView.setData(.deposit, .estimatedWaitTime, String(Int(time)))
-                    print("✅ 예금 고객 수", count, time)
+                if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.deposit) == true {
+                    self.waitStatusView.waitingCustomersCountView.setData(.deposit, .waitingCustomers, String(count ?? 0))
+                    self.waitStatusView.estimatedWaitTimeView.setData(.deposit, .estimatedWaitTime, String(Int(time ?? 0.0)))
                 }
             }
         }
 
         viewModel.loanCountDidChange = { count, time in
             DispatchQueue.main.async {
-                if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains("대출") == true {
-                    self.waitStatusView.waitingCustomersCountView.setData(.loan, .waitingCustomers, String(count))
-                    self.waitStatusView.estimatedWaitTimeView.setData(.loan, .estimatedWaitTime, String(Int(time)))
-                    print("✅ 대출 고객 수", count, time)
+                if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
+                    self.waitStatusView.waitingCustomersCountView.setData(.loan, .waitingCustomers, String(count ?? 0))
+                    self.waitStatusView.estimatedWaitTimeView.setData(.loan, .estimatedWaitTime, String(Int(time ?? 0.0)))
                 }
             }
         }
@@ -198,12 +196,10 @@ extension BankWaitingBaseViewController {
         isWaiting = true
         showToast(message: I18N.ServiceFeature.successWaiting)
         
-        if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains("대출") == true {
+        if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
             viewModel.addCustomer(type: .loan)
-            print("🦊 대출 고객 추가 버튼")
         } else {
             viewModel.addCustomer(type: .deposit)
-            print("🦊 예금 고객 추가 버튼")
         }
         
         bindViewModels()
