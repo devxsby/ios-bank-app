@@ -37,12 +37,6 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
         }
     }
     
-    private var animationState: WaitingAnimationStyle = .basic {
-        didSet {
-            updateAnimationStyle()
-        }
-    }
-    
     // MARK: - UI Components
     
     private let containerScrollView = UIScrollView()
@@ -137,13 +131,6 @@ extension BankWaitingBaseViewController {
         }
     }
     
-    private func updateAnimationStyle() {
-        if isWaiting {
-            waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: animationState))
-        } else {
-            waitStatusView.waitingAnimationView.setStyle(.basic)
-        }
-    }
     private func calculateAnimationState(for count: Int?) -> WaitingAnimationStyle {
         guard let count = count else { return .basic }
         if count <= 1 {
