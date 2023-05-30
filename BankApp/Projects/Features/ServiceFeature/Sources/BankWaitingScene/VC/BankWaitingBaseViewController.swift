@@ -21,6 +21,7 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     // MARK: - Properties
     
     public let factory: AlertViewBuildable
+    public let viewModel: ServiceViewModel
     
     @UserDefaultWrapper<Bool>(key: "isWaiting", defaultValue: false)
     public var isWaiting: Bool {
@@ -57,8 +58,9 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     
     // MARK: - Initialization
     
-    init(factory: AlertViewBuildable) {
+    init(factory: AlertViewBuildable, viewModel: ServiceViewModel) {
         self.factory = factory
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -78,6 +80,7 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print(isWaiting)
+        bindViewModels()
     }
 }
 
@@ -87,6 +90,7 @@ extension BankWaitingBaseViewController {
     
     private func setUI() {
         view.backgroundColor = .white
+        waitButton.layer.applyShadow(color: .white, alpha: 1, x: 0, y: -10, blur: 10)
         waitStatusView.layer.cornerRadius = 20
         containerScrollView.showsVerticalScrollIndicator = false
     }
@@ -123,7 +127,7 @@ extension BankWaitingBaseViewController {
             $0.top.equalTo(waitStatusView.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().offset(10)
-            $0.height.equalTo(250)
+            $0.height.equalTo(230)
         }
     }
 }
@@ -132,19 +136,43 @@ extension BankWaitingBaseViewController {
 
 extension BankWaitingBaseViewController {
     
+    private func bindViewModels() {
+        
+        viewModel.depositCountDidChange = { count, time in
+            DispatchQueue.main.async {
+                if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains("예금") == true {
+                    self.waitStatusView.waitingCustomersCountView.setData(.deposit, .waitingCustomers, String(count))
+                    self.waitStatusView.estimatedWaitTimeView.setData(.deposit, .estimatedWaitTime, String(Int(time)))
+                    print("✅ 예금 고객 수", count, time)
+                }
+            }
+        }
+
+        viewModel.loanCountDidChange = { count, time in
+            DispatchQueue.main.async {
+                if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains("대출") == true {
+                    self.waitStatusView.waitingCustomersCountView.setData(.loan, .waitingCustomers, String(count))
+                    self.waitStatusView.estimatedWaitTimeView.setData(.loan, .estimatedWaitTime, String(Int(time)))
+                    print("✅ 대출 고객 수", count, time)
+                }
+            }
+        }
+    }
+    
     private func initialButtonState() {
-        isWaiting = isWaiting // 기존 상태
+        isWaiting = false // 기존 상태 왜이러나?
     }
     
     @objc
     public func waitButtonDidTap() {
+        print(waitStatusView.waitingCustomersCountView.titleLabel.text)
         if isButtonEnabled {
             isButtonEnabled = false
-            isWaiting ? presentAlertVC() : performWaiting()
+            isWaiting ? presentCancelAlertPopUp() : performWaiting()
         }
     }
     
-    private func presentAlertVC() {
+    private func presentCancelAlertPopUp() {
         
         let alertVC = factory.makeAlertViewController(type: .cancelWaiting,
                                                       title: I18N.ServiceFeature.Alert.cancelPopup,
@@ -159,16 +187,38 @@ extension BankWaitingBaseViewController {
         isButtonEnabled = true // 버튼을 즉시 다시 활성화
     }
     
+    
     private func performWaiting() {
+        isButtonEnabled = false // 버튼 비활성화
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { // 클릭 간격 제한
-            self.isButtonEnabled = true
+            self.isButtonEnabled = true // 버튼 활성화
         }
+        
         isWaiting = true
         showToast(message: I18N.ServiceFeature.successWaiting)
+        
+        if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains("대출") == true {
+            viewModel.addCustomer(type: .loan)
+            print("🦊 대출 고객 추가 버튼")
+        } else {
+            viewModel.addCustomer(type: .deposit)
+            print("🦊 예금 고객 추가 버튼")
+        }
+        
+        bindViewModels()
     }
     
     private func cancelWaiting() {
         isWaiting = false
         isButtonEnabled = true // 버튼을 즉시 다시 활성화
+        
+//        if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains("대출") == true {
+//            viewModel.removeCustomer(type: .loan)
+//            print("🚨 대출 고객 삭제 버튼")
+//        } else {
+//            viewModel.addCustomer(type: .deposit)
+//            print("🚨 예금 고객 삭제 버튼")
+//        }
     }
 }

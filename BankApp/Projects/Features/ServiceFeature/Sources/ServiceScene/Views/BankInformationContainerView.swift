@@ -26,15 +26,6 @@ final public class BankInformationContainerView: UIView {
         return button
     }()
     
-//    private let mapImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.image = DSKitAsset.Images.imgSamplePlace.image
-//        imageView.clipsToBounds = true
-//        imageView.layer.cornerRadius = 20
-//        imageView.contentMode = .scaleToFill
-//        return imageView
-//    }()
-    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = I18N.ServiceFeature.sampleBankName
@@ -67,6 +58,7 @@ final public class BankInformationContainerView: UIView {
         ])
         stackView.axis = .vertical
         stackView.spacing = 10
+        stackView.setCustomSpacing(15, after: nameLabel)
         stackView.alignment = .leading
         return stackView
     }()

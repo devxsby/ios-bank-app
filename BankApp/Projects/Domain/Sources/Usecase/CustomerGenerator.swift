@@ -34,7 +34,6 @@ public final class CustomerGenerator {
                 loanNumber += 1
             }
         }
-        
         return (depositCustomers, loanCustomers)
     }
 }

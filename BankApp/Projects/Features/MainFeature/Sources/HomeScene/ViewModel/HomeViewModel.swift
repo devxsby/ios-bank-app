@@ -14,8 +14,7 @@ import Domain
 public class HomeViewModel: ViewModelType {
     
     private let useCase: HomeUseCase
-    private var cancelBag = CancelBag()
-  
+    
     // MARK: - Inputs
     
     public struct Input {

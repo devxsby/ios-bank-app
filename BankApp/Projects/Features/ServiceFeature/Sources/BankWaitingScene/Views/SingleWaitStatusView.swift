@@ -17,7 +17,7 @@ final class SingleWaitStatusView: UIView {
     
     // MARK: - UI Components
     
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.font = DSKitFontFamily.SpoqaHanSansNeo.medium.font(size: 16)
         label.textColor = .black

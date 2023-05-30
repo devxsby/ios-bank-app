@@ -18,6 +18,7 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     // MARK: - Properties
     
     public let factory: AlertViewBuildable
+    public let viewModel: ServiceViewModel
     
     public var initialTab: Int = 0
     private var viewTypes: [String] = [I18N.ServiceFeature.loan, I18N.ServiceFeature.deposit]
@@ -29,8 +30,8 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     
     // MARK: - UI Components
     
-    lazy var loanDetailVC = LoansViewController(factory: factory)
-    lazy var depositDetailVC = DepositsViewController(factory: factory)
+    lazy var loanDetailVC = LoansViewController(factory: factory, viewModel: viewModel)
+    lazy var depositDetailVC = DepositsViewController(factory: factory, viewModel: viewModel)
     
     private lazy var backBarButton: UIBarButtonItem = {
         let barButton = UIBarButtonItem(image: DSKitAsset.Images.icnBackArrow.image,
@@ -74,7 +75,8 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     }()
     
     private let pageViewController: UIPageViewController = {
-        let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        let pageViewController = UIPageViewController(transitionStyle: .scroll,
+                                                      navigationOrientation: .horizontal, options: nil)
         return pageViewController
     }()
     
@@ -86,8 +88,9 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     
     // MARK: - Initialization
     
-    public init(factory: AlertViewBuildable) {
+    public init(factory: AlertViewBuildable, viewModel: ServiceViewModel) {
         self.factory = factory
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -160,7 +163,6 @@ extension BankWaitingDetailViewController {
         
         pageViewController.delegate = self
         pageViewController.dataSource = self
-    
     }
     
     private func didTapCell(at indexPath: IndexPath) {
@@ -179,7 +181,6 @@ extension BankWaitingDetailViewController {
                                         animated: true,
                                         scrollPosition: .bottom)
         pageViewController.setViewControllers([detailViewControllers[initialTab]], direction: .forward, animated: true, completion: nil)
-        
     }
     
     // MARK: - @objc Function

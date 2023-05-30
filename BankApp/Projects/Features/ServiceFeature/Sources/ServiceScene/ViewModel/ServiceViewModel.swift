@@ -18,7 +18,9 @@ public class ServiceViewModel {
     // MARK: - Properties
     
     private let usecase: ServiceUseCase
-    private var cancelBag = CancelBag()
+    
+    private var lastDepositRemainingCustomers: Int = 0
+    private var lastLoanRemainingCustomers: Int = 0
     
     public var depositCountDidChange: ((Int, Double) -> Void)?
     public var loanCountDidChange: ((Int, Double) -> Void)?
@@ -35,6 +37,28 @@ public class ServiceViewModel {
         self.startProcessingDeposit()
         self.startProcessingLoan()
     }
+    
+    public func addCustomer(type: BankingServiceType) {
+        usecase.addCustomer(type: type) { [weak self] remainingCustomers, estimatedWaitTime in
+            switch type {
+            case .deposit:
+                self?.depositCountDidChange?(remainingCustomers, estimatedWaitTime)
+            case .loan:
+                self?.loanCountDidChange?(remainingCustomers, estimatedWaitTime)
+            }
+        }
+    }
+
+//    public func removeCustomer(type: BankingServiceType) {
+//        usecase.removeCustomer(type: type) { [weak self] remainingCustomers, estimatedWaitTime in
+//            switch type {
+//            case .deposit:
+//                self?.depositCountDidChange?(remainingCustomers, estimatedWaitTime)
+//            case .loan:
+//                self?.loanCountDidChange?(remainingCustomers, estimatedWaitTime)
+//            }
+//        }
+//    }
 }
 
 extension ServiceViewModel {

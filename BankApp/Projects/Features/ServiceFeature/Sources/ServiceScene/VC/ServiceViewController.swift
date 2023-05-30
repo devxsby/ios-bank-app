@@ -22,7 +22,6 @@ public final class ServiceViewController: UIViewController, ServiceViewControlla
     
     public let factory: ServiceFeatureViewBuildable & AlertViewBuildable
     public let viewModel: ServiceViewModel
-    private var cancelBag = CancelBag()
     
     // MARK: - UI Components
     
@@ -155,7 +154,7 @@ extension ServiceViewController {
         horizontalLineView.snp.makeConstraints {
             $0.top.equalTo(showMyWaitlistView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(40)
             $0.height.equalTo(4)
         }
     }

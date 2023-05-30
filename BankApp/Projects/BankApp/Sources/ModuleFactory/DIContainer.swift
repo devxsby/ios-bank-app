@@ -32,6 +32,12 @@ public class DIContainer: ServiceFeatureViewBuildable {
     static let shared = DIContainer()
     
     private init() { }
+    
+    private let serviceRepository = ServiceRepository()
+    private let customerGenerator = CustomerGenerator()
+    private lazy var servieUsecase = DefaultServiceUseCase(repository: serviceRepository,
+                                                           customerGenerator: customerGenerator)
+    private lazy var serviceViewModel = ServiceViewModel(usecase: servieUsecase)
 }
 
 extension DIContainer: Features {
@@ -55,16 +61,12 @@ extension DIContainer: Features {
     }
         
     public func makeServiceViewController() -> ServiceFeatureInterface.ServiceViewControllable {
-        let repository = ServiceRepository()
-        let customerGenerator = CustomerGenerator()
-        let usecase = DefaultServiceUseCase(repository: repository, customerGenerator: customerGenerator)
-        let viewModel = ServiceViewModel(usecase: usecase)
-        let serviceVC = ServiceViewController(factory: self, viewModel: viewModel)
+        let serviceVC = ServiceViewController(factory: self, viewModel: serviceViewModel)
         return serviceVC
     }
 
     public func makeBankWaitingViewController() -> ServiceFeatureInterface.ServiceViewControllable {
-        let bankingWaitingVC = BankWaitingDetailViewController(factory: self)
+        let bankingWaitingVC = BankWaitingDetailViewController(factory: self, viewModel: serviceViewModel)
         return bankingWaitingVC
     }
     

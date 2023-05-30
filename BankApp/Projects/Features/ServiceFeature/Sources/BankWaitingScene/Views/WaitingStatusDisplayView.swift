@@ -24,9 +24,9 @@ final public class WaitingStatusDisplayView: UIView {
     }()
     
     let waitingAnimationView = WaitingAnimationView(.basic)
-    let waitingCustomersStatusView = SingleWaitStatusView(.loan, .waitingCustomers)
-    let estimatedWaitTimeStatusView = SingleWaitStatusView(.loan, .estimatedWaitTime)
-    let issuanceTimeStatusView = SingleWaitStatusView(.loan, .issuanceTime)
+    let waitingCustomersCountView = SingleWaitStatusView(.loan, .waitingCustomers)
+    let estimatedWaitTimeView = SingleWaitStatusView(.loan, .estimatedWaitTime)
+    let issuanceTimeView = SingleWaitStatusView(.loan, .issuanceTime)
     
     private let bankNameLabel: UILabel = {
         let label = UILabel()
@@ -38,9 +38,9 @@ final public class WaitingStatusDisplayView: UIView {
     
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
-            waitingCustomersStatusView,
-            estimatedWaitTimeStatusView,
-            issuanceTimeStatusView
+            waitingCustomersCountView,
+            estimatedWaitTimeView,
+            issuanceTimeView
         ])
         stackView.axis = .vertical
         stackView.spacing = 5
@@ -103,9 +103,9 @@ extension WaitingStatusDisplayView {
     // TODO: - viewwillappear 노티받으면 setData 업데이트 하기
     // TODO: - 예금, 대출 다른 뷰컨으로 상속 시키는 법?
     private func setData() {
-        waitingCustomersStatusView.setData(.deposit, .waitingCustomers, "5")
-        estimatedWaitTimeStatusView.setData(.deposit, .estimatedWaitTime, "10")
-        issuanceTimeStatusView.setData(.deposit, .issuanceTime, "몇시 몇분")
+//        waitingCustomersCountView.setData(.deposit, .waitingCustomers, "5")
+//        estimatedWaitTimeView.setData(.deposit, .estimatedWaitTime, "10")
+//        issuanceTimeView.setData(.deposit, .issuanceTime, "몇시 몇분")
 
     }
     

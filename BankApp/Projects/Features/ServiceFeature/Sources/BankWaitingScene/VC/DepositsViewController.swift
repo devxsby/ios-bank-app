@@ -13,6 +13,11 @@ import Domain
 
 public final class DepositsViewController: BankWaitingBaseViewController {
     
+    // MARK: - Properties
+    
+    var currentWaitingCustomerCount: Int = 0
+    var currentWaitingTime: Double = 0
+    
     // MARK: - View Life Cycle
     
     public override func viewDidLoad() {
@@ -34,13 +39,14 @@ extension DepositsViewController {
     func updateView() {
         // TODO: 예금과 대출의 버튼 상태가 하나로 같이 가야하나? 독립적으로 가야하나?
         waitStatusView.loadingView(isActivate: true)
+        isWaiting = isWaiting
         
         let customers = String(WaitingInfoManager.shared.depositCount)
         let time = String(Int(WaitingInfoManager.shared.depositTime))
         
-        waitStatusView.waitingCustomersStatusView.setData(.deposit, .waitingCustomers, customers)
-        waitStatusView.estimatedWaitTimeStatusView.setData(.deposit, .estimatedWaitTime, time)
-        waitStatusView.issuanceTimeStatusView.setData(.deposit, .issuanceTime, nil) // TODO:  date formatrer
+        waitStatusView.waitingCustomersCountView.setData(.deposit, .waitingCustomers, customers)
+        waitStatusView.estimatedWaitTimeView.setData(.deposit, .estimatedWaitTime, time)
+        waitStatusView.issuanceTimeView.setData(.deposit, .issuanceTime, nil) // TODO:  date formatrer
     }
     
     private func addButtonAction() {

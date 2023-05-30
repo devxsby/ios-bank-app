@@ -22,7 +22,6 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
     // MARK: - Properties
     
     public let viewModel: HomeViewModel
-    private var cancelBag = CancelBag()
     private var sections = [HomeItem]()
     private var isFirstEntry = true
     
@@ -84,7 +83,6 @@ public final class HomeViewController: UIViewController, HomeViewControllable {
         setLayout()
         setDelegate()
         registerCells()
-        bindViewModels()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -133,11 +131,6 @@ extension HomeViewController {
 // MARK: - Methods
 
 extension HomeViewController {
-    
-    private func bindViewModels() {
-        let input = HomeViewModel.Input()
-        let output = self.viewModel.transform(from: input, cancelBag: self.cancelBag)
-    }
     
     private func registerCells() {
         
