@@ -23,11 +23,17 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     public let factory: AlertViewBuildable
     public let viewModel: ServiceViewModel
     
+    @UserDefaultWrapper<String>(key: "waitingServiceType", defaultValue: BankingServiceType.deposit.rawValue)
+    private var waitingServiceType: String
+    
+    @UserDefaultWrapper<Bool>(key: "isActiveWaitingNotification", defaultValue: true)
+    private var isActiveWaitingNotification: Bool
+    
     @UserDefaultWrapper<Bool>(key: "isWaiting", defaultValue: false)
     public var isWaiting: Bool {
         didSet {
             waitButton.isSelected = isWaiting
-            waitButton.backgroundColor = isWaiting ? DSKitAsset.Colors.gray300.color.withAlphaComponent(0.5) : DSKitAsset.Colors.blue.color
+            waitButton.backgroundColor = isWaiting ? DSKitAsset.Colors.gray300.color : DSKitAsset.Colors.blue.color
         }
     }
     
@@ -36,6 +42,7 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
             waitButton.isEnabled = isButtonEnabled
         }
     }
+    private let userNotiCenter = UNUserNotificationCenter.current()
     
     // MARK: - UI Components
     
@@ -72,6 +79,7 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        requestNotificationAutorization()
         setUI()
         setLayout()
         initialButtonState()
@@ -79,7 +87,6 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print(isWaiting)
         bindViewModels()
     }
 }
@@ -147,6 +154,38 @@ extension BankWaitingBaseViewController {
 
 extension BankWaitingBaseViewController {
     
+    private func requestNotificationAutorization() {
+        let notiAuthOptions = UNAuthorizationOptions(arrayLiteral: [.alert, .badge, .sound])
+        userNotiCenter.requestAuthorization(options: notiAuthOptions) { (success, error) in
+            if let error = error {
+                print(#function, error)
+            }
+        }
+    }
+    
+    private func requestSendNotification(seconds: Double, sceneType: BankingServiceType) {
+        let notiContent = UNMutableNotificationContent()
+        notiContent.title = "야곰 뱅크 대기 알람"
+        notiContent.body = "다음 대기 순서입니다. \(sceneType.teller) 앞에서 기다려주세요."
+        notiContent.userInfo = ["targetScene": "\(sceneType.rawValue)"]
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: seconds, repeats: false)
+        
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: notiContent,
+            trigger: trigger
+        )
+        
+        userNotiCenter.add(request) { (error) in
+            print(#function, error as Any)
+        }
+    }
+    
+    private func removeNofiticaion() {
+        userNotiCenter.removeAllDeliveredNotifications()
+    }
+    
     private func bindViewModels() {
         
         viewModel.depositCountDidChange = { [weak self] count, time in
@@ -169,9 +208,7 @@ extension BankWaitingBaseViewController {
                     
                     if count == 0 {
                         self.isWaiting = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            self.waitStatusView.waitingAnimationView.setStyle(.basic)
-                        }
+                        self.waitStatusView.waitingAnimationView.setStyle(.basic)
                     }
                     
                     if !self.isWaiting {
@@ -201,9 +238,7 @@ extension BankWaitingBaseViewController {
                     
                     if count == 0 {
                         self.isWaiting = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            self.waitStatusView.waitingAnimationView.setStyle(.basic)
-                        }
+                        self.waitStatusView.waitingAnimationView.setStyle(.basic)
                     }
                     
                     if !self.isWaiting {
@@ -212,6 +247,7 @@ extension BankWaitingBaseViewController {
                 }
             }
         }
+        self.notificationView.alertSwitch.setOn(self.isActiveWaitingNotification, animated: false)
     }
     
     private func initialButtonState() {
@@ -250,14 +286,19 @@ extension BankWaitingBaseViewController {
         }
         
         isWaiting = true
-        showToast(message: I18N.ServiceFeature.successWaiting)
         
         if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
             viewModel.registerWait(type: .loan)
+            self.waitingServiceType = BankingServiceType.loan.rawValue
             self.waitStatusView.issuanceTimeView.setData(.loan, .issuanceTime, Date.now.currentTimeString())
+            self.requestSendNotification(seconds: 5, sceneType: .loan) // 테스트를 위해 5초로 설정
+            showToast(message: BankingServiceType.loan.teller + " " + I18N.ServiceFeature.successWaiting)
         } else {
             viewModel.registerWait(type: .deposit)
-            self.waitStatusView.issuanceTimeView.setData(.loan, .issuanceTime, Date.now.currentTimeString())
+            self.waitingServiceType = BankingServiceType.deposit.rawValue
+            self.waitStatusView.issuanceTimeView.setData(.deposit, .issuanceTime, Date.now.currentTimeString())
+            self.requestSendNotification(seconds: 5, sceneType: .deposit) // 테스트를 위해 5초로 설정
+            showToast(message: BankingServiceType.deposit.teller + " " + I18N.ServiceFeature.successWaiting)
         }
         
         bindViewModels()
@@ -266,6 +307,7 @@ extension BankWaitingBaseViewController {
     private func cancelWaiting() {
         isWaiting = false
         isButtonEnabled = true // 버튼을 즉시 다시 활성화
+        removeNofiticaion()
         
         if waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
             viewModel.cancelWaiting(type: .loan)

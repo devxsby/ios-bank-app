@@ -101,10 +101,10 @@ extension Toast {
     }
     
     private static func animateToast(_ toastContainer: UIView) {
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.6, delay: 0.0, options: .curveEaseIn, animations: {
             toastContainer.alpha = 1.0
         }, completion: { _ in
-            UIView.animate(withDuration: 0.4, delay: 1.0, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.6, delay: 1.0, options: .curveEaseOut, animations: {
                 toastContainer.alpha = 0.0
             }, completion: { _ in
                 toastContainer.removeFromSuperview()

@@ -20,6 +20,7 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     public let factory: AlertViewBuildable
     public let viewModel: ServiceViewModel
     
+//    private let userNotiCenter = UNUserNotificationCenter.current()
     public var initialTab: Int = 0
     private var viewTypes: [String] = [I18N.ServiceFeature.loan, I18N.ServiceFeature.deposit]
     private var currentPage: Int = 0 {
@@ -102,6 +103,7 @@ public final class BankWaitingDetailViewController: UIViewController, ServiceVie
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+//        requestNotificationAutorization()
         setUI()
         setLayout()
         registerCells()
@@ -182,6 +184,35 @@ extension BankWaitingDetailViewController {
                                         scrollPosition: .bottom)
         pageViewController.setViewControllers([detailViewControllers[initialTab]], direction: .forward, animated: true, completion: nil)
     }
+    
+//    
+//    private func requestNotificationAutorization() {
+//        let notiAuthOptions = UNAuthorizationOptions(arrayLiteral: [.alert, .badge, .sound])
+//        userNotiCenter.requestAuthorization(options: notiAuthOptions) { (success, error) in
+//            if let error = error {
+//                print(#function, error)
+//            }
+//        }
+//    }
+//    
+//    private func requestSendNotification(seconds: Double, sceneType: BankingServiceType) {
+//        let notiContent = UNMutableNotificationContent()
+//        notiContent.title = "야곰 뱅크 대기 알람"
+//        notiContent.body = "다음 대기 순서입니다. \(sceneType.teller) 앞에서 기다려주세요."
+//        notiContent.userInfo = ["targetScene": "\(sceneType.rawValue)"]
+//        
+//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: seconds, repeats: false)
+//        
+//        let request = UNNotificationRequest(
+//            identifier: UUID().uuidString,
+//            content: notiContent,
+//            trigger: trigger
+//        )
+//        
+//        userNotiCenter.add(request) { (error) in
+//            print(#function, error as Any)
+//        }
+//    }
     
     // MARK: - @objc Function
     

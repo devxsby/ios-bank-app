@@ -100,15 +100,6 @@ extension WaitingStatusDisplayView {
 
 extension WaitingStatusDisplayView {
     
-    // TODO: - viewwillappear 노티받으면 setData 업데이트 하기
-    // TODO: - 예금, 대출 다른 뷰컨으로 상속 시키는 법?
-    private func setData() {
-//        waitingCustomersCountView.setData(.deposit, .waitingCustomers, "5")
-//        estimatedWaitTimeView.setData(.deposit, .estimatedWaitTime, "10")
-//        issuanceTimeView.setData(.deposit, .issuanceTime, "몇시 몇분")
-
-    }
-    
     func loadingView(isActivate: Bool) {
         if isActivate {
             waitingAnimationView.isHidden = isActivate

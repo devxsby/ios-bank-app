@@ -67,7 +67,7 @@ public struct I18N {
         
         public static let waiting = "대기하기"
         public static let cancelWaiting = "대기 취소하기"
-        public static let successWaiting = "번호표 발급에 성공했어요"
+        public static let successWaiting = "번호표 발급 성공"
         
         public struct Alert {
             public static let cancelPopup = "정말 대기를\n취소하시겠습니까?"

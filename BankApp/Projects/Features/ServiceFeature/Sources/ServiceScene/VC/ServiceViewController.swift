@@ -23,6 +23,15 @@ public final class ServiceViewController: UIViewController, ServiceViewControlla
     public let factory: ServiceFeatureViewBuildable & AlertViewBuildable
     public let viewModel: ServiceViewModel
     
+    @UserDefaultWrapper<String>(key: "waitingServiceType", defaultValue: BankingServiceType.deposit.rawValue)
+    private var waitingServiceType: String
+    
+    @UserDefaultWrapper<Bool>(key: "isWaiting", defaultValue: false)
+    private var isWaiting: Bool
+    
+    @UserDefaultWrapper<Bool>(key: "isActiveWaitingNotification", defaultValue: true)
+    private var isActiveWaitingNotification: Bool
+        
     // MARK: - UI Components
     
     private lazy var refresher: UIRefreshControl = {
@@ -206,12 +215,24 @@ extension ServiceViewController {
 extension ServiceViewController: MyWaitlistViewDelegate {
     
     public func didPressWaitlistView() {
-        // TODO: 분기처리를 해야하는데 isWaiting상태를 어떻게 공유하면 좋을까?
-        showToast(message: I18N.ServiceFeature.Alert.noWaitingList)
         makeVibrate()
-//        let detailVC = factory.makeBankWaitingViewController().viewController
-//        detailVC.hidesBottomBarWhenPushed = true
-//        navigationController?.pushViewController(detailVC, animated: true)
+        if isWaiting && isActiveWaitingNotification == true {
+            if waitingServiceType == BankingServiceType.deposit.rawValue {
+                guard let detailVC = factory.makeBankWaitingViewController().viewController
+                        as? BankWaitingDetailViewController else { return }
+                detailVC.hidesBottomBarWhenPushed = true
+                detailVC.initialTab = BankingServiceType.deposit.tabIndex
+                navigationController?.pushViewController(detailVC, animated: true)
+            } else {
+                guard let detailVC = factory.makeBankWaitingViewController().viewController
+                        as? BankWaitingDetailViewController else { return }
+                detailVC.hidesBottomBarWhenPushed = true
+                detailVC.initialTab = BankingServiceType.loan.tabIndex
+                navigationController?.pushViewController(detailVC, animated: true)
+            }
+        } else {
+            showToast(message: I18N.ServiceFeature.Alert.noWaitingList)
+        }
     }
 }
 

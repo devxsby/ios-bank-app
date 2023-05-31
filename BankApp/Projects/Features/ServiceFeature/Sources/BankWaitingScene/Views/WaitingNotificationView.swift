@@ -14,7 +14,7 @@ import DSKit
 import SnapKit
 
 public protocol WaitingNotificationViewDelegate: AnyObject {
-    func toggleSwitch(_ is: Bool)
+    func toggleSwitch(_ isOn: Bool)
 }
 
 final public class WaitingNotificationView: UIView {
@@ -33,10 +33,10 @@ final public class WaitingNotificationView: UIView {
         return label
     }()
     
-    private lazy var alertSwitch: UISwitch = {
+    lazy var alertSwitch: UISwitch = {
         let alertSwitch = UISwitch()
         alertSwitch.onTintColor = DSKitAsset.Colors.blue.color
-//        alertSwitch.setOn(true, animated: false)
+        alertSwitch.setOn(true, animated: false)
         alertSwitch.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
         return alertSwitch
     }()
