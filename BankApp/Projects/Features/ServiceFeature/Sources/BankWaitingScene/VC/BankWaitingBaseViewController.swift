@@ -145,14 +145,17 @@ extension BankWaitingBaseViewController {
     }
     
     private func updateAnimationStyle(count: Int?) {
-        guard let count = count else { return }
+        guard let count = count else { return animationStyle = .basic }
+        
         if count <= 1 && isWaiting {
             animationStyle = .animated(fillIndex: 2)
         } else if count >= 1 && isWaiting && count <= 5 {
             animationStyle = .animated(fillIndex: 1)
         } else if count > 5 && isWaiting {
             animationStyle = .animated(fillIndex: 0)
-        } else {
+        }
+        
+        if count == 0 {
             animationStyle = .basic
             isWaiting = false
         }
