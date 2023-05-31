@@ -44,6 +44,12 @@ public class BankWaitingBaseViewController: UIViewController, ServiceViewControl
     }
     private let userNotiCenter = UNUserNotificationCenter.current()
     
+    private var animationStyle: WaitingAnimationStyle = .basic {
+        didSet {
+            waitStatusView.waitingAnimationView.setStyle(animationStyle)
+        }
+    }
+    
     // MARK: - UI Components
     
     private let containerScrollView = UIScrollView()
@@ -138,14 +144,17 @@ extension BankWaitingBaseViewController {
         }
     }
     
-    private func calculateAnimationState(for count: Int?) -> WaitingAnimationStyle {
-        guard let count = count else { return .basic }
-        if count <= 1 {
-            return .animated(fillIndex: 2)
-        } else if count <= 5 {
-            return .animated(fillIndex: 1)
+    private func updateAnimationStyle(count: Int?) {
+        guard let count = count else { return }
+        if count <= 1 && isWaiting {
+            animationStyle = .animated(fillIndex: 2)
+        } else if count >= 1 && isWaiting && count <= 5 {
+            animationStyle = .animated(fillIndex: 1)
+        } else if count > 5 && isWaiting {
+            animationStyle = .animated(fillIndex: 0)
         } else {
-            return .animated(fillIndex: 0)
+            animationStyle = .basic
+            isWaiting = false
         }
     }
 }
@@ -195,25 +204,7 @@ extension BankWaitingBaseViewController {
                 if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.deposit) == true {
                     self.waitStatusView.waitingCustomersCountView.setData(.deposit, .waitingCustomers, String(count ?? 0))
                     self.waitStatusView.estimatedWaitTimeView.setData(.deposit, .estimatedWaitTime, String(Int(time ?? 0.0)))
-                    
-                    guard let count = count else { return }
-                    
-                    if count <= 1 && self.isWaiting {
-                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 2))
-                    } else if count >= 1 && self.isWaiting && count <= 5 {
-                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 1))
-                    } else if count > 5 && self.isWaiting {
-                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 0))
-                    }
-                    
-                    if count == 0 {
-                        self.isWaiting = false
-                        self.waitStatusView.waitingAnimationView.setStyle(.basic)
-                    }
-                    
-                    if !self.isWaiting {
-                        self.waitStatusView.waitingAnimationView.setStyle(.basic)
-                    }
+                    self.updateAnimationStyle(count: count)
                 }
             }
         }
@@ -225,25 +216,7 @@ extension BankWaitingBaseViewController {
                 if self.waitStatusView.waitingCustomersCountView.titleLabel.text?.contains(I18N.ServiceFeature.loan) == true {
                     self.waitStatusView.waitingCustomersCountView.setData(.loan, .waitingCustomers, String(count ?? 0))
                     self.waitStatusView.estimatedWaitTimeView.setData(.loan, .estimatedWaitTime, String(Int(time ?? 0.0)))
-                    
-                    guard let count = count else { return }
-                    
-                    if count <= 1 && self.isWaiting {
-                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 2))
-                    } else if count >= 1 && self.isWaiting && count <= 5 {
-                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 1))
-                    } else if count > 5 && self.isWaiting {
-                        self.waitStatusView.waitingAnimationView.setStyle(.animated(fillIndex: 0))
-                    }
-                    
-                    if count == 0 {
-                        self.isWaiting = false
-                        self.waitStatusView.waitingAnimationView.setStyle(.basic)
-                    }
-                    
-                    if !self.isWaiting {
-                        self.waitStatusView.waitingAnimationView.setStyle(.basic)
-                    }
+                    self.updateAnimationStyle(count: count)
                 }
             }
         }
