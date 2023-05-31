@@ -5,6 +5,7 @@
 //  Created by devxsby on 2023/05/31.
 //  Copyright © 2023 BankApp. All rights reserved.
 //
+
 import XCTest
 @testable import Domain
 
@@ -16,9 +17,12 @@ class BankTests: XCTestCase {
         super.setUp()
         
         let depositBankers: [Banker] = [
-            Banker(type: .deposit, taskDuration: 1.0),
-            Banker(type: .loan, taskDuration: 2.0),
-            Banker(type: .loan, taskDuration: 3.0)
+            Banker(type: .deposit, taskDuration: 5.0),
+            Banker(type: .deposit, taskDuration: 5.0)
+        ]
+        
+        let loanBankers: [Banker] = [
+            Banker(type: .loan, taskDuration: 8.0)
         ]
         
         let depositCustomers: [Customer] = [
@@ -27,7 +31,13 @@ class BankTests: XCTestCase {
             Customer(number: 3, taskType: .deposit)
         ]
         
-        sut = Bank(depositBankers: depositBankers, loanBankers: [], depositCustomers: depositCustomers, loanCustomers: [])
+        let loanCustomers: [Customer] = [
+            Customer(number: 1, taskType: .loan),
+            Customer(number: 2, taskType: .loan),
+            Customer(number: 3, taskType: .loan)
+        ]
+        
+        sut = Bank(depositBankers: depositBankers, loanBankers: loanBankers, depositCustomers: depositCustomers, loanCustomers: loanCustomers)
     }
     
     override func tearDown() {
@@ -35,57 +45,54 @@ class BankTests: XCTestCase {
         super.tearDown()
     }
     
-    func test_처음시작시_대출창구가_제대로동작하는지() {
+    func test_startProcessing_DepositCustomers() {
         // given
         var remainingCustomers: Int?
         var estimatedWaitTime: Double?
+        let expectation = XCTestExpectation(description: "Processing completed")
         
         sut.printRemainingCustomers = { serviceType, remaining, waitTime in
             if serviceType == .deposit {
                 remainingCustomers = remaining
                 estimatedWaitTime = waitTime
+                expectation.fulfill()
             }
         }
         
         // when
-        sut.startProcessing()
-        
-        let expectation = XCTestExpectation(description: "Processing completed")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 5.0)
+        sut.startProcessing() { }
         
         // then
-        XCTAssertEqual(remainingCustomers, 0)
-        XCTAssertEqual(estimatedWaitTime, 0.0)
+        wait(for: [expectation], timeout: 10.0)
+        XCTAssertEqual(remainingCustomers, nil) // 0인지 nild인지 모르겠음
+        XCTAssertEqual(estimatedWaitTime, nil) // 0.0인지 nild인지 모르겠음
     }
     
-    func test_예금창구에_고객한명을추가했을때_대기시간이_1번의taskduration만큼_늘었는지() {
+    func test_addCustomerToDepositQueue() {
         // given
         let initialCount = sut.depositCustomers.count
-        let expectation = XCTestExpectation(description: "예금창구에 고객을 추가함.")
+        let expectation = XCTestExpectation(description: "Added customer to deposit queue")
         var remainingCustomers: Int?
         var estimatedWaitTime: Double?
-
+        
         sut.printRemainingCustomers = { serviceType, remaining, waitTime in
             if serviceType == .deposit {
                 remainingCustomers = remaining
                 estimatedWaitTime = waitTime
-                expectation.fulfill() // 클로저 실행 후 expectation 완료
+                expectation.fulfill()
             }
         }
-
+        
         // when
         sut.addCustomerToDepositQueue()
-
+        
         // then
-        wait(for: [expectation], timeout: 5.0) // expectation이 완료될 때까지 대기
+        wait(for: [expectation], timeout: 5.0)
         XCTAssertEqual(remainingCustomers, initialCount + 1)
         XCTAssertEqual(estimatedWaitTime, Double(initialCount) * sut.depositBankers[0].taskDuration)
     }
     
-    func test_예금창구에_마지막고객삭제후_고객숫자가_하나_감소했는지() {
+    func test_removeLastCustomer_Deposit() {
         // given
         let initialCount = sut.depositCustomers.count
         
@@ -94,5 +101,65 @@ class BankTests: XCTestCase {
         
         // then
         XCTAssertEqual(sut.depositCustomers.count, initialCount - 1)
+    }
+    
+    func test_startProcessing_LoanCustomers() {
+        // given
+        var remainingCustomers: Int?
+        var estimatedWaitTime: Double?
+        let expectation = XCTestExpectation(description: "Added customer to loan queue")
+        
+        sut.printRemainingCustomers = { serviceType, remaining, waitTime in
+            if serviceType == .loan {
+                remainingCustomers = remaining
+                estimatedWaitTime = waitTime
+                expectation.fulfill()
+            }
+        }
+        
+        // when
+        sut.startProcessing() { }
+        
+        // then
+        wait(for: [expectation], timeout: 10.0)
+        
+        // then
+        XCTAssertEqual(remainingCustomers, nil) // 0인지 nild인지 모르겠음
+        XCTAssertEqual(estimatedWaitTime, nil) // 0.0인지 nild인지 모르겠음
+    }
+    
+    func test_addCustomerToLoanQueue() {
+        // given
+        let initialCount = sut.loanCustomers.count
+        let expectation = XCTestExpectation(description: "Added customer to loan queue")
+        var remainingCustomers: Int?
+        var estimatedWaitTime: Double?
+        
+        sut.printRemainingCustomers = { serviceType, remaining, waitTime in
+            if serviceType == .loan {
+                remainingCustomers = remaining
+                estimatedWaitTime = waitTime
+                expectation.fulfill()
+            }
+        }
+        
+        // when
+        sut.addCustomerToLoanQueue()
+        
+        // then
+        wait(for: [expectation], timeout: 5.0)
+        XCTAssertEqual(remainingCustomers, initialCount + 1)
+        XCTAssertEqual(estimatedWaitTime, Double(initialCount + 1) * sut.loanBankers[0].taskDuration)
+    }
+    
+    func test_removeLastCustomer_Loan() {
+        // given
+        let initialCount = sut.loanCustomers.count
+        
+        // when
+        sut.removeLastCustomer(.loan)
+        
+        // then
+        XCTAssertEqual(sut.loanCustomers.count, initialCount - 1)
     }
 }

@@ -39,10 +39,13 @@ public class Bank {
         self.loanCustomers = loanCustomers
     }
     
-    public func startProcessing() {
+    public func startProcessing(completion: @escaping () -> Void) {
         setInitialValue()
-        processDepositCustomers()
-        processLoanCustomers()
+        processDepositCustomers {
+            self.processLoanCustomers {
+                completion()
+            }
+        }
     }
 }
 
@@ -55,7 +58,7 @@ extension Bank {
         printRemainingCustomers?(.loan, nil, nil)
     }
     
-    private func processDepositCustomers() {
+    private func processDepositCustomers(completion: @escaping () -> Void) {
         let group = DispatchGroup()
         
         depositQueue.async(group: group) {
@@ -81,12 +84,11 @@ extension Bank {
         }
         
         group.notify(queue: DispatchQueue.main) {
-            self.isLoading = false
-            self.printRemainingCustomers?(.deposit, self.depositCustomers.count, 0.0)
+            completion()
         }
     }
     
-    private func processLoanCustomers() {
+    private func processLoanCustomers(completion: @escaping () -> Void) {
         loanQueue.async {
             while !self.loanCustomers.isEmpty {
                 if let banker = self.loanBankers.first {
@@ -99,6 +101,8 @@ extension Bank {
                 }
             }
         }
+        
+        completion()
     }
     
     public func addCustomerToDepositQueue() {
