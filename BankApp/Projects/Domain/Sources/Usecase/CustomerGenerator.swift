@@ -21,7 +21,7 @@ public final class CustomerGenerator {
         var depositNumber = 1
         var loanNumber = 1
         
-        for _ in 1...10 {
+        for _ in 1...20 {
             let randomType: BankingServiceType = Bool.random() ? .deposit : .loan
             
             if randomType == .deposit {

@@ -50,7 +50,6 @@ class BankTests: XCTestCase {
         // when
         sut.startProcessing()
         
-        // Wait for processing to complete
         let expectation = XCTestExpectation(description: "Processing completed")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             expectation.fulfill()

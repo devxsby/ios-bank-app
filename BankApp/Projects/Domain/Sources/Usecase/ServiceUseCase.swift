@@ -24,15 +24,17 @@ public class DefaultServiceUseCase {
     
     private let depositBankers = [Banker(type: .deposit, taskDuration: 5.0)]
     private let loanBankers = [Banker(type: .loan, taskDuration: 8.0)]
-    private var depositBank = Bank(depositBankers: [], loanBankers: [], depositCustomers: [], loanCustomers: [])
-    private var loanBank = Bank(depositBankers: [], loanBankers: [], depositCustomers: [], loanCustomers: [])
-    
-    private let depositCustomers = (1...12).map { Customer(number: $0, taskType: .deposit) }
-    private let loanCustomers = (1...8).map { Customer(number: $0, taskType: .loan) }
+    private var depositBank: Bank?
+    private var loanBank: Bank?
     
     public init(repository: ServiceRepositoryInterface, customerGenerator: CustomerGenerator) {
         self.repository = repository
         self.customerGenerator = customerGenerator
+    }
+    
+    private func generateRandomCustomers() -> (depositCustomers: [Customer], loanCustomers: [Customer]) {
+        let result = customerGenerator.generateRandomCustomers()
+        return (result.depositCustomers, result.loanCustomers)
     }
 }
 
@@ -41,11 +43,12 @@ public class DefaultServiceUseCase {
 extension DefaultServiceUseCase: ServiceUseCase {
     
     public func processDeposit(completion: @escaping (Int?, Double?) -> Void) {
-
-        depositBank = Bank(depositBankers: depositBankers, loanBankers: [],
-                           depositCustomers: depositCustomers, loanCustomers: [])
+        let randomCustomers = generateRandomCustomers()
         
-        depositBank.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
+        depositBank = Bank(depositBankers: depositBankers, loanBankers: [],
+                           depositCustomers: randomCustomers.depositCustomers, loanCustomers: [])
+        
+        depositBank?.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
             if taskType == .deposit {
                 completion(remainingCustomers, estimatedWaitTime)
                 WaitingInfoManager.shared.depositCount = remainingCustomers ?? 0
@@ -53,15 +56,16 @@ extension DefaultServiceUseCase: ServiceUseCase {
             }
         }
         
-        depositBank.startProcessing()
+        depositBank?.startProcessing()
     }
     
     public func processLoan(completion: @escaping (Int?, Double?) -> Void) {
+        let randomCustomers = generateRandomCustomers()
         
         loanBank = Bank(depositBankers: [], loanBankers: loanBankers,
-                        depositCustomers: [], loanCustomers: loanCustomers)
+                        depositCustomers: [], loanCustomers: randomCustomers.loanCustomers)
         
-        loanBank.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
+        loanBank?.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
             if taskType == .loan {
                 completion(remainingCustomers, estimatedWaitTime)
                 WaitingInfoManager.shared.loanCount = remainingCustomers ?? 0
@@ -69,24 +73,24 @@ extension DefaultServiceUseCase: ServiceUseCase {
             }
         }
         
-        loanBank.startProcessing()
+        loanBank?.startProcessing()
     }
     
     public func addCustomer(type: BankingServiceType, completion: @escaping (Int, Double) -> Void) {
         switch type {
         case .deposit:
-            return depositBank.addCustomerToDepositQueue()
+            depositBank?.addCustomerToDepositQueue()
         case .loan:
-            return loanBank.addCustomerToLoanQueue()
+            loanBank?.addCustomerToLoanQueue()
         }
     }
     
     public func removeCustomer(type: BankingServiceType) {
         switch type {
         case .deposit:
-            depositBank.removeLastCustomer(.deposit)
+            depositBank?.removeLastCustomer(.deposit)
         case .loan:
-            loanBank.removeLastCustomer(.loan)
+            loanBank?.removeLastCustomer(.loan)
         }
     }
 }
