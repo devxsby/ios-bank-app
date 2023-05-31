@@ -24,17 +24,21 @@ public class DefaultServiceUseCase {
     
     private let depositBankers = [Banker(type: .deposit, taskDuration: 5.0)]
     private let loanBankers = [Banker(type: .loan, taskDuration: 8.0)]
+    private var depositCustomers = [Customer]()
+    private var loanCustomers = [Customer]()
     private var depositBank: Bank?
     private var loanBank: Bank?
     
     public init(repository: ServiceRepositoryInterface, customerGenerator: CustomerGenerator) {
         self.repository = repository
         self.customerGenerator = customerGenerator
+        generateRandomCustomers()
     }
     
-    private func generateRandomCustomers() -> (depositCustomers: [Customer], loanCustomers: [Customer]) {
+    private func generateRandomCustomers() {
         let result = customerGenerator.generateRandomCustomers()
-        return (result.depositCustomers, result.loanCustomers)
+        depositCustomers = result.depositCustomers
+        loanCustomers = result.loanCustomers
     }
 }
 
@@ -43,10 +47,8 @@ public class DefaultServiceUseCase {
 extension DefaultServiceUseCase: ServiceUseCase {
     
     public func processDeposit(completion: @escaping (Int?, Double?) -> Void) {
-        let randomCustomers = generateRandomCustomers()
-        
         depositBank = Bank(depositBankers: depositBankers, loanBankers: [],
-                           depositCustomers: randomCustomers.depositCustomers, loanCustomers: [])
+                           depositCustomers: depositCustomers, loanCustomers: [])
         
         depositBank?.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
             if taskType == .deposit {
@@ -56,14 +58,14 @@ extension DefaultServiceUseCase: ServiceUseCase {
             }
         }
         
-        depositBank?.startProcessing()
+        depositBank?.startProcessing {
+            completion(0, 0.0)
+        }
     }
-    
+
     public func processLoan(completion: @escaping (Int?, Double?) -> Void) {
-        let randomCustomers = generateRandomCustomers()
-        
         loanBank = Bank(depositBankers: [], loanBankers: loanBankers,
-                        depositCustomers: [], loanCustomers: randomCustomers.loanCustomers)
+                        depositCustomers: [], loanCustomers: loanCustomers)
         
         loanBank?.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
             if taskType == .loan {
@@ -73,7 +75,9 @@ extension DefaultServiceUseCase: ServiceUseCase {
             }
         }
         
-        loanBank?.startProcessing()
+        loanBank?.startProcessing {
+            completion(0, 0.0)
+        }
     }
     
     public func addCustomer(type: BankingServiceType, completion: @escaping (Int, Double) -> Void) {
