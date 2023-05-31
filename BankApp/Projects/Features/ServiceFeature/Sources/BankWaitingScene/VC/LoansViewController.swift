@@ -13,11 +13,6 @@ import Domain
 
 public final class LoansViewController: BankWaitingBaseViewController {
     
-    // MARK: - Properties
-    
-    var currentWaitingCustomerCount: Int = 0
-    var currentWaitingTime: Double = 0
-    
     // MARK: - View Life Cycle
     
     public override func viewDidLoad() {

@@ -84,7 +84,7 @@ extension SingleWaitStatusView {
             subtitleLabel.text = value == "0" ? "-" : "\(value ?? "-") \(I18N.ServiceFeature.peopleCount)"
         case .estimatedWaitTime:
             titleLabel.text = I18N.ServiceFeature.estimatedWaitTimes
-            subtitleLabel.text = value == "0" ? "-" : "\(value ?? "-") \(I18N.ServiceFeature.peopleCount)"
+            subtitleLabel.text = value == "0" ? "-" : "\(value ?? "-") \(I18N.ServiceFeature.time)"
         case .issuanceTime:
             titleLabel.text = I18N.ServiceFeature.issuanceTime
             subtitleLabel.text = value != nil ? value! : "-"
