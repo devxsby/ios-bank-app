@@ -52,6 +52,7 @@ extension DefaultServiceUseCase: ServiceUseCase {
                 WaitingInfoManager.shared.depositTime = estimatedWaitTime ?? 0.0
             }
         }
+        
         depositBank.startProcessing()
     }
     
@@ -59,6 +60,7 @@ extension DefaultServiceUseCase: ServiceUseCase {
         
         loanBank = Bank(depositBankers: [], loanBankers: loanBankers,
                         depositCustomers: [], loanCustomers: loanCustomers)
+        
         loanBank.printRemainingCustomers = { taskType, remainingCustomers, estimatedWaitTime in
             if taskType == .loan {
                 completion(remainingCustomers, estimatedWaitTime)
@@ -66,6 +68,7 @@ extension DefaultServiceUseCase: ServiceUseCase {
                 WaitingInfoManager.shared.loanTime = estimatedWaitTime ?? 0.0
             }
         }
+        
         loanBank.startProcessing()
     }
     

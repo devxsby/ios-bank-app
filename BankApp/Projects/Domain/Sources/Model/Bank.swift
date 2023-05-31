@@ -112,7 +112,7 @@ extension Bank {
             if let firstBanker = self.depositBankers.first {
                 self.depositCustomers.append(Customer(number: self.depositCustomers.count + 1, taskType: .deposit))
                 let remainingCustomers = self.depositCustomers.count
-                let estimatedDepositWaitTime = Double(remainingCustomers) * firstBanker.taskDuration
+                let estimatedDepositWaitTime = Double(remainingCustomers - 1) * firstBanker.taskDuration
                 
                 if self.isLoading {
                     DispatchQueue.main.async {
@@ -166,4 +166,3 @@ extension Bank {
         }
     }
 }
-
